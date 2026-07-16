@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Microphone Test — Check Your Mic Online with a Live Meter</title>
+<meta name="description" content="Free online microphone test with a live volume meter and waveform. Choose your input device and confirm your mic is picking up sound. 100% in-browser — no recording, nothing uploaded.">
+<link rel="canonical" href="https://hardwarecheckup.com/mic-test.html">
+<meta name="theme-color" content="#14161a">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Microphone Test",
+  "url": "https://hardwarecheckup.com/mic-test.html",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free browser-based microphone test with a live volume meter, waveform, and device selection."
+}
+</script>
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+    <nav class="site-nav" aria-label="Tools">
+      <a href="/webcam-test.html">Webcam</a>
+      <a href="/mic-test.html" aria-current="page">Mic</a>
+      <a href="/speaker-test.html">Speakers</a>
+      <a href="/keyboard-test.html">Keyboard</a>
+      <a href="/mouse-test.html">Mouse</a>
+      <a href="/dead-pixel-test.html">Dead Pixel</a>
+    </nav>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="tool-hero">
+    <h1>Microphone Test</h1>
+    <p>Confirm your mic is picking up sound with a live volume meter and waveform. Choose an input device and speak — if the bars move, your microphone works. Audio is analysed on your device and never recorded or uploaded.</p>
+  </div>
+
+  <div class="panel">
+    <div class="control-row">
+      <button id="start-btn" class="primary" type="button">Start microphone</button>
+      <button id="stop-btn" type="button" disabled>Stop</button>
+      <label for="device-select">Microphone
+        <select id="device-select" aria-label="Select microphone"></select>
+      </label>
+    </div>
+
+    <h2 style="margin:6px 0 4px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);">Input level</h2>
+    <div class="meter-track"><div id="meter-fill" class="meter-fill"></div></div>
+
+    <h2 style="margin:16px 0 6px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);">Waveform</h2>
+    <canvas id="scope" class="scope" aria-label="Live microphone waveform"></canvas>
+
+    <p id="status" class="status-msg" role="status" aria-live="polite"></p>
+
+    <div class="field-grid">
+      <div class="field"><span class="k">Current level</span><span class="v" id="f-level">—</span></div>
+      <div class="field"><span class="k">Peak</span><span class="v" id="f-peak">—</span></div>
+      <div class="field"><span class="k">Device</span><span class="v" id="f-label" style="font-size:13px;">—</span></div>
+      <div class="field"><span class="k">Status</span><span class="v" style="font-size:13px;">Local only</span></div>
+    </div>
+  </div>
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
+    <h2>How to use the microphone test</h2>
+    <p>Press <strong>Start microphone</strong> and allow microphone access when prompted. Then talk, tap the mic, or play some audio near it. The <strong>input level</strong> bar should rise and fall with the sound, and the <strong>waveform</strong> should wiggle in time with your voice. If both stay flat while you're clearly making noise, your mic isn't being captured — check the device dropdown and the troubleshooting list below.</p>
+    <p>The meter reads a rough loudness (RMS) as a percentage, and the <strong>peak</strong> field remembers the loudest moment since you started, which is handy for checking that sudden sounds aren't clipping. Device names appear only after you grant permission once, and if you have several inputs (a headset, a webcam mic, a USB interface) you can switch between them from the dropdown.</p>
+    <p>This test never plays your microphone back through your speakers, so there's no risk of feedback squeal, and it never records — the moment you press Stop or leave the page, capture ends.</p>
+
+    <h2>Mic not registering?</h2>
+    <ul>
+      <li><strong>Permission denied:</strong> click the microphone icon in the address bar, set this site to "Allow", and press Start again.</li>
+      <li><strong>Right device selected?</strong> Laptops often default to a low-quality built-in mic. Pick your headset or interface from the dropdown.</li>
+      <li><strong>Muted at the hardware level:</strong> check for a physical mute switch or a muted input in your operating system's sound settings.</li>
+      <li><strong>In use elsewhere:</strong> close other apps that may be holding the microphone, then retry.</li>
+    </ul>
+
+    <p>Prepping for a meeting? See <a href="/articles/how-to-test-webcam-and-mic-before-a-call.html">how to test your webcam and mic before a call</a>, then check your <a href="/speaker-test.html">speakers</a> and <a href="/webcam-test.html">webcam</a>.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/mic.js"></script>
+</body>
+</html>

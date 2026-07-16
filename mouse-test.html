@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mouse Test — Check Buttons, Scroll, Double-Click &amp; Drag</title>
+<meta name="description" content="Free online mouse test. Check left, middle, and right buttons, double-click, the scroll wheel, cursor tracking, dragging, and a click counter. Runs 100% in your browser.">
+<link rel="canonical" href="https://hardwarecheckup.com/mouse-test.html">
+<meta name="theme-color" content="#14161a">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Mouse Test",
+  "url": "https://hardwarecheckup.com/mouse-test.html",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free browser-based mouse test for buttons, double-click, scroll wheel, cursor position, and dragging."
+}
+</script>
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+    <nav class="site-nav" aria-label="Tools">
+      <a href="/webcam-test.html">Webcam</a>
+      <a href="/mic-test.html">Mic</a>
+      <a href="/speaker-test.html">Speakers</a>
+      <a href="/keyboard-test.html">Keyboard</a>
+      <a href="/mouse-test.html" aria-current="page">Mouse</a>
+      <a href="/dead-pixel-test.html">Dead Pixel</a>
+    </nav>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="tool-hero">
+    <h1>Mouse Test</h1>
+    <p>Check every mouse button, the scroll wheel, double-clicking, cursor tracking, and dragging. The mouse graphic lights up as you click. Everything runs on your device — nothing is uploaded.</p>
+  </div>
+
+  <div class="panel">
+    <div id="mouse-pad">
+      <div class="mouse-body" aria-hidden="true">
+        <div id="btn-left" class="mouse-btn left"></div>
+        <div id="btn-right" class="mouse-btn right"></div>
+        <div id="btn-middle" class="mouse-btn middle"></div>
+      </div>
+      <p class="type-hint">Click the buttons on your real mouse — left, right, and the wheel (middle) — over this area. Right-click is captured here so no menu pops up.</p>
+    </div>
+
+    <div class="field-grid" style="margin-top:14px;">
+      <div class="field"><span class="k">Last button</span><span class="v" id="f-lastbtn">—</span></div>
+      <div class="field"><span class="k">Clicks</span><span class="v" id="f-clicks">0</span></div>
+      <div class="field"><span class="k">Double-click</span><span class="v" id="f-dbl" style="font-size:14px;">—</span></div>
+      <div class="field"><span class="k">Scroll</span><span class="v" id="f-scroll">—</span></div>
+      <div class="field"><span class="k">Cursor (x, y)</span><span class="v" id="f-pos" style="font-size:14px;">—</span></div>
+    </div>
+
+    <h2 style="margin:20px 0 8px;font-size:13px;">Drag test</h2>
+    <div id="drag-pad" class="drag-pad">Press and drag inside this box</div>
+
+    <div class="control-row" style="margin-top:14px;">
+      <button id="reset-btn" type="button">Reset counters</button>
+    </div>
+  </div>
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
+    <h2>How to use the mouse test</h2>
+    <p>Move your cursor over the page and the <strong>cursor (x, y)</strong> readout tracks it in real time — jumpy or frozen numbers can indicate a failing sensor or a dirty surface. Click each button on your real mouse: the matching part of the on-screen mouse lights up, the <strong>last button</strong> field names it, and the <strong>clicks</strong> counter ticks up. Test the left, right, and middle (scroll-wheel) buttons this way; right-clicks are captured inside the tool so the context menu won't interrupt you.</p>
+    <p>To check for a worn <strong>double-click</strong> switch, deliberately double-click and confirm the double-click field reads "detected". A common fault on older mice is the opposite problem — a single click that registers as a double — which you can catch by clicking once, slowly, and watching whether the counter jumps by two. Scroll the wheel up and down to confirm the <strong>scroll</strong> direction is detected both ways, and press-and-hold inside the <strong>drag test</strong> box, moving before you release, to confirm dragging holds without dropping mid-motion.</p>
+    <p>Press <strong>Reset counters</strong> to start a fresh run. This tool only reads standard mouse and pointer events in your browser and records nothing.</p>
+
+    <p>If a button feels unreliable, our guide to <a href="/articles/common-hardware-faults-and-how-to-diagnose-them.html">common hardware faults and how to diagnose them</a> covers double-click failure and drift. Using a game controller? Check for stick drift at <a href="https://stickdriftcheck.com" target="_blank" rel="noopener">stickdriftcheck.com</a>.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/mouse.js"></script>
+</body>
+</html>

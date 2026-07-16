@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Common Hardware Faults and How to Diagnose Them — hardwarecheckup.com</title>
+<meta name="description" content="A field guide to the everyday faults in webcams, microphones, speakers, keyboards, mice, monitors, and game controllers — how each one shows up and how to pin it down in minutes.">
+<link rel="canonical" href="https://hardwarecheckup.com/articles/common-hardware-faults-and-how-to-diagnose-them.html">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+  </div>
+</header>
+<main class="container-narrow">
+  <h1>Common Hardware Faults and How to Diagnose Them</h1>
+
+  <p>Most peripheral problems aren't mysterious once you know the short list of ways each device tends to fail. The trick to diagnosis is isolation: change one thing at a time, confirm what's working before chasing what isn't, and let a simple test tell you whether the fault is the hardware, the connection, or the software. This is a field guide to the faults that turn up most often, and the quickest way to pin each one down.</p>
+
+  <h2>The universal first move: rule out software</h2>
+  <p>Before blaming any device, separate hardware from software by testing it somewhere neutral. A browser-based test is ideal for this because it sidesteps whatever app you were fighting with. If your mic works in the <a href="/mic-test.html">microphone test</a> but not in a specific meeting app, the hardware is fine and the problem is that app's settings or permissions. If it fails everywhere, the fault is lower down — the device, its driver, or its connection. That single split saves more time than any other diagnostic step, so make it your reflex.</p>
+
+  <h2>Webcam faults</h2>
+  <p>Cameras fail in a small number of recognizable ways. A <strong>black preview</strong> almost always means the device is busy — held by another app or a background call — rather than broken; close everything using it and retry. A camera that's <strong>missing entirely</strong> from the device list points to a connection or privacy-shutter issue, or a disabled device in your operating system. A picture that's <strong>present but grainy or soft</strong> is usually a lighting problem, not a fault, because cameras drop resolution and crank gain in dim rooms. Confirm all of this in the <a href="/webcam-test.html">webcam test</a>: a live image rules out the device, and the resolution readout tells you whether you're getting the mode you paid for.</p>
+
+  <h2>Microphone faults</h2>
+  <p>The classic mic fault isn't a dead microphone at all — it's the <strong>wrong input selected</strong>, with the system listening to a built-in mic while you talk into a headset. A flat meter on one device and a lively one on another confirms it instantly. Genuine faults include a mic that's <strong>far too quiet</strong> (low gain, or a mic positioned too far away), one that <strong>clips and distorts</strong> (gain too high), and one that produces a <strong>constant hiss or hum</strong> (interference, a bad cable, or a ground loop on desktop audio). The <a href="/mic-test.html">microphone test</a> shows all three as distinct meter and waveform behaviours, so you can tell "quiet" from "clipping" from "noisy" at a glance.</p>
+
+  <h2>Speaker and headphone faults</h2>
+  <p>The most common speaker complaint — "sound only comes from one side" — is usually a <strong>loose connector</strong> or a <strong>dead channel</strong>, and the left/right tones in the <a href="/speaker-test.html">speaker test</a> isolate it in seconds. A <strong>buzz or rattle</strong> at certain volumes or pitches suggests a physically damaged driver or something vibrating loose, which the frequency sweep will expose as you pass through the offending range. And "no sound at all" is, more often than people admit, the <strong>wrong output device</strong> — audio routed to a monitor's unused speakers or to Bluetooth headphones in another room. Verifying the output in a simple tone test rules the hardware in or out before you go hunting through settings.</p>
+
+  <h2>Keyboard faults</h2>
+  <p>Keyboards give you three recurring problems. A <strong>dead key</strong> that never registers means a failed switch or a break in the matrix. A <strong>stuck or chattering key</strong> repeats or fires on its own, usually from debris or a worn switch. And <strong>missed simultaneous keys</strong> — combinations that silently don't register — are the blocking behaviour covered in our <a href="/articles/keyboard-ghosting-and-n-key-rollover-explained.html">ghosting and rollover article</a>. The <a href="/keyboard-test.html">keyboard tester</a> catches all three: pressed keys stay lit so dead ones are obvious by their absence, a key lighting up untouched reveals chatter, and the simultaneous-key counter shows where blocking kicks in. Before replacing anything, try compressed air and a reseat of the keycap, since a surprising share of "dead" keys are just dirty.</p>
+
+  <h2>Mouse faults</h2>
+  <p>Mice wear out at the switches and the sensor. A <strong>double-click fault</strong> — where one deliberate click registers as two — is the most common aging failure, caused by a worn button switch, and you can catch it by clicking once slowly in the <a href="/mouse-test.html">mouse test</a> and watching whether the counter jumps by two. A <strong>cursor that stutters or jumps</strong> points to a dirty or failing sensor, or a poor surface; the live position readout makes erratic tracking visible. A <strong>scroll wheel that skips or scrolls the wrong way</strong> and a <strong>button that doesn't register</strong> round out the list, and both show up directly on the tool's indicators.</p>
+
+  <h2>Monitor faults</h2>
+  <p>Beyond dead and stuck pixels — which have their <a href="/dead-pixel-test.html">own dedicated test</a> and a <a href="/articles/what-causes-dead-pixels-and-can-you-fix-them.html">full article</a> — monitors show <strong>backlight bleed</strong> (uneven glow at the edges, visible on a full black screen), <strong>banding</strong> (visible steps in what should be a smooth gradient), and <strong>uniformity problems</strong> (patches that are brighter or a different tint than the rest). A solid-colour test surfaces every one of these: black reveals bleed, grey reveals uniformity issues, and the pure colours reveal stuck sub-pixels.</p>
+
+  <h2>Game controller faults</h2>
+  <p>Controllers have their own signature failure: <strong>analog stick drift</strong>, where a stick reports movement even when you're not touching it, causing your character or camera to creep on its own. It's caused by wear in the stick's potentiometers or contamination inside the mechanism, and it's one of the most common reasons controllers get retired. Browsers can't always read a controller through these general-purpose tools, so if you suspect drift, use a dedicated checker like <a href="https://stickdriftcheck.com" target="_blank" rel="noopener">stickdriftcheck.com</a>, which visualizes each stick's resting position and shows drift immediately.</p>
+
+  <h2>A diagnostic mindset</h2>
+  <p>Whatever the device, the method is the same: confirm the good before chasing the bad, change one variable at a time, and use a neutral test to separate hardware from software. Nine times out of ten the fault turns out to be a loose cable, a wrong device selection, or a setting — not a broken part — and the few minutes it takes to run a quick check will tell you which. When it genuinely is the hardware, you'll at least know exactly what to describe on a warranty claim.</p>
+
+  <h2>Keep reading</h2>
+  <ul>
+    <li><a href="/articles/how-to-test-webcam-and-mic-before-a-call.html">How to test your webcam and mic before a call</a></li>
+    <li><a href="/articles/what-causes-dead-pixels-and-can-you-fix-them.html">What causes dead pixels — and can you fix them?</a></li>
+    <li><a href="/articles/keyboard-ghosting-and-n-key-rollover-explained.html">Keyboard ghosting and N-key rollover explained</a></li>
+    <li><a href="/">Back to all hardware tests</a></li>
+  </ul>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+<script src="/assets/js/theme.js"></script>
+</body>
+</html>

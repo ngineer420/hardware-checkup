@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hardware Checkup — Free Browser-Based Hardware Tests</title>
+<meta name="description" content="Free, no-signup hardware tests that run entirely in your browser: webcam, microphone, speakers, keyboard, mouse, and dead pixel checks. Nothing is uploaded — everything runs on your device.">
+<link rel="canonical" href="https://hardwarecheckup.com/">
+<meta name="theme-color" content="#14161a">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Hardware Checkup — Free Browser-Based Hardware Tests">
+<meta property="og:description" content="Test your webcam, mic, speakers, keyboard, mouse, and screen for dead pixels — instantly, free, and 100% in your browser.">
+<meta property="og:url" content="https://hardwarecheckup.com/">
+<meta property="og:image" content="https://hardwarecheckup.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hardware Checkup — Free Browser-Based Hardware Tests">
+<meta name="twitter:description" content="Test your webcam, mic, speakers, keyboard, mouse, and screen for dead pixels — instantly, free, and 100% in your browser.">
+<meta name="twitter:image" content="https://hardwarecheckup.com/assets/og-image.png">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Hardware Checkup",
+  "url": "https://hardwarecheckup.com/",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free browser-based hardware testing hub for webcam, microphone, speakers, keyboard, mouse, and dead pixel checks."
+}
+</script>
+
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+    <nav class="site-nav" aria-label="Tools">
+      <a href="/webcam-test.html">Webcam</a>
+      <a href="/mic-test.html">Mic</a>
+      <a href="/speaker-test.html">Speakers</a>
+      <a href="/keyboard-test.html">Keyboard</a>
+      <a href="/mouse-test.html">Mouse</a>
+      <a href="/dead-pixel-test.html">Dead Pixel</a>
+    </nav>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="hero">
+    <h1>Test Your Hardware in the Browser</h1>
+    <p>Quick, free checks for your webcam, microphone, speakers, keyboard, mouse, and screen. No downloads, no sign-up.</p>
+    <p class="privacy-note"><strong>Private by design:</strong> every test runs entirely on your device. No video, audio, or keystroke ever leaves your browser or is uploaded anywhere.</p>
+  </div>
+
+  <div class="tool-grid">
+    <a class="tool-card" href="/webcam-test.html">
+      <span class="tc-icon" aria-hidden="true">📷</span>
+      <h3>Webcam Test</h3>
+      <p>Check your camera with a live preview, pick a device, and read the resolution and frame rate.</p>
+      <span class="tc-go">Open webcam test →</span>
+    </a>
+    <a class="tool-card" href="/mic-test.html">
+      <span class="tc-icon" aria-hidden="true">🎙️</span>
+      <h3>Microphone Test</h3>
+      <p>See a live volume meter and waveform to confirm your mic is picking up sound.</p>
+      <span class="tc-go">Open mic test →</span>
+    </a>
+    <a class="tool-card" href="/speaker-test.html">
+      <span class="tc-icon" aria-hidden="true">🔊</span>
+      <h3>Speaker Test</h3>
+      <p>Play tones to the left, right, or both channels and run a frequency sweep.</p>
+      <span class="tc-go">Open speaker test →</span>
+    </a>
+    <a class="tool-card" href="/keyboard-test.html">
+      <span class="tc-icon" aria-hidden="true">⌨️</span>
+      <h3>Keyboard Tester</h3>
+      <p>Light up keys as you press them to find stuck keys, ghosting, and rollover limits.</p>
+      <span class="tc-go">Open keyboard tester →</span>
+    </a>
+    <a class="tool-card" href="/mouse-test.html">
+      <span class="tc-icon" aria-hidden="true">🖱️</span>
+      <h3>Mouse Test</h3>
+      <p>Check every button, double-click, the scroll wheel, cursor tracking, and dragging.</p>
+      <span class="tc-go">Open mouse test →</span>
+    </a>
+    <a class="tool-card" href="/dead-pixel-test.html">
+      <span class="tc-icon" aria-hidden="true">🖥️</span>
+      <h3>Dead Pixel Test</h3>
+      <p>Cycle full-screen colours to spot dead or stuck pixels, plus a flasher mode.</p>
+      <span class="tc-go">Open dead pixel test →</span>
+    </a>
+  </div>
+
+  <section class="container-narrow about-section">
+    <h2>About Hardware Checkup</h2>
+    <p>Hardware Checkup is a free collection of browser-based tools for quickly verifying that your computer's peripherals work. Buying a used laptop, troubleshooting a call that has no sound, checking a new monitor for dead pixels, or diagnosing a key that won't type — each tool gives you an immediate, honest answer without installing anything.</p>
+    <p>Everything runs client-side using standard web APIs your browser already ships with: <code>getUserMedia</code> for the camera and microphone, the Web Audio API for speaker tones and volume metering, and ordinary keyboard, mouse, and fullscreen events for the input and display tests. Because the processing happens locally, your camera image, microphone audio, and keystrokes never leave your device and are never uploaded to any server.</p>
+  </section>
+
+  <section class="container-narrow" id="articles" style="padding-top:0;">
+    <h2 style="margin-top:0;">Learn more about hardware testing</h2>
+    <div class="faq-item">
+      <h3><a href="/articles/how-to-test-webcam-and-mic-before-a-call.html">How to test your webcam and mic before a call</a></h3>
+      <p>A pre-meeting checklist to make sure your camera, microphone, and speakers all work before Zoom, Teams, or Meet starts.</p>
+    </div>
+    <div class="faq-item">
+      <h3><a href="/articles/what-causes-dead-pixels-and-can-you-fix-them.html">What causes dead pixels — and can you fix them?</a></h3>
+      <p>The difference between dead and stuck pixels, why they happen, which ones are fixable, and how the flasher method works.</p>
+    </div>
+    <div class="faq-item">
+      <h3><a href="/articles/keyboard-ghosting-and-n-key-rollover-explained.html">Keyboard ghosting and N-key rollover explained</a></h3>
+      <p>Why some key combinations don't register, what ghosting and blocking actually are, and how rollover ratings work.</p>
+    </div>
+    <div class="faq-item">
+      <h3><a href="/articles/common-hardware-faults-and-how-to-diagnose-them.html">Common hardware faults and how to diagnose them</a></h3>
+      <p>A field guide to the everyday faults in cameras, mics, speakers, keyboards, mice, and controllers — and how to pin each one down.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/theme.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dead Pixel Test — Full-Screen Colour Check for Your Monitor</title>
+<meta name="description" content="Free online dead pixel test. Cycle full-screen solid colours to reveal dead and stuck pixels on your monitor, laptop, or phone, plus a flasher mode for stuck-pixel recovery. Runs in your browser.">
+<link rel="canonical" href="https://hardwarecheckup.com/dead-pixel-test.html">
+<meta name="theme-color" content="#14161a">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Dead Pixel Test",
+  "url": "https://hardwarecheckup.com/dead-pixel-test.html",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free browser-based dead pixel test that cycles full-screen solid colours and includes a stuck-pixel flasher."
+}
+</script>
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+    <nav class="site-nav" aria-label="Tools">
+      <a href="/webcam-test.html">Webcam</a>
+      <a href="/mic-test.html">Mic</a>
+      <a href="/speaker-test.html">Speakers</a>
+      <a href="/keyboard-test.html">Keyboard</a>
+      <a href="/mouse-test.html">Mouse</a>
+      <a href="/dead-pixel-test.html" aria-current="page">Dead Pixel</a>
+    </nav>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="tool-hero">
+    <h1>Dead Pixel Test</h1>
+    <p>Fill your whole screen with solid colours to reveal dead pixels (always black) and stuck pixels (stuck on one colour). A flasher mode can help coax stuck pixels back to life. Everything runs locally in your browser.</p>
+  </div>
+
+  <div class="panel">
+    <div class="control-row">
+      <button id="start-btn" class="primary" type="button">Start full-screen test</button>
+      <button id="flash-btn" type="button">Start flasher mode</button>
+    </div>
+    <p style="margin:4px 0 10px;color:var(--text-dim);font-size:13px;">Or jump straight to a colour:</p>
+    <div id="swatch-row" class="swatch-row" aria-label="Start at a specific colour"></div>
+    <p class="type-hint" style="text-align:left;margin-top:14px;">
+      In the test: <strong>click</strong> or <strong>→ / Space</strong> for the next colour · <strong>←</strong> for the previous · <strong>F</strong> toggles the flasher · <strong>Esc</strong> exits.
+    </p>
+  </div>
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
+    <h2>How to use the dead pixel test</h2>
+    <p>Clean your screen first — dust and smudges are easy to mistake for pixel faults. Press <strong>Start full-screen test</strong> and the page fills edge to edge with a solid colour; click or press the right-arrow or space bar to move through red, green, blue, white, black, cyan, magenta, yellow, and grey. On each colour, look closely (a magnifying glass helps) for any point that doesn't match. A <strong>dead pixel</strong> stays black on every colour because it receives no power. A <strong>stuck pixel</strong> shows a fixed red, green, or blue point that's most obvious on the opposite colours — for example a stuck red sub-pixel jumps out against green, blue, and black backgrounds.</p>
+    <p>The <strong>flasher mode</strong> rapidly alternates black and white over the whole screen. Rapidly exercising a stuck sub-pixel like this sometimes unsticks it after a few minutes — leave it running on the affected area and check again. Press <strong>F</strong> while testing to toggle the flasher on and off, and <strong>Esc</strong> to exit at any time. The test uses your browser's fullscreen mode where available; if the browser blocks fullscreen, the colour fill still covers the page.</p>
+    <p><strong>A quick caution:</strong> the flasher rapidly alternates high-contrast black and white, which can be uncomfortable and may affect people with photosensitive epilepsy — skip it if flashing light is a problem for you. Nothing about this test is recorded or sent anywhere; it simply paints colours on your own display.</p>
+
+    <p>Found a bad pixel? Read <a href="/articles/what-causes-dead-pixels-and-can-you-fix-them.html">what causes dead pixels and can you fix them</a> for repair odds and warranty thresholds.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<div id="dp-overlay" class="dp-overlay" role="dialog" aria-label="Dead pixel full-screen test">
+  <div id="dp-hint" class="dp-hint"></div>
+</div>
+
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/deadpixel.js"></script>
+</body>
+</html>

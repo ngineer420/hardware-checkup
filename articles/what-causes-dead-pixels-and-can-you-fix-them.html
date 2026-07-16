@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Causes Dead Pixels — and Can You Fix Them? — hardwarecheckup.com</title>
+<meta name="description" content="Dead vs stuck pixels explained: what actually causes them, which ones are fixable, how the flashing-colour recovery method works, and the warranty thresholds that decide replacements.">
+<link rel="canonical" href="https://hardwarecheckup.com/articles/what-causes-dead-pixels-and-can-you-fix-them.html">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+  </div>
+</header>
+<main class="container-narrow">
+  <h1>What Causes Dead Pixels — and Can You Fix Them?</h1>
+
+  <p>A single bad pixel on an otherwise perfect screen is maddening precisely because it's so small — a pinpoint of wrongness your eye keeps drifting back to. Before you panic or start looking at replacement screens, it's worth understanding what's actually happening under the glass, because the answer determines whether the fault is fixable at all. The most important distinction is one most people never make: dead pixels and stuck pixels are different problems with very different odds.</p>
+
+  <h2>How a pixel actually makes colour</h2>
+  <p>Each pixel on an LCD or OLED panel is made of three sub-pixels — one red, one green, one blue. Your screen creates every colour by mixing how bright each of those three is. Pure white is all three at full brightness; black is all three off; yellow is red and green on with blue off. That's why a full-screen colour test is so revealing: by forcing every pixel to the same known state, any pixel that disagrees with its neighbours stands out instantly. Run the <a href="/dead-pixel-test.html">dead pixel test</a> and cycle through the solid colours, and a faulty sub-pixel has nowhere to hide.</p>
+
+  <h2>Dead pixels vs stuck pixels</h2>
+  <p>A <strong>dead pixel</strong> is one that receives no power at all. Its sub-pixels can't light up, so it stays black no matter what the screen is displaying. The giveaway is consistency: a dead pixel is black on white, black on red, black on every colour, because it simply isn't switching on. Dead pixels are usually caused by a broken transistor or a failed connection to that pixel — a genuine hardware defect — and they are, unfortunately, the harder of the two to do anything about.</p>
+  <p>A <strong>stuck pixel</strong> is the opposite: one or more of its sub-pixels is jammed <em>on</em> at a constant value. Instead of black, you see a persistent bright dot of red, green, blue, or a combination like cyan or magenta. The tell here is that the dot changes visibility depending on the background — a stuck red sub-pixel is nearly invisible on a red screen but glaringly obvious on green, blue, and black. Stuck pixels are typically the result of a sub-pixel getting "parked" at one voltage rather than a broken connection, and that's exactly why they're often recoverable while dead ones usually aren't.</p>
+
+  <h2>Can you fix them?</h2>
+  <p>Stuck pixels are the ones worth trying to rescue. The most common approach is rapid colour cycling: flashing the affected area quickly between colours, and especially between black and white, exercises the stuck sub-pixel's transistor over and over. The idea is that repeatedly forcing the sub-pixel to change state can shake it loose from the value it's parked at. The flasher mode in the <a href="/dead-pixel-test.html">dead pixel test</a> does exactly this — leave it running over the stuck spot for anywhere from a few minutes to half an hour, then re-check on the solid colours. It doesn't always work, but it costs nothing and carries little risk beyond the visual discomfort of the flashing itself.</p>
+  <p>A second method some people try is gentle physical pressure: with the screen off, a soft cloth over the exact spot, and light pressure while turning the screen back on. This can occasionally nudge a stuck liquid-crystal cell back into place. It also risks creating <em>more</em> bad pixels or scratching a coating if you press too hard or in the wrong place, so treat it as a last resort and be very gentle. Dead pixels — the always-black kind — rarely respond to either method, because the problem is a missing electrical connection rather than a mis-set one, and no amount of flashing will reconnect a broken transistor.</p>
+
+  <h2>What about "hot" and other pixel faults?</h2>
+  <p>You may also hear about "hot pixels," which sit stuck fully on as bright white, most noticeable on a black background. They behave like stuck pixels and are worth the same flashing treatment. On OLED panels the vocabulary shifts slightly — because each pixel emits its own light, a truly dead OLED pixel shows as a permanent black dot, and OLEDs are more prone to long-term burn-in (faint ghost images from static content) than to the manufacturing-defect pixels common on LCDs. The colour test still applies: solid fields reveal whatever the panel is doing wrong.</p>
+
+  <h2>When it's a warranty issue, not a DIY one</h2>
+  <p>If the flashing method fails and you've got a dead pixel, the realistic path is replacement rather than repair — and whether you're entitled to one depends on the manufacturer's dead-pixel policy. Most makers publish a threshold: a certain number of dead or stuck sub-pixels, sometimes with stricter limits for the bright center of the screen, before they'll consider a panel defective under warranty. A single stuck pixel often falls below that bar, frustrating as that is, while several clustered together may qualify. It's worth checking the exact policy for your model and running a documented colour test early in the return window, because a pixel you can prove was faulty on day one is far easier to claim than one you notice months later.</p>
+  <p>The practical takeaway: identify which kind of fault you have first. Cycle the solid colours to see whether the dot is always black (dead) or always coloured (stuck), try the flasher on stuck pixels, and check your warranty threshold if it won't clear. Knowing the difference saves you both false hope and unnecessary spending.</p>
+
+  <h2>Keep reading</h2>
+  <ul>
+    <li><a href="/articles/common-hardware-faults-and-how-to-diagnose-them.html">Common hardware faults and how to diagnose them</a></li>
+    <li><a href="/articles/how-to-test-webcam-and-mic-before-a-call.html">How to test your webcam and mic before a call</a></li>
+    <li><a href="/articles/keyboard-ghosting-and-n-key-rollover-explained.html">Keyboard ghosting and N-key rollover explained</a></li>
+    <li><a href="/dead-pixel-test.html">Run the dead pixel test</a></li>
+  </ul>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+<script src="/assets/js/theme.js"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keyboard Ghosting and N-Key Rollover Explained — hardwarecheckup.com</title>
+<meta name="description" content="Why some key combinations don't register: ghosting, blocking, and the matrix behind every keyboard, plus what N-key rollover and 6KRO really mean and how to test your own board.">
+<link rel="canonical" href="https://hardwarecheckup.com/articles/keyboard-ghosting-and-n-key-rollover-explained.html">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+  </div>
+</header>
+<main class="container-narrow">
+  <h1>Keyboard Ghosting and N-Key Rollover Explained</h1>
+
+  <p>Press W, A, and the space bar together in a game and jump while running diagonally — on some keyboards it works, on others the jump silently never happens. That missing keystroke is the everyday face of two related concepts: <strong>ghosting</strong> and <strong>rollover</strong>. Both come down to how keyboards are wired internally, and once you understand the wiring, the behaviour stops being mysterious and becomes something you can actually test for.</p>
+
+  <h2>The matrix under every keyboard</h2>
+  <p>A keyboard doesn't have a dedicated wire running from each key to the controller — that would need over a hundred separate connections. Instead, keys are arranged in a grid, or <strong>matrix</strong>, of rows and columns. Each key sits at the intersection of one row and one column, and the controller figures out which key you pressed by scanning the grid: energizing each column in turn and checking which rows respond. This is elegant and cheap, and for ordinary typing — where you press one key at a time, or a couple in quick succession — it works flawlessly.</p>
+  <p>The trouble starts when you hold several keys down at once, because the matrix can become ambiguous about what's really being pressed.</p>
+
+  <h2>What ghosting actually is</h2>
+  <p>Imagine three keys held down that happen to form three corners of a rectangle in the matrix grid — sharing rows and columns in just the wrong way. When the controller scans, the electrical path can complete through those three keys as if a <em>fourth</em> key, at the empty corner, were also pressed. That phantom keystroke is a <strong>ghost</strong>: a key you never touched registering as pressed. True ghosting — a genuinely false extra keypress — would be chaos, so essentially every modern keyboard prevents it. But it prevents it using a technique that creates the second problem.</p>
+
+  <h2>Blocking: the fix that causes the missed keys</h2>
+  <p>To stop ghosts, keyboards use <strong>blocking</strong> (sometimes called jamming): when a combination of keys would produce an ambiguous ghost reading, the controller refuses to register the additional key rather than risk inventing a phantom one. So instead of a wrong key appearing, a real key you pressed is simply ignored. This is why your jump didn't happen — the keyboard blocked the space bar because registering it alongside W and A would have been ambiguous in the matrix. What people loosely call "ghosting" in a gaming context is almost always blocking: not a phantom key, but a swallowed one.</p>
+  <p>The likelihood of blocking depends entirely on which keys share rows and columns. Cheaper keyboards lay out the matrix without much thought to which key groups gamers press together, so common combinations like movement keys plus a modifier plus the space bar can collide. This is why the same three-key combo works on one board and fails on another.</p>
+
+  <h2>Where rollover comes in</h2>
+  <p><strong>Rollover</strong> describes how many keys a keyboard can register simultaneously without dropping any. You'll see it written a few ways:</p>
+  <ul>
+    <li><strong>2KRO</strong> — two-key rollover, the bare minimum. The keyboard guarantees any two keys plus, usually, modifier keys. Fine for typing, limiting for gaming.</li>
+    <li><strong>6KRO</strong> — six-key rollover, the common standard for USB keyboards. It reliably registers six regular keys at once (plus modifiers like Shift and Ctrl), which covers almost anything a person can physically press with ten fingers in normal use.</li>
+    <li><strong>NKRO</strong> — N-key rollover, meaning every key is independent and any number can be pressed at once with none blocked. This is the gold standard for gaming and fast typing, achieved by wiring the matrix so no combination is ambiguous, often by adding a diode at each key.</li>
+  </ul>
+  <p>The historical reason 6KRO is so common is a quirk of the standard USB keyboard protocol, which reports keys in a fixed-size slot list that holds six regular keys plus modifiers. True NKRO keyboards work around this, but the six-key figure is enough that most users never hit the ceiling outside of intense gaming.</p>
+
+  <h2>Testing your own keyboard</h2>
+  <p>You don't have to guess where your keyboard's limits are — you can measure them. Open the <a href="/keyboard-test.html">keyboard tester</a> and hold down a growing handful of keys at once while watching the "held now" counter. Start with a realistic gaming cluster: a movement key, an adjacent one, a modifier, and the space bar. If the counter stops climbing before you've added the keys you're actually holding, you've found a blocking limit — the keyboard won't register beyond that many simultaneous presses in that particular combination. Try different key groups, because blocking depends on the specific matrix layout: some trios collide while others don't.</p>
+  <p>The same tool is useful for the more mundane faults, too. Because pressed keys stay highlighted, you can press every key in turn and immediately see any that never light up (a dead key), and you can watch for a key that lights on its own or refuses to turn off (a stuck key). A key's physical code and legacy keyCode are shown as you press, which helps when a key seems to type the wrong character and you suspect a layout remap rather than a hardware fault.</p>
+
+  <h2>Do you need NKRO?</h2>
+  <p>For writing, email, and everyday work, even humble 2KRO is genuinely fine — you can't type faster than the keyboard can follow. For fast-paced games where you routinely hold three or four keys and tap a fifth, 6KRO covers the vast majority of situations, and full NKRO is a nice guarantee rather than a strict necessity. The practical move is to test the combinations <em>you</em> actually use: if they all register, your keyboard is good enough, whatever its spec sheet claims. If a combo you rely on gets blocked, that's the moment NKRO becomes worth paying for.</p>
+
+  <h2>Keep reading</h2>
+  <ul>
+    <li><a href="/articles/common-hardware-faults-and-how-to-diagnose-them.html">Common hardware faults and how to diagnose them</a></li>
+    <li><a href="/articles/how-to-test-webcam-and-mic-before-a-call.html">How to test your webcam and mic before a call</a></li>
+    <li><a href="/articles/what-causes-dead-pixels-and-can-you-fix-them.html">What causes dead pixels — and can you fix them?</a></li>
+    <li><a href="/keyboard-test.html">Run the keyboard tester</a></li>
+  </ul>
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+<script src="/assets/js/theme.js"></script>
+</body>
+</html>

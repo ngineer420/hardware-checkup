@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speaker Test — Check Left &amp; Right Channels and Run a Sweep</title>
+<meta name="description" content="Free online speaker test. Play a tone to the left, right, or both channels, run a frequency sweep, and adjust pitch and volume. 100% in your browser — nothing uploaded.">
+<link rel="canonical" href="https://hardwarecheckup.com/speaker-test.html">
+<meta name="theme-color" content="#14161a">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Speaker Test",
+  "url": "https://hardwarecheckup.com/speaker-test.html",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free browser-based speaker test with left/right/both channel tones and a frequency sweep."
+}
+</script>
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+    <nav class="site-nav" aria-label="Tools">
+      <a href="/webcam-test.html">Webcam</a>
+      <a href="/mic-test.html">Mic</a>
+      <a href="/speaker-test.html" aria-current="page">Speakers</a>
+      <a href="/keyboard-test.html">Keyboard</a>
+      <a href="/mouse-test.html">Mouse</a>
+      <a href="/dead-pixel-test.html">Dead Pixel</a>
+    </nav>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="tool-hero">
+    <h1>Speaker Test</h1>
+    <p>Check that both of your speakers work and are wired to the correct side. Play a tone to the left, right, or both channels, or run a frequency sweep. All sound is generated in your browser — nothing is uploaded.</p>
+  </div>
+
+  <div class="panel">
+    <h2>Channel test</h2>
+    <p style="margin:0 0 12px;color:var(--text-dim);font-size:13px;">Put on both speakers or headphones. Each button should play only from the side it names — if left and right are swapped, your cables or audio settings need fixing.</p>
+    <div class="btn-cluster">
+      <button id="test-left" type="button">◀ Left</button>
+      <button id="test-both" class="primary" type="button">Both ◀▶</button>
+      <button id="test-right" type="button">Right ▶</button>
+      <button id="test-sweep" type="button">Sweep 100 Hz → 12 kHz</button>
+      <button id="stop-btn" type="button" disabled>Stop</button>
+    </div>
+
+    <p id="status" class="status-msg ok" role="status" aria-live="polite">Ready. Press a channel button to play a test tone.</p>
+
+    <div class="range-row">
+      <label for="freq" style="min-width:64px;">Pitch</label>
+      <input id="freq" type="range" min="50" max="15000" step="1" value="440" aria-label="Tone frequency in hertz">
+      <span class="rv" id="freq-val">440 Hz</span>
+    </div>
+    <div class="range-row">
+      <label for="vol" style="min-width:64px;">Volume</label>
+      <input id="vol" type="range" min="0" max="100" step="1" value="30" aria-label="Volume">
+      <span class="rv" id="vol-val">30%</span>
+    </div>
+    <div class="range-row">
+      <label for="wave" style="min-width:64px;">Waveform</label>
+      <select id="wave" aria-label="Oscillator waveform">
+        <option value="sine">Sine (smooth)</option>
+        <option value="square">Square</option>
+        <option value="triangle">Triangle</option>
+        <option value="sawtooth">Sawtooth</option>
+      </select>
+    </div>
+  </div>
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
+    <h2>How to use the speaker test</h2>
+    <p>Start at a low volume — the slider defaults to 30% — and press <strong>Both</strong> to hear a centred tone from both speakers. Then press <strong>Left</strong> and <strong>Right</strong> in turn: each should come only from the matching side. This is the quickest way to catch swapped channels, a dead speaker, or a loose connection on one side. Because the first sound on a page needs a user action to start audio, nothing plays until you click a button — that's a browser rule, not a fault.</p>
+    <p>The <strong>pitch</strong> slider changes the tone's frequency, which is useful for hearing whether a speaker buzzes or rattles at particular notes. The <strong>sweep</strong> glides from a deep 100 Hz up to a bright 12 kHz over a few seconds; on healthy hardware it rises smoothly with no dropouts, and it doubles as a rough hearing check, since most adults stop hearing the very top of the range. Change the <strong>waveform</strong> to a square or sawtooth for a harsher, harmonically rich tone that can reveal distortion a pure sine hides.</p>
+    <p>If you hear nothing at all, make sure the correct output device is selected in your operating system, that system and browser volume aren't muted, and that headphones are fully seated. Press <strong>Stop</strong> at any time to silence the tone.</p>
+
+    <p>No sound on a call? Also check your <a href="/mic-test.html">microphone</a>, and read our guide to <a href="/articles/common-hardware-faults-and-how-to-diagnose-them.html">common hardware faults and how to diagnose them</a>.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/speaker.js"></script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Webcam Test — Check Your Camera Online, Free &amp; Private</title>
+<meta name="description" content="Free online webcam test. See a live preview, choose your camera, check the resolution and frame rate, and mirror the image. Runs 100% in your browser — nothing is recorded or uploaded.">
+<link rel="canonical" href="https://hardwarecheckup.com/webcam-test.html">
+<meta name="theme-color" content="#14161a">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Webcam Test",
+  "url": "https://hardwarecheckup.com/webcam-test.html",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free browser-based webcam test with live preview, device selection, resolution and frame-rate readout."
+}
+</script>
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+    <nav class="site-nav" aria-label="Tools">
+      <a href="/webcam-test.html" aria-current="page">Webcam</a>
+      <a href="/mic-test.html">Mic</a>
+      <a href="/speaker-test.html">Speakers</a>
+      <a href="/keyboard-test.html">Keyboard</a>
+      <a href="/mouse-test.html">Mouse</a>
+      <a href="/dead-pixel-test.html">Dead Pixel</a>
+    </nav>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="tool-hero">
+    <h1>Webcam Test</h1>
+    <p>Check that your camera works with a live preview. Pick a device, read its resolution and frame rate, and mirror the image if you like. Your video stays on your device — it is never recorded or uploaded.</p>
+  </div>
+
+  <div class="panel">
+    <div class="control-row">
+      <button id="start-btn" class="primary" type="button">Start camera</button>
+      <button id="stop-btn" type="button" disabled>Stop</button>
+      <button id="mirror-btn" type="button" aria-pressed="false">Mirror: off</button>
+      <label for="device-select">Camera
+        <select id="device-select" aria-label="Select camera"></select>
+      </label>
+    </div>
+
+    <div class="video-frame">
+      <video id="preview" playsinline autoplay muted hidden></video>
+      <div id="video-placeholder" class="video-placeholder">Camera preview will appear here after you press <strong>Start camera</strong> and allow access.</div>
+    </div>
+
+    <p id="status" class="status-msg" role="status" aria-live="polite"></p>
+
+    <div class="field-grid">
+      <div class="field"><span class="k">Resolution</span><span class="v" id="f-res">—</span></div>
+      <div class="field"><span class="k">Frame rate</span><span class="v" id="f-fps">—</span></div>
+      <div class="field"><span class="k">Aspect</span><span class="v" id="f-aspect">—</span></div>
+      <div class="field"><span class="k">Device</span><span class="v" id="f-label" style="font-size:13px;">—</span></div>
+    </div>
+  </div>
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
+    <h2>How to use the webcam test</h2>
+    <p>Press <strong>Start camera</strong> and, when your browser asks, allow camera access for this site. A live image should appear within a second or two — if you can see yourself, your webcam is working. If you have more than one camera (for example a built-in laptop camera and an external USB webcam), choose the one you want from the <strong>Camera</strong> dropdown. Device names only become visible after you grant permission the first time, which is a browser privacy feature.</p>
+    <p>The readout shows the resolution and frame rate your camera is actually delivering, which is useful when a camera claims 1080p but negotiates a lower mode. Use the <strong>Mirror</strong> toggle to flip the preview horizontally — mirrored view feels natural for framing yourself, while the un-mirrored view shows what other people see on a call.</p>
+    <p>Nothing you see here is stored. When you press <strong>Stop</strong> or leave the page, the camera light turns off and the stream is released. If the preview never appears, see the troubleshooting notes below.</p>
+
+    <h2>Camera not working?</h2>
+    <ul>
+      <li><strong>Permission denied:</strong> click the camera icon in your browser's address bar and set this site to "Allow", then press Start again.</li>
+      <li><strong>Black image or "in use" error:</strong> another app (Zoom, Teams, or another browser tab) is holding the camera. Close it and retry.</li>
+      <li><strong>No camera found:</strong> check the physical connection or privacy shutter, and make sure the camera isn't disabled in your operating system settings.</li>
+    </ul>
+
+    <p>Getting ready for a meeting? Read <a href="/articles/how-to-test-webcam-and-mic-before-a-call.html">how to test your webcam and mic before a call</a>, or check your <a href="/mic-test.html">microphone</a> and <a href="/speaker-test.html">speakers</a> next.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/webcam.js"></script>
+</body>
+</html>

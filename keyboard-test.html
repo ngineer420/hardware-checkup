@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keyboard Tester — Check Keys, Stuck Keys &amp; Ghosting Online</title>
+<meta name="description" content="Free online keyboard tester. Press keys to light them up, see the last key with its event.code and keyCode, spot stuck keys and dead keys, and check N-key rollover. Runs entirely in your browser.">
+<link rel="canonical" href="https://hardwarecheckup.com/keyboard-test.html">
+<meta name="theme-color" content="#14161a">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Keyboard Tester",
+  "url": "https://hardwarecheckup.com/keyboard-test.html",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free browser-based keyboard tester that highlights keys, shows key codes, and reveals stuck keys and ghosting."
+}
+</script>
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+    <nav class="site-nav" aria-label="Tools">
+      <a href="/webcam-test.html">Webcam</a>
+      <a href="/mic-test.html">Mic</a>
+      <a href="/speaker-test.html">Speakers</a>
+      <a href="/keyboard-test.html" aria-current="page">Keyboard</a>
+      <a href="/mouse-test.html">Mouse</a>
+      <a href="/dead-pixel-test.html">Dead Pixel</a>
+    </nav>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="tool-hero">
+    <h1>Keyboard Tester</h1>
+    <p>Press any key and it lights up on the on-screen keyboard. Keys you've pressed stay highlighted so you can spot dead or stuck keys, and holding several at once reveals ghosting and N-key rollover limits. Keystrokes never leave your browser.</p>
+  </div>
+
+  <div class="panel">
+    <div class="kb-readout field-grid">
+      <div class="field"><span class="k">Last key</span><span class="v" id="f-key">—</span></div>
+      <div class="field"><span class="k">event.code</span><span class="v" id="f-code" style="font-size:14px;">—</span></div>
+      <div class="field"><span class="k">keyCode</span><span class="v" id="f-keycode">—</span></div>
+      <div class="field"><span class="k">Held now</span><span class="v" id="f-held">0</span></div>
+    </div>
+    <div class="control-row" style="margin-top:12px;">
+      <span style="font-size:12.5px;color:var(--text-dim);">Keys pressed this session: <strong id="f-count" style="color:var(--accent);">0</strong></span>
+      <button id="reset-btn" type="button">Reset highlights</button>
+    </div>
+
+    <div id="kb" class="kb" aria-label="On-screen keyboard" style="margin-top:8px;"></div>
+    <p class="type-hint">Bright = currently held · Amber = pressed at least once. Some browser and OS shortcuts (like Win/Cmd combos) may be intercepted before they reach this page.</p>
+  </div>
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
+    <h2>How to use the keyboard tester</h2>
+    <p>Click anywhere on this page so it has focus, then start pressing keys. Each key you press turns bright while it's held and stays amber after you release it, building up a picture of every key that registered. To check a suspicious key, press it and watch for the highlight — if a physical key press produces no reaction on screen, that key (or its switch) is likely dead. The <strong>last key</strong> panel shows the character, the physical <code>event.code</code>, and the legacy <code>keyCode</code>, which is handy for debugging remaps and unusual layouts.</p>
+    <p>To hunt for a <strong>stuck key</strong>, press <strong>Reset highlights</strong> and then don't touch the keyboard: if any key lights up on its own, or a key stays lit after you let go, that switch is sticking. To test <strong>ghosting and N-key rollover</strong>, hold several keys down at once and watch the <strong>held now</strong> counter — on a basic membrane keyboard some combinations simply won't register beyond two or three simultaneous keys, while a good gaming keyboard will happily show six or more. That behaviour is explained in depth in our article below.</p>
+    <p>This tool reads standard keyboard events locally and stores nothing. A handful of combinations reserved by your operating system or browser (for example the Windows or Command key, or function-key media controls) may never reach the page, so their absence here isn't necessarily a fault.</p>
+
+    <p>Curious why some key combos don't work? Read <a href="/articles/keyboard-ghosting-and-n-key-rollover-explained.html">keyboard ghosting and N-key rollover explained</a>, or run the <a href="/mouse-test.html">mouse test</a> next.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/keyboard.js"></script>
+</body>
+</html>
