@@ -1,23 +1,25 @@
 /* hardwarecheckup.com — design system
-   Warm-graphite hardware-testing aesthetic, system monospace stack (zero external font requests).
-   Base tokens & shell shared with the wider tool-site portfolio; tool-specific UI appended below. */
+   Diagnostic-console aesthetic: dark instrument slate, signal-teal accent,
+   status-LED motifs, faint HUD grid. System monospace stack (zero external
+   font requests). Base tokens & shell shared across the hub + tool pages. */
 
 :root {
-  --bg: #14161a;
-  --bg-raised: #1b1e24;
-  --bg-inset: #0f1114;
-  --border: #2b2f37;
-  --border-soft: #21242b;
-  --text: #e9e7e2;
-  --text-dim: #a2a7b0;
-  --text-faint: #62666f;
-  --accent: #ffb454;
-  --accent-dim: #b9822f;
-  --accent-contrast: #201200;
-  --correct: #6fd68a;
+  --bg: #0c1114;
+  --bg-raised: #131a1f;
+  --bg-inset: #080d10;
+  --border: #223038;
+  --border-soft: #182229;
+  --text: #e4edf0;
+  --text-dim: #96a6ad;
+  --text-faint: #5c6b72;
+  --accent: #2dd6c4;          /* signal teal */
+  --accent-dim: #1c9a8d;
+  --accent-contrast: #041d1a;
+  --accent-2: #4cc9ff;        /* diagnostic blue */
+  --correct: #4ade80;
   --incorrect: #ff6b6b;
   --incorrect-bg: rgba(255, 107, 107, 0.14);
-  --focus: #7cc6ff;
+  --focus: #6fe3d6;
   --radius: 6px;
   --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Menlo", "Consolas",
     "Liberation Mono", monospace;
@@ -25,40 +27,42 @@
 }
 
 :root[data-theme="light"] {
-  --bg: #f7f5f1;
+  --bg: #eef3f3;
   --bg-raised: #ffffff;
-  --bg-inset: #edeae3;
-  --border: #ddd7cb;
-  --border-soft: #e7e2d8;
-  --text: #201c16;
-  --text-dim: #5a5648;
-  --text-faint: #928d7e;
-  --accent: #b9722a;
-  --accent-dim: #8f5a20;
-  --accent-contrast: #fff8ee;
-  --correct: #2f8f52;
+  --bg-inset: #e3ebeb;
+  --border: #cdd9d9;
+  --border-soft: #dde6e6;
+  --text: #10201e;
+  --text-dim: #4a5b5a;
+  --text-faint: #869494;
+  --accent: #0d8f81;
+  --accent-dim: #0a6d62;
+  --accent-contrast: #eafffb;
+  --accent-2: #0a6cbf;
+  --correct: #1f9d54;
   --incorrect: #c8362b;
   --incorrect-bg: rgba(200, 54, 43, 0.1);
-  --focus: #0a6cbf;
+  --focus: #0a6d62;
 }
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
-    --bg: #f7f5f1;
+    --bg: #eef3f3;
     --bg-raised: #ffffff;
-    --bg-inset: #edeae3;
-    --border: #ddd7cb;
-    --border-soft: #e7e2d8;
-    --text: #201c16;
-    --text-dim: #5a5648;
-    --text-faint: #928d7e;
-    --accent: #b9722a;
-    --accent-dim: #8f5a20;
-    --accent-contrast: #fff8ee;
-    --correct: #2f8f52;
+    --bg-inset: #e3ebeb;
+    --border: #cdd9d9;
+    --border-soft: #dde6e6;
+    --text: #10201e;
+    --text-dim: #4a5b5a;
+    --text-faint: #869494;
+    --accent: #0d8f81;
+    --accent-dim: #0a6d62;
+    --accent-contrast: #eafffb;
+    --accent-2: #0a6cbf;
+    --correct: #1f9d54;
     --incorrect: #c8362b;
     --incorrect-bg: rgba(200, 54, 43, 0.1);
-    --focus: #0a6cbf;
+    --focus: #0a6d62;
   }
 }
 
@@ -68,6 +72,10 @@ html { color-scheme: dark light; }
 body {
   margin: 0;
   background: var(--bg);
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--accent) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--accent) 4%, transparent) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px;
   color: var(--text);
   font-family: var(--mono);
   font-size: 15px;
@@ -110,12 +118,16 @@ button:focus-visible, a:focus-visible, input:focus-visible {
   outline-offset: 2px;
 }
 button.primary {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 68%, var(--accent-2)));
+  border-color: transparent;
   color: var(--accent-contrast);
-  font-weight: 600;
+  font-weight: 700;
 }
-button.primary:hover { color: var(--accent-contrast); filter: brightness(1.08); }
+button.primary:hover {
+  color: var(--accent-contrast);
+  filter: brightness(1.05);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent), 0 6px 20px -8px color-mix(in srgb, var(--accent) 60%, transparent);
+}
 button.icon-btn { padding: 6px 10px; font-size: 13px; }
 
 /* ---------- layout shell ---------- */
@@ -142,7 +154,7 @@ button.icon-btn { padding: 6px 10px; font-size: 13px; }
   font-size: 18px;
   letter-spacing: -0.02em;
 }
-.brand-mark .bracket { color: var(--accent); }
+.brand-mark .bracket { color: var(--accent); text-shadow: 0 0 12px color-mix(in srgb, var(--accent) 55%, transparent); }
 .brand-tag { color: var(--text-faint); font-size: 12px; display: none; }
 @media (min-width: 640px) { .brand-tag { display: inline; } }
 
@@ -155,8 +167,23 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 24px 20px 60px; }
 .container-narrow h2 { font-size: 16px; margin-top: 32px; }
 .container-narrow p, .container-narrow li { color: var(--text-dim); }
 
-/* ---------- hero ---------- */
-.hero { text-align: center; padding: 20px 0 24px; }
+/* ---------- hero (diagnostics console) ---------- */
+.hero { text-align: center; padding: 22px 0 22px; }
+.hero::before {
+  content: "● SYSTEM READY — 6 DIAGNOSTICS AVAILABLE";
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 5px 14px;
+  font-size: 11px;
+  letter-spacing: .1em;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 9%, var(--bg-raised));
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+  border-radius: 999px;
+  text-indent: 0;
+}
 .hero h1 {
   font-size: clamp(22px, 4vw, 32px);
   margin: 0 0 8px;
@@ -395,19 +422,53 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 24px 20px 60px; }
 @media (min-width: 560px) { .tool-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 820px) { .tool-grid { grid-template-columns: repeat(3, 1fr); } }
 .tool-card {
+  position: relative;
   display: block;
   background: var(--bg-raised);
   border: 1px solid var(--border-soft);
+  border-left: 3px solid var(--border);
   border-radius: 10px;
   padding: 18px 18px 16px;
   color: inherit;
-  transition: border-color .12s ease, transform .12s ease;
+  overflow: hidden;
+  transition: border-color .14s ease, transform .14s ease, box-shadow .14s ease;
 }
-.tool-card:hover { border-color: var(--accent-dim); text-decoration: none; transform: translateY(-2px); }
+/* status LED in the corner */
+.tool-card::after {
+  content: "";
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--correct);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--correct) 22%, transparent);
+  animation: led-pulse 2.4s ease-in-out infinite;
+}
+.tool-card:hover {
+  border-color: var(--accent-dim);
+  border-left-color: var(--accent);
+  text-decoration: none;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px -14px color-mix(in srgb, var(--accent) 70%, transparent);
+}
 .tool-card .tc-icon { font-size: 22px; line-height: 1; display: block; margin-bottom: 10px; }
 .tool-card h3 { margin: 0 0 6px; font-size: 15.5px; color: var(--text); }
 .tool-card p { margin: 0; font-size: 13px; color: var(--text-dim); }
-.tool-card .tc-go { display: inline-block; margin-top: 10px; font-size: 12px; color: var(--accent); }
+.tool-card .tc-go {
+  display: inline-block;
+  margin-top: 12px;
+  font-size: 11px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+@keyframes led-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .35; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tool-card::after { animation: none; }
+}
 
 /* ---------- tool page shell ---------- */
 .tool-hero { text-align: center; padding: 12px 0 8px; }
@@ -621,5 +682,5 @@ canvas.scope {
   padding: 0; cursor: pointer;
 }
 
-.erabbit-mark { display: block; width: 10px; margin: 0 0 0 auto; line-height: 0; }
+.erabbit-mark { display: block; width: 10px; margin: 0 0 0 auto; line-height: 0; cursor: default; }
 .erabbit-mark img { display: block; width: 10px; height: 10px; }
