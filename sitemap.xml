@@ -36,6 +36,26 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://hardwarecheckup.com/refresh-rate-test.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hardwarecheckup.com/touchscreen-test.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hardwarecheckup.com/battery-test.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hardwarecheckup.com/color-test.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://hardwarecheckup.com/articles/how-to-test-webcam-and-mic-before-a-call.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

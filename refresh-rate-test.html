@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Screen Refresh Rate Test — Check Your Monitor's Actual Hz</title>
+<meta name="description" content="Free online refresh rate test. Measure your monitor's actual frames per second and confirm whether that 120Hz, 144Hz or 240Hz panel is really running at its rated speed. Runs in your browser.">
+<link rel="canonical" href="https://hardwarecheckup.com/refresh-rate-test.html">
+<meta name="theme-color" content="#0c1114">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Screen Refresh Rate Test — Check Your Monitor's Actual Hz">
+<meta property="og:description" content="Measure your display's real refresh rate in the browser and find out whether your high-refresh monitor is still set to 60Hz.">
+<meta property="og:url" content="https://hardwarecheckup.com/refresh-rate-test.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Screen Refresh Rate Test — Check Your Monitor's Actual Hz">
+<meta name="twitter:description" content="Measure your display's real refresh rate in the browser and find out whether your high-refresh monitor is still set to 60Hz.">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Screen Refresh Rate Test",
+  "url": "https://hardwarecheckup.com/refresh-rate-test.html",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free browser-based refresh rate test that measures actual frames per second with requestAnimationFrame and reports the matching display rate."
+}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7560786263587509" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+    <button id="nav-toggle" class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation menu">☰</button>
+    <nav class="site-nav" id="site-nav" aria-label="Tools">
+      <a href="/webcam-test.html">Webcam</a>
+      <a href="/mic-test.html">Mic</a>
+      <a href="/speaker-test.html">Speakers</a>
+      <a href="/keyboard-test.html">Keyboard</a>
+      <a href="/mouse-test.html">Mouse</a>
+      <a href="/dead-pixel-test.html">Dead Pixel</a>
+      <a href="/refresh-rate-test.html" aria-current="page">Refresh Rate</a>
+      <a href="/touchscreen-test.html">Touchscreen</a>
+      <a href="/battery-test.html">Battery</a>
+      <a href="/color-test.html">Colour</a>
+    </nav>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="tool-hero">
+    <h1>Screen Refresh Rate Test</h1>
+    <p>Measure how many frames per second your display is actually delivering, and find out whether the 144Hz monitor you paid for is still sitting at 60Hz. Everything runs locally in your browser.</p>
+  </div>
+
+  <div class="panel">
+    <div class="control-row">
+      <button id="start-btn" class="primary" type="button">Measure refresh rate</button>
+      <button id="stop-btn" type="button">Stop</button>
+    </div>
+    <div class="rr-meter" aria-hidden="true">
+      <div class="rr-progress"><div id="rr-progress-bar" class="rr-progress-bar"></div></div>
+      <div id="rr-pulse" class="rr-pulse"><span></span><span></span><span></span><span></span></div>
+    </div>
+    <p id="status" class="status-msg" role="status" aria-live="polite"></p>
+
+    <div class="field-grid">
+      <div class="field"><span class="k">Measured</span><span class="v" id="f-hz">—</span></div>
+      <div class="field"><span class="k">Matches</span><span class="v" id="f-claimed">—</span></div>
+      <div class="field"><span class="k">Frame time</span><span class="v" id="f-frame">—</span></div>
+      <div class="field"><span class="k">Jitter</span><span class="v" id="f-jitter">—</span></div>
+      <div class="field"><span class="k">Frames sampled</span><span class="v" id="f-samples">—</span></div>
+      <div class="field"><span class="k">Late frames</span><span class="v" id="f-dropped">—</span></div>
+    </div>
+
+    <p id="rr-verdict" class="rr-verdict" role="status" hidden></p>
+  </div>
+
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
+    <h2>How to test your screen refresh rate</h2>
+    <p>Press <strong>Measure refresh rate</strong> and leave this window in front for five seconds. The test asks the browser for an animation frame, over and over, and records how long each one takes to arrive. Your browser paints in step with the display, so the gap between frames <em>is</em> the refresh interval — about 16.7&nbsp;ms on a 60Hz panel, 6.9&nbsp;ms on 144Hz. Divide 1000 by that and you have the rate.</p>
+    <p>Five seconds is not padding. A one-second sample wobbles by several Hz between runs, which is worse than useless when the number you are checking is the difference between 120 and 144. Five seconds gathers three hundred frames at 60Hz, and the result is taken as the <strong>median</strong> rather than the average — a single garbage-collection pause or a background task produces one 300&nbsp;ms frame, and an average would quietly drag a genuine 144Hz reading down to something like 138.</p>
+
+    <h2>My monitor is 144Hz but this says 60</h2>
+    <p>That is the single most common finding here, and it is usually real. A high-refresh monitor almost never arrives set to its rated speed — Windows and macOS both default new displays to 60Hz and leave it to you to change. Check the display settings on your computer first. If the option for a higher rate is missing or greyed out, the usual causes are the cable (an older HDMI cable cannot carry a high refresh rate at full resolution — DisplayPort, or a certified high-speed HDMI cable, generally can), the port you plugged into, or a graphics driver that needs updating.</p>
+    <p>Browsers also cap what they will report. A tab in the background has its frame delivery slowed right down to save power, so this test abandons a run if the window loses focus rather than reporting the throttled figure as your refresh rate. Some browsers also cap animation at 60fps regardless of the panel, and a few laptops drop to a lower rate on battery to save power — worth plugging in and measuring again before you conclude anything.</p>
+
+    <h2>What the other numbers mean</h2>
+    <p><strong>Frame time</strong> is the median gap between frames, the raw measurement everything else derives from. <strong>Jitter</strong> is how much that gap varies across the middle 90% of the sample; a steady display shows a fraction of a millisecond, and a large figure means something on your machine is competing for the GPU. <strong>Late frames</strong> counts frames that took at least half again as long as they should have — a handful is normal, a lot means the browser could not keep up. If the measured rate does not match any standard figure, a variable-refresh display (G-Sync or FreeSync) may be lowering the rate on a mostly static screen, which is exactly what it is designed to do.</p>
+
+    <p>Checking a new display all round? The <a href="/dead-pixel-test.html">dead pixel test</a> finds individual failed pixels and the <a href="/color-test.html">colour and gradient test</a> shows up banding and backlight problems.</p>
+
+  </section>
+</main>
+
+<footer class="site-footer">
+  <nav class="footer-tools" aria-label="All tools">
+    <span class="footer-tools-label">Tools</span>
+    <a href="/webcam-test.html">Webcam</a>
+    <a href="/mic-test.html">Mic</a>
+    <a href="/speaker-test.html">Speakers</a>
+    <a href="/keyboard-test.html">Keyboard</a>
+    <a href="/mouse-test.html">Mouse</a>
+    <a href="/dead-pixel-test.html">Dead Pixel</a>
+    <a href="/refresh-rate-test.html">Refresh Rate</a>
+    <a href="/touchscreen-test.html">Touchscreen</a>
+    <a href="/battery-test.html">Battery</a>
+    <a href="/color-test.html">Colour</a>
+  </nav>
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/refreshrate.js"></script>
+<a href="https://erabb.it" class="erabbit-mark" aria-label="erabb.it"><img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐇</text></svg>" width="10" height="10" alt=""></a>
+</body>
+</html>
