@@ -400,7 +400,60 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 24px 20px 60px; }
 }
 .site-nav a:hover { color: var(--accent); border-color: var(--border); text-decoration: none; }
 .site-nav a[aria-current="page"] { color: var(--accent); border-color: var(--accent-dim); }
-@media (max-width: 720px) { .site-nav { display: none; } }
+
+/* The nav is a disclosure below 720px, not a deletion. It used to be
+   `display: none` with nothing replacing it, which left a phone visitor on
+   any one tool with no route to the other five. */
+.nav-toggle { display: none; }
+@media (max-width: 720px) {
+  .header-inner { flex-wrap: wrap; }
+  .brand { margin-right: auto; }
+  .nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
+  .site-nav {
+    display: none;
+    order: 1;
+    flex-basis: 100%;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-soft);
+  }
+  .site-nav.is-open { display: flex; }
+  /* 12px vertical keeps each row over the 44px minimum tap target -- these
+     are phone visitors by definition. */
+  .site-nav a { font-size: 14px; padding: 12px 8px; }
+}
+
+/* ---------- footer tool list ---------- */
+/* Always visible, on every page, with no JavaScript involved. The articles,
+   privacy and terms pages carry no header nav at all, so this is the only
+   route off them -- and it is crawlable. */
+.footer-tools {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 22px 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+  font-size: 13px;
+}
+.footer-tools-label {
+  color: var(--text-faint);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+.footer-tools a { color: var(--text-dim); }
+.footer-tools a:hover { color: var(--accent); }
+/* On the articles, privacy and terms pages there is no header nav at all, so
+   below 720px this list is the only navigation on the page. Give it real
+   tap targets rather than desktop-density text links. */
+@media (max-width: 720px) {
+  .footer-tools { gap: 0 14px; padding-top: 14px; }
+  .footer-tools a { padding: 12px 2px; }
+}
 
 /* ---------- privacy note ---------- */
 .privacy-note {

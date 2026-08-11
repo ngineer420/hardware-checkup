@@ -32,7 +32,8 @@
       <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
       <span class="brand-tag">browser hardware tests</span>
     </a>
-    <nav class="site-nav" aria-label="Tools">
+    <button id="nav-toggle" class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation menu">☰</button>
+    <nav class="site-nav" id="site-nav" aria-label="Tools">
       <a href="/webcam-test.html">Webcam</a>
       <a href="/mic-test.html">Mic</a>
       <a href="/speaker-test.html">Speakers</a>
@@ -79,6 +80,15 @@
 </main>
 
 <footer class="site-footer">
+  <nav class="footer-tools" aria-label="All tools">
+    <span class="footer-tools-label">Tools</span>
+    <a href="/webcam-test.html">Webcam</a>
+    <a href="/mic-test.html">Mic</a>
+    <a href="/speaker-test.html">Speakers</a>
+    <a href="/keyboard-test.html">Keyboard</a>
+    <a href="/mouse-test.html">Mouse</a>
+    <a href="/dead-pixel-test.html">Dead Pixel</a>
+  </nav>
   <div class="footer-inner">
     <div>© <span id="year"></span> hardwarecheckup.com</div>
     <div class="footer-links">

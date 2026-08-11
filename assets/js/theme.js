@@ -1,4 +1,4 @@
-/* hardwarecheckup.com — shared theme toggle + footer year.
+/* hardwarecheckup.com — shared theme toggle + mobile nav + footer year.
    Runs on every page. 100% client-side; no network, no storage of anything but the theme choice. */
 (function () {
   "use strict";
@@ -21,6 +21,18 @@
         try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
       });
     }
+    /* Mobile nav disclosure. Same pattern as perfecttune.net. If this script
+       never runs, the footer tool list is still there on every page, so
+       navigation never depends on JavaScript. */
+    var navToggle = document.getElementById("nav-toggle");
+    var nav = document.getElementById("site-nav");
+    if (navToggle && nav) {
+      navToggle.addEventListener("click", function () {
+        var open = nav.classList.toggle("is-open");
+        navToggle.setAttribute("aria-expanded", String(open));
+      });
+    }
+
     var yr = document.getElementById("year");
     if (yr) yr.textContent = new Date().getFullYear();
   });
