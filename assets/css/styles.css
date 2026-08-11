@@ -155,7 +155,11 @@ button.icon-btn { padding: 6px 10px; font-size: 13px; }
   letter-spacing: -0.02em;
 }
 .brand-mark .bracket { color: var(--accent); text-shadow: 0 0 12px color-mix(in srgb, var(--accent) 55%, transparent); }
-.brand-tag { color: var(--text-faint); font-size: 12px; display: none; }
+/* nowrap matters now the nav is ten items: the header row is capped at
+   --maxw, so the tag and the nav compete for it, and letting the tag break
+   turned three words into three stacked lines and a 95px-tall header. The nav
+   wraps to a second row instead, which is what it is shaped for. */
+.brand-tag { color: var(--text-faint); font-size: 12px; display: none; white-space: nowrap; }
 @media (min-width: 640px) { .brand-tag { display: inline; } }
 
 .header-actions { display: flex; align-items: center; gap: 8px; }
@@ -170,7 +174,7 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 24px 20px 60px; }
 /* ---------- hero (diagnostics console) ---------- */
 .hero { text-align: center; padding: 22px 0 22px; }
 .hero::before {
-  content: "● SYSTEM READY — 6 DIAGNOSTICS AVAILABLE";
+  content: "● SYSTEM READY — 10 DIAGNOSTICS AVAILABLE";
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -423,6 +427,16 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 24px 20px 60px; }
   /* 12px vertical keeps each row over the 44px minimum tap target -- these
      are phone visitors by definition. */
   .site-nav a { font-size: 14px; padding: 12px 8px; }
+  /* At six tools the open drawer was ~280px and simply pushed the page down.
+     At ten it is ~470px, more than half of a 390x844 phone, and the last two
+     entries land below the fold under a sticky header -- so the disclosure
+     scrolls itself instead of growing without limit. 60vh keeps the page
+     underneath visible, which is what tells you the menu is a menu. */
+  /* `flex-wrap: nowrap` is load-bearing, not tidying. The base rule wraps, and
+     a wrapping column that hits a max-height does not scroll — it silently
+     spills into a second column, so on a short phone the menu turned into two
+     ragged columns of half-width links and the overflow rule never fired. */
+  .site-nav { flex-wrap: nowrap; max-height: 60vh; overflow-y: auto; overscroll-behavior: contain; }
 }
 
 /* ---------- footer tool list ---------- */
@@ -734,6 +748,203 @@ canvas.scope {
   border: 1px solid var(--border);
   padding: 0; cursor: pointer;
 }
+
+/* ---------- refresh rate ---------- */
+.rr-meter { margin: 14px 0 4px; }
+.rr-progress {
+  height: 6px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.rr-progress-bar {
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width .1s linear;
+}
+/* Four dots sliding across while the sample runs. It is not decoration: the
+   measurement takes five seconds with nothing else moving, and a still page
+   for five seconds reads as a hang. It also gives the eye something animating
+   at the display's own rate to look at. */
+.rr-pulse { display: flex; gap: 6px; margin-top: 12px; height: 10px; }
+.rr-pulse span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.rr-pulse.is-running span { animation: rr-bounce 1s infinite ease-in-out; background: var(--accent); }
+.rr-pulse.is-running span:nth-child(2) { animation-delay: .12s; }
+.rr-pulse.is-running span:nth-child(3) { animation-delay: .24s; }
+.rr-pulse.is-running span:nth-child(4) { animation-delay: .36s; }
+@keyframes rr-bounce {
+  0%, 100% { opacity: .25; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-5px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rr-pulse.is-running span { animation: none; opacity: .8; }
+}
+.rr-verdict {
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg-inset));
+  color: var(--text-dim);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+.rr-verdict[hidden] { display: none; }
+
+/* ---------- touchscreen ---------- */
+.touch-surface {
+  position: relative;
+  margin: 14px 0 16px;
+  height: min(58vh, 420px);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-inset);
+  overflow: hidden;
+  /* Without this the browser pans, zooms and long-press-selects instead of
+     reporting the touches, which is the whole point of the surface. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  cursor: crosshair;
+}
+.touch-surface canvas { position: absolute; inset: 0; display: block; }
+.touch-grid {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: repeat(8, 1fr);
+  grid-auto-rows: 1fr;
+  pointer-events: none;
+}
+.touch-cell {
+  border-right: 1px solid var(--border-soft);
+  border-bottom: 1px solid var(--border-soft);
+  transition: background .18s ease;
+}
+.touch-cell.is-hit { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.touch-dots { position: absolute; inset: 0; pointer-events: none; }
+.touch-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+}
+.touch-hint {
+  position: absolute;
+  inset: auto 0 50% 0;
+  text-align: center;
+  color: var(--text-faint);
+  font-size: 13px;
+  margin: 0;
+  padding: 0 16px;
+  pointer-events: none;
+}
+.touch-hint[hidden] { display: none; }
+
+/* ---------- battery ---------- */
+.bat-shell { display: flex; align-items: center; gap: 3px; margin: 14px 0 18px; }
+.bat-body {
+  position: relative;
+  flex: 1;
+  max-width: 320px;
+  height: 46px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-inset);
+  overflow: hidden;
+}
+.bat-cap {
+  width: 6px;
+  height: 18px;
+  border-radius: 0 3px 3px 0;
+  background: var(--border);
+}
+.bat-fill {
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+  transition: width .4s ease, background .3s ease;
+}
+.bat-fill.is-low { background: var(--incorrect); }
+.bat-fill.is-charging { background: var(--correct); }
+.bat-pct {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+  /* The fill slides under this, so the label has to stay legible on both the
+     filled and the empty side rather than picking one and losing on the other. */
+  mix-blend-mode: difference;
+  color: #fff;
+}
+.bat-bolt { position: absolute; top: 4px; right: 8px; font-size: 14px; }
+.bat-bolt[hidden] { display: none; }
+
+/* Shown instead of the readout when the browser will not provide one. It is a
+   real answer, not an error state, so it gets a panel rather than red text. */
+.notice {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-inset);
+  padding: 16px 18px;
+  margin-top: 10px;
+}
+.notice[hidden] { display: none; }
+.notice h2 { font-size: 15px; }
+.notice p { color: var(--text-dim); font-size: 13.5px; line-height: 1.6; }
+.notice p:last-child { margin-bottom: 0; }
+.notice code {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  background: var(--bg-raised);
+  border: 1px solid var(--border-soft);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* ---------- colour & gradient ---------- */
+.ct-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  display: none;
+  cursor: none;
+}
+.ct-overlay.open { display: block; }
+.ct-overlay canvas { display: block; width: 100%; height: 100%; }
+.ct-hint {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  max-width: min(680px, 90vw);
+  background: rgba(0,0,0,.62);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.5;
+  padding: 8px 14px;
+  border-radius: 8px;
+  pointer-events: none;
+  text-align: center;
+}
+.pattern-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.pattern-btn { font-size: 12.5px; padding: 7px 12px; }
 
 .erabbit-mark { display: block; width: 10px; margin: 0 0 0 auto; line-height: 0; cursor: default; }
 .erabbit-mark img { display: block; width: 10px; height: 10px; }
