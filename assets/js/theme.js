@@ -1,4 +1,4 @@
-/* hardwarecheckup.com — shared theme toggle + mobile nav + footer year.
+/* hardwarecheckup.com — shared theme toggle + toolbar + footer year.
    Runs on every page. 100% client-side; no network, no storage of anything but the theme choice. */
 (function () {
   "use strict";
@@ -21,27 +21,65 @@
         try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
       });
     }
-    /* Mobile nav disclosure. Same pattern as perfecttune.net. If this script
-       never runs, the footer tool list is still there on every page, so
-       navigation never depends on JavaScript. */
-    var navToggle = document.getElementById("nav-toggle");
-    var nav = document.getElementById("site-nav");
-    if (navToggle && nav) {
-      navToggle.addEventListener("click", function () {
-        var open = nav.classList.toggle("is-open");
-        navToggle.setAttribute("aria-expanded", String(open));
-        /* The drawer is capped at 60vh and scrolls, and the tool list is now
-           long enough that the page you are on can sit below the fold of its
-           own menu -- so the open drawer would show no current page at all.
-           Bring it into view rather than leaving it to be hunted for. */
-        if (open) {
-          var current = nav.querySelector('[aria-current="page"]');
-          if (current && current.scrollIntoView) {
-            try { current.scrollIntoView({ block: "nearest" }); } catch (e) { current.scrollIntoView(); }
-          }
-        }
+  /* ================================================================== *
+   * toolbar v1 — the portfolio navigation pattern.                      *
+   * Spec: github.com/ngineer420/ngineer420.github.io/issues/13          *
+   *                                                                     *
+   * Copied verbatim from the photoshrink pilot. Pure enhancement: with  *
+   * JS off, <details>/<summary> still discloses the sheet, the rail is  *
+   * still a native scroll container of real links, the edge fades are   *
+   * still CSS and the scrim is still CSS. Only the active-chip          *
+   * centring, Escape and click-outside are lost.                        *
+   * ================================================================== */
+  (function toolbar() {
+    var bar = document.querySelector('.toolbar');
+    if (!bar) return;
+    var rail = bar.querySelector('.tb-rail');
+    var menu = bar.querySelector('details.tb-menu');
+
+    if (rail) {
+      /* js-on hands the right-hand fade over to measurement. Until then the
+         CSS keeps it on, so a JS-disabled visitor never gets a chip clipped
+         mid-word with nothing to say there is more of the row. */
+      rail.classList.add('js-on');
+      var fades = function () {
+        var max = rail.scrollWidth - rail.clientWidth;
+        rail.classList.toggle('can-l', rail.scrollLeft > 1);
+        rail.classList.toggle('can-r', rail.scrollLeft < max - 1);
+      };
+      /* Centre the current chip, measured from the rail's own box rather than
+         through offsetLeft. The chips' offsetParent is .toolbar — the rail
+         itself is not positioned — so offsetLeft carries the trigger's width
+         with it, and centring on that number lands the active chip a whole
+         trigger-width left of centre, half under the left fade at 320px. This
+         is still a direct scrollLeft assignment and never scrollIntoView,
+         which would also scroll every ancestor and the document and so drop a
+         phone visitor below the header on arrival. */
+      var current = rail.querySelector('[aria-current]');
+      if (current) {
+        var cbox = current.getBoundingClientRect();
+        var rbox = rail.getBoundingClientRect();
+        rail.scrollLeft += (cbox.left - rbox.left) - (rbox.width - cbox.width) / 2;
+      }
+      rail.addEventListener('scroll', fades, { passive: true });
+      window.addEventListener('resize', fades);
+      fades();
+    }
+
+    if (menu) {
+      /* A disclosure, not a modal: focus is deliberately not trapped, Tab
+         walks the links and straight out the other side. */
+      window.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape' || !menu.open) return;
+        menu.open = false;
+        var summary = menu.querySelector('summary');
+        if (summary) summary.focus();
+      });
+      document.addEventListener('click', function (e) {
+        if (menu.open && !menu.contains(e.target)) menu.open = false;
       });
     }
+  })();
 
     var yr = document.getElementById("year");
     if (yr) yr.textContent = new Date().getFullYear();
