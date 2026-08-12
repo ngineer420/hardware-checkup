@@ -56,6 +56,26 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://hardwarecheckup.com/system-info.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hardwarecheckup.com/screen-resolution.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hardwarecheckup.com/what-is-my-browser.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hardwarecheckup.com/user-agent.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://hardwarecheckup.com/articles/how-to-test-webcam-and-mic-before-a-call.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

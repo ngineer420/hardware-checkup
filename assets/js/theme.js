@@ -30,6 +30,16 @@
       navToggle.addEventListener("click", function () {
         var open = nav.classList.toggle("is-open");
         navToggle.setAttribute("aria-expanded", String(open));
+        /* The drawer is capped at 60vh and scrolls, and the tool list is now
+           long enough that the page you are on can sit below the fold of its
+           own menu -- so the open drawer would show no current page at all.
+           Bring it into view rather than leaving it to be hunted for. */
+        if (open) {
+          var current = nav.querySelector('[aria-current="page"]');
+          if (current && current.scrollIntoView) {
+            try { current.scrollIntoView({ block: "nearest" }); } catch (e) { current.scrollIntoView(); }
+          }
+        }
       });
     }
 

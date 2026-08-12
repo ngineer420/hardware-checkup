@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hardware Checkup — Free Browser-Based Hardware Tests</title>
-<meta name="description" content="Free, no-signup hardware tests that run entirely in your browser: webcam, microphone, speakers, keyboard, mouse, dead pixel, refresh rate, touchscreen, battery and colour checks. Nothing is uploaded — everything runs on your device.">
+<meta name="description" content="Free, no-signup hardware tests that run entirely in your browser: webcam, microphone, speakers, keyboard, mouse, dead pixel, refresh rate, touchscreen, battery and colour checks, plus a full system info readout. Nothing is uploaded — everything runs on your device.">
 <link rel="canonical" href="https://hardwarecheckup.com/">
 <meta name="theme-color" content="#0c1114">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="Hardware Checkup — Free Browser-Based Hardware Tests">
-<meta property="og:description" content="Test your webcam, mic, speakers, keyboard, mouse, touchscreen, battery and screen — dead pixels, refresh rate and colour — instantly, free, and 100% in your browser.">
+<meta property="og:description" content="Test your webcam, mic, speakers, keyboard, mouse, touchscreen, battery and screen — dead pixels, refresh rate and colour — or read your full system info. Instant, free, and 100% in your browser.">
 <meta property="og:url" content="https://hardwarecheckup.com/">
 <meta property="og:image" content="https://hardwarecheckup.com/assets/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Hardware Checkup — Free Browser-Based Hardware Tests">
-<meta name="twitter:description" content="Test your webcam, mic, speakers, keyboard, mouse, touchscreen, battery and screen — dead pixels, refresh rate and colour — instantly, free, and 100% in your browser.">
+<meta name="twitter:description" content="Test your webcam, mic, speakers, keyboard, mouse, touchscreen, battery and screen — dead pixels, refresh rate and colour — or read your full system info. Instant, free, and 100% in your browser.">
 <meta name="twitter:image" content="https://hardwarecheckup.com/assets/og-image.png">
 
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -30,7 +30,7 @@
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Any",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-  "description": "Free browser-based hardware testing hub for webcam, microphone, speakers, keyboard, mouse, and dead pixel checks."
+  "description": "Free browser-based hardware testing hub for webcam, microphone, speakers, keyboard, mouse and dead pixel checks, plus a full system information readout."
 }
 </script>
 
@@ -57,6 +57,10 @@
       <a href="/touchscreen-test.html">Touchscreen</a>
       <a href="/battery-test.html">Battery</a>
       <a href="/color-test.html">Colour</a>
+      <a href="/system-info.html">System Info</a>
+      <a href="/screen-resolution.html">Resolution</a>
+      <a href="/what-is-my-browser.html">Browser</a>
+      <a href="/user-agent.html">User Agent</a>
     </nav>
     <div class="header-actions">
       <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
@@ -67,7 +71,7 @@
 <main id="main">
   <div class="hero">
     <h1>Test Your Hardware in the Browser</h1>
-    <p>Quick, free checks for your webcam, microphone, speakers, keyboard, mouse, touchscreen, battery and screen. No downloads, no sign-up.</p>
+    <p>Quick, free checks for your webcam, microphone, speakers, keyboard, mouse, touchscreen, battery and screen — and a full readout of your system, screen resolution and browser. No downloads, no sign-up.</p>
     <p class="privacy-note"><strong>Private by design:</strong> every test runs entirely on your device. No video, audio, or keystroke ever leaves your browser or is uploaded anywhere.</p>
   </div>
 
@@ -132,6 +136,30 @@
       <p>Full-screen gradients and flat fields that reveal banding, tint, black crush and backlight bleed.</p>
       <span class="tc-go">Open colour test →</span>
     </a>
+    <a class="tool-card" href="/system-info.html">
+      <span class="tc-icon" aria-hidden="true">🧾</span>
+      <h3>System Info</h3>
+      <p>Screen, browser, OS, CPU cores, memory and graphics on one page — with a button that copies it all as text.</p>
+      <span class="tc-go">Open system info →</span>
+    </a>
+    <a class="tool-card" href="/screen-resolution.html">
+      <span class="tc-icon" aria-hidden="true">📐</span>
+      <h3>Screen Resolution</h3>
+      <p>Your resolution in large type, plus pixel ratio, physical pixels and a live viewport size.</p>
+      <span class="tc-go">Check my resolution →</span>
+    </a>
+    <a class="tool-card" href="/what-is-my-browser.html">
+      <span class="tc-icon" aria-hidden="true">🧭</span>
+      <h3>What Browser Am I Using?</h3>
+      <p>Your browser, version, engine and operating system — from Client Hints where the browser offers them.</p>
+      <span class="tc-go">Identify my browser →</span>
+    </a>
+    <a class="tool-card" href="/user-agent.html">
+      <span class="tc-icon" aria-hidden="true">🪪</span>
+      <h3>My User Agent</h3>
+      <p>The full user agent string your browser sends, ready to copy, with a breakdown of what each part means.</p>
+      <span class="tc-go">Show my user agent →</span>
+    </a>
   </div>
 
   <section class="container-narrow about-section">
@@ -174,6 +202,10 @@
     <a href="/touchscreen-test.html">Touchscreen</a>
     <a href="/battery-test.html">Battery</a>
     <a href="/color-test.html">Colour</a>
+    <a href="/system-info.html">System Info</a>
+    <a href="/screen-resolution.html">Resolution</a>
+    <a href="/what-is-my-browser.html">Browser</a>
+    <a href="/user-agent.html">User Agent</a>
   </nav>
   <div class="footer-inner">
     <div>© <span id="year"></span> hardwarecheckup.com</div>

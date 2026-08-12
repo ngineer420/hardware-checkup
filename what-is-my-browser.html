@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Browser Am I Using? — Instant Answer</title>
+<meta name="description" content="Which browser you are using and which version, in large type, plus your operating system and rendering engine. Read from User-Agent Client Hints where available, and honest about what it cannot know.">
+<link rel="canonical" href="https://hardwarecheckup.com/what-is-my-browser.html">
+<meta name="theme-color" content="#0c1114">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="What Browser Am I Using? — Instant Answer">
+<meta property="og:description" content="Your browser name and version in large type, plus operating system and rendering engine. Runs entirely in your browser.">
+<meta property="og:url" content="https://hardwarecheckup.com/what-is-my-browser.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="What Browser Am I Using? — Instant Answer">
+<meta name="twitter:description" content="Your browser name and version in large type, plus operating system and rendering engine. Runs entirely in your browser.">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "What Browser Am I Using",
+  "url": "https://hardwarecheckup.com/what-is-my-browser.html",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Instantly identifies your browser and version, your operating system and the rendering engine, using User-Agent Client Hints where the browser supports them."
+}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7560786263587509" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+    <button id="nav-toggle" class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation menu">☰</button>
+    <nav class="site-nav" id="site-nav" aria-label="Tools">
+      <a href="/webcam-test.html">Webcam</a>
+      <a href="/mic-test.html">Mic</a>
+      <a href="/speaker-test.html">Speakers</a>
+      <a href="/keyboard-test.html">Keyboard</a>
+      <a href="/mouse-test.html">Mouse</a>
+      <a href="/dead-pixel-test.html">Dead Pixel</a>
+      <a href="/refresh-rate-test.html">Refresh Rate</a>
+      <a href="/touchscreen-test.html">Touchscreen</a>
+      <a href="/battery-test.html">Battery</a>
+      <a href="/color-test.html">Colour</a>
+      <a href="/system-info.html">System Info</a>
+      <a href="/screen-resolution.html">Resolution</a>
+      <a href="/what-is-my-browser.html" aria-current="page">Browser</a>
+      <a href="/user-agent.html">User Agent</a>
+    </nav>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="tool-hero">
+    <h1>What Browser Am I Using?</h1>
+  </div>
+
+  <div class="big-answer" data-si-big="browser">
+    <strong class="ba-value" data-si-big-value>Reading…</strong>
+    <span class="ba-sub" data-si-big-sub>Reading what your browser reports about itself.</span>
+  </div>
+
+  <div class="panel" data-si-fields="browser,browser-version,os,engine">
+    <p class="status-msg">Reading what this browser reports…</p>
+  </div>
+
+  <p class="si-more">Screen, CPU, graphics, refresh rate and the rest are on the <a href="/system-info.html">full system info page</a>, with a copy-as-text button. The raw string all of this is read from is on the <a href="/user-agent.html">user agent page</a>.</p>
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
+    <h2>Where this answer comes from</h2>
+    <p>Two places, and which one is used matters. The old way is the <a href="/user-agent.html">user agent string</a>, a line of text every browser sends with each request. It is thirty years of accumulated compatibility hacks — which is why Chrome, Edge, Opera, Vivaldi, Brave and Samsung Internet all describe themselves as “Mozilla/5.0” and all contain the word “Chrome”, and why every browser on a Mac or an iPhone contains the word “Safari”. Detection that reads the string in the wrong order confidently reports Edge users as Chrome users, which is the single most common fault in pages like this one. This page checks the specific browsers first and treats Chrome and Safari as the fallbacks they have to be.</p>
+    <p>The newer way is <strong>User-Agent Client Hints</strong>, a structured API that returns the browser's brand and version as data instead of prose. Chromium-based browsers support it; Safari and Firefox do not. Where it is available this page prefers it, because it is the source browsers keep accurate while they freeze and reduce the old string. It also contains a deliberate trap: the list of brands always includes one fake entry with randomised punctuation, such as “Not_A Brand” or “Not(A:Brand”, precisely so that code which naively takes the first item breaks during testing rather than in the wild.</p>
+
+    <h2>Why the version might look odd</h2>
+    <p>If you use a Chrome-based browser, the version in the user agent string now reads like <code>138.0.0.0</code> — the major number is real and everything after it has been zeroed out on purpose, to remove a chunk of fingerprinting detail. Client Hints can still supply the full version when a page asks for it, which is why the full version above may be more precise than the raw string suggests. Safari's version comes from a <code>Version/</code> token that has stayed reliable, and Firefox reports its version plainly.</p>
+
+    <h2>What this page will not claim</h2>
+    <p><strong>Brave</strong> is the clearest example. It ships Chrome's user agent verbatim and does not identify itself through Client Hints either, deliberately, because being indistinguishable from the largest possible crowd is the point of the product. If you are using Brave, this page will say Chrome — that is what your browser is telling every site you visit, which is exactly what a page answering “what does the web see me as” should report. The same goes for privacy extensions and developer tools that override the user agent: the answer above is what your browser <em>says</em>, and there is no client-side way to check it against what your browser <em>is</em>.</p>
+    <p>Operating system versions have the same problem in a different shape. Windows 11 identifies itself as “Windows NT 10.0”, exactly as Windows 10 does, so from the user agent string alone the two cannot be told apart — and this page will say “Windows 10 or 11” rather than pick one. Client Hints can resolve it, and where your browser offers them the answer above will name the version directly. macOS has reported “10.15.7” in every release since Big Sur, which is why a modern Mac can appear to be running a version from 2019.</p>
+
+    <h2>Keeping a browser up to date</h2>
+    <p>Browser updates are overwhelmingly security updates, and the version number above is worth checking against the current release if you have not restarted your browser in a while. Chrome, Edge, Firefox and Opera all update in the background and apply the update on the next restart — which means a browser left open for weeks can be several versions behind while insisting it is up to date. Safari updates with macOS and iOS. In Chrome and Edge the version is under the menu → Help → About; in Firefox, menu → Help → About Firefox; in Safari, the Apple menu → About This Mac tells you the system version that Safari comes from.</p>
+    <p>All of this is read locally in your browser and nothing is uploaded. If you are troubleshooting something specific rather than curious, the <a href="/system-info.html">full system info page</a> collects every field on one screen with a button that copies it as plain text for a support ticket.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <nav class="footer-tools" aria-label="All tools">
+    <span class="footer-tools-label">Tools</span>
+    <a href="/webcam-test.html">Webcam</a>
+    <a href="/mic-test.html">Mic</a>
+    <a href="/speaker-test.html">Speakers</a>
+    <a href="/keyboard-test.html">Keyboard</a>
+    <a href="/mouse-test.html">Mouse</a>
+    <a href="/dead-pixel-test.html">Dead Pixel</a>
+    <a href="/refresh-rate-test.html">Refresh Rate</a>
+    <a href="/touchscreen-test.html">Touchscreen</a>
+    <a href="/battery-test.html">Battery</a>
+    <a href="/color-test.html">Colour</a>
+    <a href="/system-info.html">System Info</a>
+    <a href="/screen-resolution.html">Resolution</a>
+    <a href="/what-is-my-browser.html">Browser</a>
+    <a href="/user-agent.html">User Agent</a>
+  </nav>
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/sysinfo.js"></script>
+<a href="https://erabb.it" class="erabbit-mark" aria-label="erabb.it"><img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐇</text></svg>" width="10" height="10" alt=""></a>
+</body>
+</html>

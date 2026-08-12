@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My System Info — Screen, Browser, CPU, GPU and OS in One Page</title>
+<meta name="description" content="See everything your browser knows about this device: screen resolution, device pixel ratio, refresh rate, browser and OS version, CPU cores, memory, GPU, touch support, language and time zone — with a one-click copy for support tickets.">
+<link rel="canonical" href="https://hardwarecheckup.com/system-info.html">
+<meta name="theme-color" content="#0c1114">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="My System Info — Screen, Browser, CPU, GPU and OS in One Page">
+<meta property="og:description" content="Every detail your browser exposes about this device, on one page, with a copy-as-text button for support tickets. Nothing is uploaded.">
+<meta property="og:url" content="https://hardwarecheckup.com/system-info.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="My System Info — Screen, Browser, CPU, GPU and OS in One Page">
+<meta name="twitter:description" content="Every detail your browser exposes about this device, on one page, with a copy-as-text button for support tickets. Nothing is uploaded.">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "System Info",
+  "url": "https://hardwarecheckup.com/system-info.html",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free browser-based system information readout: screen resolution, pixel ratio, refresh rate, browser and OS version, CPU cores, device memory, GPU, touch support, language and time zone, with a copy-as-plain-text button."
+}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7560786263587509" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+    <button id="nav-toggle" class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation menu">☰</button>
+    <nav class="site-nav" id="site-nav" aria-label="Tools">
+      <a href="/webcam-test.html">Webcam</a>
+      <a href="/mic-test.html">Mic</a>
+      <a href="/speaker-test.html">Speakers</a>
+      <a href="/keyboard-test.html">Keyboard</a>
+      <a href="/mouse-test.html">Mouse</a>
+      <a href="/dead-pixel-test.html">Dead Pixel</a>
+      <a href="/refresh-rate-test.html">Refresh Rate</a>
+      <a href="/touchscreen-test.html">Touchscreen</a>
+      <a href="/battery-test.html">Battery</a>
+      <a href="/color-test.html">Colour</a>
+      <a href="/system-info.html" aria-current="page">System Info</a>
+      <a href="/screen-resolution.html">Resolution</a>
+      <a href="/what-is-my-browser.html">Browser</a>
+      <a href="/user-agent.html">User Agent</a>
+    </nav>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="tool-hero">
+    <h1>My System Info</h1>
+    <p>Everything your browser will tell a web page about this device — screen, resolution, browser, operating system, processor, graphics, touch, language and time zone — on one page, with a button that copies the lot as plain text. Nothing is uploaded, and anything your browser withholds is marked as unavailable rather than guessed at.</p>
+  </div>
+
+  <div class="panel">
+    <div class="control-row">
+      <button id="copy-btn" class="primary" type="button">Copy everything as text</button>
+      <button id="show-text-btn" type="button">Show as text</button>
+    </div>
+    <p id="copy-status" class="status-msg" role="status" aria-live="polite">Paste it straight into a support ticket, a forum post or a bug report.</p>
+    <textarea id="si-text" readonly hidden aria-label="System information as plain text"></textarea>
+  </div>
+
+  <div class="panel" data-si-report>
+    <p class="status-msg">Reading what this browser reports…</p>
+  </div>
+
+  <div class="panel">
+    <h2>Measure the refresh rate</h2>
+    <p class="status-msg" style="margin-top:0;">The one figure on this page that has to be measured rather than read. It takes five seconds of animation frames, and the result is added to the table above and to the copied text.</p>
+    <div class="control-row">
+      <button id="start-btn" class="primary" type="button">Measure refresh rate</button>
+      <button id="stop-btn" type="button">Stop</button>
+    </div>
+    <div class="rr-meter" aria-hidden="true">
+      <div class="rr-progress"><div id="rr-progress-bar" class="rr-progress-bar"></div></div>
+      <div id="rr-pulse" class="rr-pulse"><span></span><span></span><span></span><span></span></div>
+    </div>
+    <p id="status" class="status-msg" role="status" aria-live="polite"></p>
+
+    <div class="field-grid">
+      <div class="field"><span class="k">Measured</span><span class="v" id="f-hz">—</span></div>
+      <div class="field"><span class="k">Matches</span><span class="v" id="f-claimed">—</span></div>
+      <div class="field"><span class="k">Frame time</span><span class="v" id="f-frame">—</span></div>
+      <div class="field"><span class="k">Jitter</span><span class="v" id="f-jitter">—</span></div>
+      <div class="field"><span class="k">Frames sampled</span><span class="v" id="f-samples">—</span></div>
+      <div class="field"><span class="k">Late frames</span><span class="v" id="f-dropped">—</span></div>
+    </div>
+
+    <p id="rr-verdict" class="rr-verdict" role="status" hidden></p>
+  </div>
+
+  <div class="notice" style="margin-top:22px;">
+    <h2 style="margin-top:0;">What this page cannot tell you</h2>
+    <p>This page reports <strong>only what the browser exposes locally</strong>. It makes no network requests of any kind, so there are things people often come looking for that it genuinely cannot report, and it will not pretend otherwise:</p>
+    <p><strong>Your IP address, internet provider and location.</strong> A web page cannot read its own visitor's IP address from JavaScript — the address is known to the <em>server</em> at the other end of a connection, which is why every site that shows you an IP is telling you what its server saw. Getting one here would mean calling somebody else's API and sending your request to them, and this site does not make outbound calls. Location works the same way: an approximate city comes from an IP lookup on a server, and a precise one comes from the Geolocation API, which asks your permission first and is a different thing from a system readout.</p>
+    <p><strong>Your exact RAM, storage, model or serial number.</strong> Browsers do not expose them. <code>deviceMemory</code> is a deliberately coarse figure capped at 8 GB, and there is no equivalent for disks, motherboards or model names.</p>
+    <p><strong>Whether the numbers describe a virtual machine, a VPN or a spoofed browser.</strong> Everything here is what the browser <em>says</em>, and any of it can be changed by an extension, a privacy setting or a developer tools override.</p>
+  </div>
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
+    <h2>Why fields say “not available in this browser”</h2>
+    <p>Because that is frequently the true answer, and a made-up value would be worse than none. Three of the readings above are missing for a large share of visitors, entirely by design:</p>
+    <p><strong>Device memory</strong> exists only in Chromium-based browsers — Chrome, Edge, Opera, Brave, Samsung Internet. Safari and Firefox never implemented it. Even where it works, the figure is snapped to 0.25, 0.5, 1, 2, 4 or 8 GB and capped at 8, so a 64&nbsp;GB workstation reports “8&nbsp;GB or more”. That coarseness is the point: a precise memory size is one more bit of a fingerprint.</p>
+    <p><strong>The graphics card</strong> comes from a WebGL extension named <code>WEBGL_debug_renderer_info</code>, which browsers increasingly restrict. Firefox masks it by default, and other browsers withhold it in private windows, in cross-origin frames, and when a page is not permitted to use it. When it is masked, the browser returns a generic string like “WebKit WebGL” — this page treats that as no answer at all rather than printing it as your graphics card.</p>
+    <p><strong>The browser and OS version</strong> are the fields under most active change. Chrome has frozen the version in the old user agent string (which is why Chrome-based browsers report a version like 138.0.0.0, with the detail zeroed out), macOS has reported “10_15_7” in every release since Big Sur, and Windows 11 identifies itself as Windows NT 10.0 exactly as Windows 10 does. Where a browser supports <strong>User-Agent Client Hints</strong> — currently the Chromium family — this page asks for the real values through that API instead, which is how it can separate Windows 10 from Windows 11 and report a current macOS version. Where it does not, the page reports the ambiguity rather than resolving it with a guess.</p>
+
+    <h2>How to use the copy button</h2>
+    <p>Press <strong>Copy everything as text</strong> and the whole readout goes to your clipboard as plain text, grouped under headings, one field per line. It is meant to be pasted directly into a support ticket, a bug report, a forum post asking why a game stutters, or a message to whoever is helping you — the sort of place where “it doesn't work on my computer” is the opening line and the first four replies are all requests for exactly this information. Fields your browser withheld are included as “not available in this browser”, because knowing that a value could not be read is itself useful to whoever is helping. If your browser blocks clipboard access, the text appears in a box on the page instead so you can select it manually.</p>
+
+    <h2>What the display numbers mean</h2>
+    <p><strong>Screen resolution</strong> is reported in CSS pixels, which is the figure your operating system's display settings usually show. <strong>Device pixel ratio</strong> is how many physical pixels the panel uses to draw one CSS pixel: 1 on a standard display, 2 on most Retina and HiDPI screens, and fractional values such as 1.25, 1.5 or 2.625 on scaled Windows displays and many phones. Multiply the two and you get the physical pixel count — a 1512&nbsp;×&nbsp;982 screen at a ratio of 2 is a 3024&nbsp;×&nbsp;1964 panel. On a display running at a non-native scaled resolution the multiplication is an approximation, which is why it is labelled as calculated.</p>
+    <p><strong>Available screen area</strong> is the screen minus whatever the system reserves — a Windows taskbar, a macOS menu bar and dock — and <strong>the viewport</strong> is the part of the window this page can actually draw in, which changes as you resize the window and updates live above. If you are checking a monitor rather than a browser, the <a href="/refresh-rate-test.html">refresh rate test</a>, <a href="/dead-pixel-test.html">dead pixel test</a> and <a href="/color-test.html">colour and gradient test</a> each go deeper than a readout can.</p>
+
+    <h2>Looking for one number in particular?</h2>
+    <p>Three of the questions people arrive with have their own page, each leading with the answer in large type: <a href="/screen-resolution.html">what is my screen resolution</a>, <a href="/what-is-my-browser.html">what browser am I using</a>, and <a href="/user-agent.html">what is my user agent</a>.</p>
+    <p>Nothing on this page is recorded, stored or transmitted. Every value is read from your own browser and rendered on your own device; the only thing that leaves it is whatever you choose to paste somewhere yourself.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <nav class="footer-tools" aria-label="All tools">
+    <span class="footer-tools-label">Tools</span>
+    <a href="/webcam-test.html">Webcam</a>
+    <a href="/mic-test.html">Mic</a>
+    <a href="/speaker-test.html">Speakers</a>
+    <a href="/keyboard-test.html">Keyboard</a>
+    <a href="/mouse-test.html">Mouse</a>
+    <a href="/dead-pixel-test.html">Dead Pixel</a>
+    <a href="/refresh-rate-test.html">Refresh Rate</a>
+    <a href="/touchscreen-test.html">Touchscreen</a>
+    <a href="/battery-test.html">Battery</a>
+    <a href="/color-test.html">Colour</a>
+    <a href="/system-info.html">System Info</a>
+    <a href="/screen-resolution.html">Resolution</a>
+    <a href="/what-is-my-browser.html">Browser</a>
+    <a href="/user-agent.html">User Agent</a>
+  </nav>
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/refreshrate.js"></script>
+<script src="/assets/js/sysinfo.js"></script>
+<a href="https://erabb.it" class="erabbit-mark" aria-label="erabb.it"><img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐇</text></svg>" width="10" height="10" alt=""></a>
+</body>
+</html>
