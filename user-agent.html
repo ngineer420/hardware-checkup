@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Is My User Agent? — See Your Full UA String</title>
+<meta name="description" content="Your complete user agent string, shown in full and ready to copy, with a plain-English breakdown of the browser, engine and operating system it names — and an honest account of what browsers now hide from it.">
+<link rel="canonical" href="https://hardwarecheckup.com/user-agent.html">
+<meta name="theme-color" content="#0c1114">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="What Is My User Agent? — See Your Full UA String">
+<meta property="og:description" content="Your full user agent string, ready to copy, with a plain-English breakdown of what each part means. Runs entirely in your browser.">
+<meta property="og:url" content="https://hardwarecheckup.com/user-agent.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="What Is My User Agent? — See Your Full UA String">
+<meta name="twitter:description" content="Your full user agent string, ready to copy, with a plain-English breakdown of what each part means. Runs entirely in your browser.">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "What Is My User Agent",
+  "url": "https://hardwarecheckup.com/user-agent.html",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Shows your complete user agent string along with the browser, rendering engine and operating system it identifies, read entirely in the browser."
+}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7560786263587509" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+    <button id="nav-toggle" class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation menu">☰</button>
+    <nav class="site-nav" id="site-nav" aria-label="Tools">
+      <a href="/webcam-test.html">Webcam</a>
+      <a href="/mic-test.html">Mic</a>
+      <a href="/speaker-test.html">Speakers</a>
+      <a href="/keyboard-test.html">Keyboard</a>
+      <a href="/mouse-test.html">Mouse</a>
+      <a href="/dead-pixel-test.html">Dead Pixel</a>
+      <a href="/refresh-rate-test.html">Refresh Rate</a>
+      <a href="/touchscreen-test.html">Touchscreen</a>
+      <a href="/battery-test.html">Battery</a>
+      <a href="/color-test.html">Colour</a>
+      <a href="/system-info.html">System Info</a>
+      <a href="/screen-resolution.html">Resolution</a>
+      <a href="/what-is-my-browser.html">Browser</a>
+      <a href="/user-agent.html" aria-current="page">User Agent</a>
+    </nav>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="tool-hero">
+    <h1>What Is My User Agent?</h1>
+  </div>
+
+  <div class="big-answer big-answer--string" data-si-big="user-agent">
+    <strong class="ba-value" data-si-big-value>Reading…</strong>
+    <span class="ba-sub" data-si-big-sub>Reading the string your browser sends with every request.</span>
+  </div>
+
+  <div class="control-row" style="margin-top:14px;">
+    <button id="copy-ua-btn" class="primary" type="button" data-si-copy="user-agent">Copy my user agent</button>
+    <span id="copy-status" class="status-msg" style="margin:0;" role="status" aria-live="polite"></span>
+  </div>
+
+  <div class="panel" data-si-fields="browser,browser-version,engine,os">
+    <p class="status-msg">Reading what this browser reports…</p>
+  </div>
+
+  <p class="si-more">Everything else your browser exposes — screen, CPU, graphics, refresh rate — is on the <a href="/system-info.html">full system info page</a>, where one button copies the lot as plain text.</p>
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
+    <h2>What a user agent string is</h2>
+    <p>It is a single line of text your browser attaches to every request it makes, identifying itself to the server. Servers use it to send you a mobile layout rather than a desktop one, to warn you that a site needs a newer browser, and — historically — to work around bugs in specific versions. When you report a problem to a website's support team, this is the string they ask for, because it tells them which browser and platform to try reproducing the fault on.</p>
+
+    <h2>Why it says “Mozilla/5.0” when you are not using Mozilla</h2>
+    <p>Every user agent string on the web starts that way, and the reason is thirty years old. In the mid-1990s some servers checked for “Mozilla” before serving frames, because Netscape Navigator was the only browser that supported them. Internet Explorer wanted those pages too, so it claimed to be Mozilla and added its real identity in brackets. Every browser since has done the same thing for the same reason: sites sniff for the incumbent, so the newcomer impersonates it and appends itself. The result is that a modern Chrome string claims to be Mozilla, then claims to be like Gecko, then names AppleWebKit and KHTML, then finally says Chrome — and ends by claiming to be Safari as well. Almost none of it is true, and all of it is load-bearing.</p>
+    <p>This is exactly why detecting a browser from the string requires checking in the right order. Edge, Opera, Vivaldi, Brave and Samsung Internet all contain “Chrome”; everything on macOS and iOS contains “Safari”. Test for Chrome first and you report a large share of visitors as using a browser they have not installed. The breakdown above checks the specific browsers before the generic ones, and reports nothing at all rather than guessing when a string matches none of them.</p>
+
+    <h2>The string is being deliberately reduced</h2>
+    <p>Because it identifies you. Combined with a screen size, a time zone and a font list, a detailed user agent contributes a large share of what makes a browser fingerprint unique — enough to recognise the same visitor across sites that share nothing else. Browser makers have been trimming it in response, and the trimming is why some of what you might expect to see is missing:</p>
+    <p><strong>Chrome and Edge</strong> now freeze most of the version — a string reading <code>138.0.0.0</code> has a real major number and zeroes where the detail used to be — and have reduced the platform portion so it no longer reports a precise operating system version. <strong>Safari</strong> has reported macOS as “10_15_7” in every release since Big Sur, so a Mac on a current version appears to be running one from 2019. <strong>Windows 11</strong> has never distinguished itself from Windows 10: both send “Windows NT 10.0”, which no amount of parsing can separate. <strong>Firefox</strong> rounds and freezes several components and, with resist-fingerprinting enabled, sends a deliberately generic string shared with every other user of that setting.</p>
+    <p>The replacement is <strong>User-Agent Client Hints</strong>, which asks for the same information as structured data and lets browsers give a precise answer to a page that has a reason to ask, without broadcasting it to everyone by default. Chromium-based browsers support it and Safari and Firefox do not, so the <a href="/what-is-my-browser.html">browser identification page</a> uses it where it exists and falls back to this string where it does not.</p>
+
+    <h2>Reading your own string</h2>
+    <p>Take a typical Chrome-on-Windows string: <code>Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36</code>. The bracketed section after Mozilla/5.0 is the platform — Windows NT 10.0 is Windows 10 or 11, and Win64/x64 is a 64-bit build. <code>AppleWebKit/537.36</code> and <code>KHTML, like Gecko</code> are the historical compatibility claims and are frozen at those numbers for everyone. <code>Chrome/138.0.0.0</code> is the real identity. The trailing <code>Safari/537.36</code> is one more compatibility claim. On a phone you will also see a device hint such as “Pixel 8” or “SM-S908B” on Android, and the word “Mobile”, which is what most servers actually check when deciding to send a mobile layout.</p>
+    <p>Everything above is read from your own browser and displayed on your own device. Nothing about this page is recorded or sent anywhere — the string is already being sent to every site you visit, which is rather the point of it.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <nav class="footer-tools" aria-label="All tools">
+    <span class="footer-tools-label">Tools</span>
+    <a href="/webcam-test.html">Webcam</a>
+    <a href="/mic-test.html">Mic</a>
+    <a href="/speaker-test.html">Speakers</a>
+    <a href="/keyboard-test.html">Keyboard</a>
+    <a href="/mouse-test.html">Mouse</a>
+    <a href="/dead-pixel-test.html">Dead Pixel</a>
+    <a href="/refresh-rate-test.html">Refresh Rate</a>
+    <a href="/touchscreen-test.html">Touchscreen</a>
+    <a href="/battery-test.html">Battery</a>
+    <a href="/color-test.html">Colour</a>
+    <a href="/system-info.html">System Info</a>
+    <a href="/screen-resolution.html">Resolution</a>
+    <a href="/what-is-my-browser.html">Browser</a>
+    <a href="/user-agent.html">User Agent</a>
+  </nav>
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/sysinfo.js"></script>
+<a href="https://erabb.it" class="erabbit-mark" aria-label="erabb.it"><img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐇</text></svg>" width="10" height="10" alt=""></a>
+</body>
+</html>

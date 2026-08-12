@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Is My Screen Resolution? — Instant Answer</title>
+<meta name="description" content="Your screen resolution, right now, in large type — plus the physical pixel count behind it, your device pixel ratio, live viewport size and colour depth. Free, instant, and entirely in your browser.">
+<link rel="canonical" href="https://hardwarecheckup.com/screen-resolution.html">
+<meta name="theme-color" content="#0c1114">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="What Is My Screen Resolution? — Instant Answer">
+<meta property="og:description" content="Your screen resolution in large type, plus pixel ratio, physical pixels, live viewport size and colour depth. Runs entirely in your browser.">
+<meta property="og:url" content="https://hardwarecheckup.com/screen-resolution.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="What Is My Screen Resolution? — Instant Answer">
+<meta name="twitter:description" content="Your screen resolution in large type, plus pixel ratio, physical pixels, live viewport size and colour depth. Runs entirely in your browser.">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "What Is My Screen Resolution",
+  "url": "https://hardwarecheckup.com/screen-resolution.html",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Instantly shows your screen resolution in CSS pixels, the physical pixel count behind it, your device pixel ratio, live viewport size and colour depth."
+}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7560786263587509" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+    <button id="nav-toggle" class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Toggle navigation menu">☰</button>
+    <nav class="site-nav" id="site-nav" aria-label="Tools">
+      <a href="/webcam-test.html">Webcam</a>
+      <a href="/mic-test.html">Mic</a>
+      <a href="/speaker-test.html">Speakers</a>
+      <a href="/keyboard-test.html">Keyboard</a>
+      <a href="/mouse-test.html">Mouse</a>
+      <a href="/dead-pixel-test.html">Dead Pixel</a>
+      <a href="/refresh-rate-test.html">Refresh Rate</a>
+      <a href="/touchscreen-test.html">Touchscreen</a>
+      <a href="/battery-test.html">Battery</a>
+      <a href="/color-test.html">Colour</a>
+      <a href="/system-info.html">System Info</a>
+      <a href="/screen-resolution.html" aria-current="page">Resolution</a>
+      <a href="/what-is-my-browser.html">Browser</a>
+      <a href="/user-agent.html">User Agent</a>
+    </nav>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="tool-hero">
+    <h1>What Is My Screen Resolution?</h1>
+  </div>
+
+  <div class="big-answer" data-si-big="resolution">
+    <strong class="ba-value" data-si-big-value>Reading…</strong>
+    <span class="ba-sub" data-si-big-sub>Reading what your browser reports about this screen.</span>
+  </div>
+
+  <div class="panel" data-si-fields="physical,pixel-ratio,available,viewport,colour-depth">
+    <p class="status-msg">Reading what this browser reports…</p>
+  </div>
+
+  <p class="si-more">Everything else your browser reports — browser, operating system, CPU cores, graphics, refresh rate — is on the <a href="/system-info.html">full system info page</a>, with a copy-as-text button.</p>
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
+    <h2>CSS pixels, physical pixels, and why they differ</h2>
+    <p>The number above is your screen size in <strong>CSS pixels</strong>, which is what web pages, your operating system's display settings and almost every “what is my resolution” answer mean by resolution. It is not always the number of pixels in the panel. Modern displays pack far more pixels into the same physical area than older ones, and if websites and applications were drawn one pixel to one pixel, everything on a Retina laptop or a modern phone would be unreadably small. So the system defines a logical pixel and draws it using several real ones.</p>
+    <p>How many is the <strong>device pixel ratio</strong>. A ratio of 1 means one CSS pixel is one physical pixel — a standard 1080p monitor. A ratio of 2 means each CSS pixel is a 2&nbsp;×&nbsp;2 block of real pixels, which is why a 13-inch MacBook reports something like 1512&nbsp;×&nbsp;982 while the panel is really 3024&nbsp;×&nbsp;1964. Fractional ratios such as 1.25, 1.5 and 2.625 come from Windows display scaling and from phones, where the manufacturer picked a scale that is not a whole number. The physical figure shown above is that multiplication, and it is calculated rather than read: on a display running below its native resolution it will report what the system is currently drawing, not what the panel is capable of.</p>
+
+    <h2>Screen resolution vs window size</h2>
+    <p>Two different numbers, and mixing them up is the usual reason a reading looks wrong. <strong>Screen resolution</strong> describes your monitor and does not change when you resize a window. <strong>Viewport size</strong> is the area inside the browser window that a page can draw in — the window minus its toolbars, and minus a scrollbar if one is showing. Resize this window and you will see the viewport figure above change while the resolution stays put. If you are testing how a site behaves on a smaller screen, the viewport is the number that matters, and it is what a responsive design's breakpoints react to.</p>
+    <p><strong>Available screen area</strong> sits between the two: the full screen minus whatever the operating system permanently reserves, such as a Windows taskbar or the macOS menu bar and dock. It is what a maximised window gets.</p>
+
+    <h2>Colour depth</h2>
+    <p>Colour depth is how many bits the display uses to describe one pixel, across all channels. <strong>24-bit</strong> is the long-standing standard — 8 bits each of red, green and blue, giving about 16.7 million colours. <strong>30-bit</strong> means 10 bits per channel, which is what HDR and wide-gamut displays use and what allows smooth gradients without visible banding. Browsers report this figure inconsistently on some platforms, so treat a surprising number as the browser's opinion rather than the panel's specification. If you want to see the difference in practice rather than in a number, the <a href="/color-test.html">colour and gradient test</a> puts full-screen ramps on the panel, where banding shows up immediately.</p>
+
+    <h2>Changing your resolution</h2>
+    <p>If the figure above is not what you expected, your display is probably not set to its native resolution — and an LCD or OLED panel has exactly one, the resolution its pixels physically are. Anything else has to be interpolated, which is why a mis-set screen looks soft. On <strong>Windows</strong>: Settings → System → Display, and pick the mode marked “(Recommended)”. On <strong>macOS</strong>: System Settings → Displays, where “Default for display” is the native option. On <strong>Android</strong> and <strong>iOS</strong> the resolution is fixed, though display zoom settings change how large everything is drawn, which changes the numbers a web page sees.</p>
+    <p>Checking a new or second-hand screen? Run the <a href="/dead-pixel-test.html">dead pixel test</a> for individual failed pixels and the <a href="/refresh-rate-test.html">refresh rate test</a> to confirm a high-refresh panel is not still sitting at 60Hz. Everything on this page is read locally in your browser and nothing is uploaded.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <nav class="footer-tools" aria-label="All tools">
+    <span class="footer-tools-label">Tools</span>
+    <a href="/webcam-test.html">Webcam</a>
+    <a href="/mic-test.html">Mic</a>
+    <a href="/speaker-test.html">Speakers</a>
+    <a href="/keyboard-test.html">Keyboard</a>
+    <a href="/mouse-test.html">Mouse</a>
+    <a href="/dead-pixel-test.html">Dead Pixel</a>
+    <a href="/refresh-rate-test.html">Refresh Rate</a>
+    <a href="/touchscreen-test.html">Touchscreen</a>
+    <a href="/battery-test.html">Battery</a>
+    <a href="/color-test.html">Colour</a>
+    <a href="/system-info.html">System Info</a>
+    <a href="/screen-resolution.html">Resolution</a>
+    <a href="/what-is-my-browser.html">Browser</a>
+    <a href="/user-agent.html">User Agent</a>
+  </nav>
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/sysinfo.js"></script>
+<a href="https://erabb.it" class="erabbit-mark" aria-label="erabb.it"><img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐇</text></svg>" width="10" height="10" alt=""></a>
+</body>
+</html>
