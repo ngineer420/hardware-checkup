@@ -460,6 +460,13 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 24px 20px 60px; }
 /* ---- the rail: one row, always. Wrapping is what produced every ragged
    multi-row header in the audit; nowrap makes those faults impossible. ---- */
 .tb-rail {
+  /* The centre-on-current JS reads `current.offsetLeft` and treats it as an
+     offset inside this scroller. Without a position here the nearest
+     positioned ancestor is `.toolbar`, so that figure also carries the
+     trigger's width and the rail over-scrolls by it — the current chip lands
+     with its first letters under the left fade, which is the clipped label
+     this pattern exists to prevent. */
+  position: relative;
   flex: 1 1 auto; min-width: 0;
   display: flex; flex-wrap: nowrap; gap: 0;
   margin: 0; padding: 0; list-style: none;
@@ -511,11 +518,24 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 24px 20px 60px; }
   overflow-y: auto; overscroll-behavior: contain;
   background: var(--tb-bg-elev);
   border: 1px solid var(--tb-border);
-  border-radius: 0 0 12px 12px;
-  box-shadow: 0 18px 40px -20px rgba(0, 0, 0, .5);
+  /* Radius and shadow are site-owned: a hard-edged idiom reads wrong with a
+     soft drop shadow and a 12px corner. Structure stays identical portfolio-
+     wide; only these two tokens move. */
+  border-radius: var(--tb-sheet-radius, 0 0 12px 12px);
+  box-shadow: var(--tb-sheet-shadow, 0 18px 40px -20px rgba(0, 0, 0, .5));
   padding: 14px 4px;
-  columns: 2; column-gap: 24px;
 }
+/* The columns live on this wrapper, never on .tb-sheet itself. A CSS multi-column
+   box with a capped block-size does not scroll — it fragments sideways into extra
+   columns and links land outside the panel behind a silent horizontal drag. The
+   wrapper has no height cap, so the columns balance at their natural height and
+   the sheet scrolls down past them. */
+.tb-sheet-cols { columns: 2; column-gap: 24px; }
+/* At <= 8 destinations the sheet renders one flat list and the columns move
+   onto it; group headings are noise at that size. */
+.tb-sheet.is-flat .tb-sheet-cols { columns: 1; }
+.tb-sheet.is-flat .tb-sheet-cols ul { columns: 2; column-gap: 24px; }
+
 /* At <= 8 destinations the sheet renders one flat list and the columns move
    onto it; group headings are noise at that size. */
 .tb-sheet.is-flat { columns: 1; }
@@ -564,6 +584,9 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 24px 20px 60px; }
     left: 0; right: 0; width: auto;
     border-width: 1px 0; border-radius: 0;
   }
+  .tb-sheet-cols,
+  .tb-sheet.is-flat .tb-sheet-cols,
+  .tb-sheet.is-flat .tb-sheet-cols ul { columns: auto; }
   .tb-sheet a { min-height: 44px; padding: 0 16px; }
   /* Anchored to the bar rather than the viewport, so it cannot cover the
      trigger — with JS off, tapping the trigger again is the way out and there

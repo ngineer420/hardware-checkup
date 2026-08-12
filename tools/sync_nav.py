@@ -122,12 +122,19 @@ def render_nav(url):
 
     flat = count <= 8
     add('    <div class="tb-sheet%s">' % (" is-flat" if flat else ""))
+    # The columns live on this inner wrapper, never on .tb-sheet itself. A CSS
+    # multi-column box with a capped block-size does not scroll — it fragments
+    # sideways into extra columns, so links land outside the panel behind a
+    # silent horizontal drag, which is the exact fault this pattern removes.
+    # The wrapper is unconstrained, so the columns lay out at their natural
+    # height and .tb-sheet scrolls vertically past them.
+    add('      <div class="tb-sheet-cols">')
     if flat:
         # Group headings are noise at this size; the whole set fits in one list.
-        add("      <ul>")
+        add("        <ul>")
         for t in tier1:
-            add("        <li>%s</li>" % anchor(t["href"], t["long"], url, owns=owned_urls(t["href"])))
-        add("      </ul>")
+            add("          <li>%s</li>" % anchor(t["href"], t["long"], url, owns=owned_urls(t["href"])))
+        add("        </ul>")
     else:
         for i, (key, title) in enumerate(D.GROUPS, start=1):
             members = [t for t in tier1 if t["group"] == key]
@@ -136,13 +143,14 @@ def render_nav(url):
             gid = "tb-g%d" % i
             # <p>, not <h2>: these are SEO landing pages and chrome headings
             # would pollute the document outline. AT still announces the list.
-            add('      <p class="tb-grouplabel" id="%s">%s</p>' % (gid, esc(title)))
-            add('      <ul aria-labelledby="%s">' % gid)
+            add('        <p class="tb-grouplabel" id="%s">%s</p>' % (gid, esc(title)))
+            add('        <ul aria-labelledby="%s">' % gid)
             for t in members:
-                add("        <li>%s</li>" % anchor(t["href"], t["long"], url, owns=owned_urls(t["href"])))
-            add("      </ul>")
+                add("          <li>%s</li>" % anchor(t["href"], t["long"], url, owns=owned_urls(t["href"])))
+            add("        </ul>")
     for href, text in D.HUBS:
-        add('      <p class="tb-hub">%s</p>' % anchor(href, text + " →", url))
+        add('        <p class="tb-hub">%s</p>' % anchor(href, text + " →", url))
+    add("      </div>")
     add("    </div>")
     add("  </details>")
     # Sibling of the <details>, not a child: the scrim is shown by CSS alone
