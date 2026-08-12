@@ -54,7 +54,7 @@
 <main id="main">
   <div class="tool-hero">
     <h1>Keyboard Tester</h1>
-    <p>Press any key and it lights up on the on-screen keyboard. Keys you've pressed stay highlighted so you can spot dead or stuck keys, and holding several at once reveals ghosting and N-key rollover limits. Keystrokes never leave your browser.</p>
+    <p>Click the on-screen keyboard to start capturing, then press any key and it lights up. Keys you've pressed stay highlighted so you can spot dead or stuck keys, and holding several at once reveals ghosting and N-key rollover limits. Press <kbd>Esc</kbd> when you're done. Keystrokes never leave your browser.</p>
   </div>
 
   <div class="panel">
@@ -69,13 +69,23 @@
       <button id="reset-btn" type="button">Reset highlights</button>
     </div>
 
-    <div id="kb" class="kb" aria-label="On-screen keyboard" style="margin-top:8px;"></div>
+    <div class="kb-stage">
+      <p class="kb-status" id="kb-status" role="status">Not capturing — click the keyboard below, or press Tab to move focus into it, to start.</p>
+      <div id="kb-surface" class="kb-surface" tabindex="0" role="application"
+           aria-label="Keyboard test surface. Focus this area to capture keys."
+           aria-describedby="kb-surface-help">
+        <div id="kb" class="kb"></div>
+        <div class="kb-idle-veil" aria-hidden="true"><span>Click here, or press Tab, to start capturing keys</span></div>
+      </div>
+      <p class="type-hint" id="kb-surface-help">Keys are only captured while this area has focus, so <kbd>Tab</kbd> and <kbd>Space</kbd> can be tested without locking you out of the page. Press <kbd>Esc</kbd> — or click anywhere outside — to hand the keyboard back.</p>
+    </div>
     <p class="type-hint">Bright = currently held · Amber = pressed at least once. Some browser and OS shortcuts (like Win/Cmd combos) may be intercepted before they reach this page.</p>
   </div>
 
   <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
     <h2>How to use the keyboard tester</h2>
-    <p>Click anywhere on this page so it has focus, then start pressing keys. Each key you press turns bright while it's held and stays amber after you release it, building up a picture of every key that registered. To check a suspicious key, press it and watch for the highlight — if a physical key press produces no reaction on screen, that key (or its switch) is likely dead. The <strong>last key</strong> panel shows the character, the physical <code>event.code</code>, and the legacy <code>keyCode</code>, which is handy for debugging remaps and unusual layouts.</p>
+    <p>Click the on-screen keyboard — or press <kbd>Tab</kbd> until it is outlined — to start capturing, then press keys. Each key you press turns bright while it's held and stays amber after you release it, building up a picture of every key that registered. To check a suspicious key, press it and watch for the highlight — if a physical key press produces no reaction on screen, that key (or its switch) is likely dead. The <strong>last key</strong> panel shows the character, the physical <code>event.code</code>, and the legacy <code>keyCode</code>, which is handy for debugging remaps and unusual layouts.</p>
+    <p>Capture is deliberately scoped to that one area. While it holds focus the page swallows the keys it receives, which is what lets you test <kbd>Tab</kbd>, <kbd>Space</kbd>, <kbd>Enter</kbd> and the arrow keys — normally those scroll the page or move focus somewhere else before you can see them. Press <kbd>Esc</kbd> to hand the keyboard back: the Escape key is still reported first, so you can confirm it works and still get out with it. Clicking anywhere outside the keyboard releases it too, and combinations held with Ctrl, Cmd or Alt are never intercepted, so your browser's own shortcuts keep working throughout.</p>
     <p>To hunt for a <strong>stuck key</strong>, press <strong>Reset highlights</strong> and then don't touch the keyboard: if any key lights up on its own, or a key stays lit after you let go, that switch is sticking. To test <strong>ghosting and N-key rollover</strong>, hold several keys down at once and watch the <strong>held now</strong> counter — on a basic membrane keyboard some combinations simply won't register beyond two or three simultaneous keys, while a good gaming keyboard will happily show six or more. That behaviour is explained in depth in our article below.</p>
     <p>This tool reads standard keyboard events locally and stores nothing. A handful of combinations reserved by your operating system or browser (for example the Windows or Command key, or function-key media controls) may never reach the page, so their absence here isn't necessarily a fault.</p>
 

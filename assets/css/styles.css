@@ -641,6 +641,79 @@ canvas.scope {
 .range-row .rv { min-width: 84px; text-align: right; color: var(--accent); font-variant-numeric: tabular-nums; }
 
 /* ---------- keyboard tester ---------- */
+kbd {
+  font-family: var(--mono);
+  font-size: .92em;
+  color: var(--text);
+  background: var(--bg-raised);
+  border: 1px solid var(--border-soft);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 0 5px;
+  white-space: nowrap;
+}
+.kb-stage { margin-top: 8px; }
+.kb-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-dim);
+}
+.kb-status::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  margin-top: .45em; /* sit on the first line, not the middle of a wrapped block */
+  border-radius: 50%;
+  background: var(--text-faint);
+}
+.kb-status.live { color: var(--text); }
+.kb-status.live::before {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(45, 214, 196, 0.18);
+}
+.kb-surface {
+  position: relative;
+  padding: 10px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-inset);
+  outline: none;
+  transition: border-color .12s ease, box-shadow .12s ease;
+}
+.kb-surface:not(.capturing) { cursor: pointer; }
+.kb-surface:not(.capturing) .kb { opacity: .38; }
+.kb-surface.capturing,
+.kb-surface:focus-visible {
+  border-style: solid;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(45, 214, 196, 0.16);
+}
+.kb-idle-veil {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  pointer-events: none;
+}
+.kb-surface.capturing .kb-idle-veil { display: none; }
+.kb-idle-veil span {
+  max-width: 100%;
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-raised);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .32);
+  color: var(--text);
+  font-size: 12.5px;
+  text-align: center;
+}
 .kb {
   display: flex;
   flex-direction: column;

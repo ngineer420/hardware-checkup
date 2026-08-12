@@ -14,6 +14,7 @@ const RR = require("../assets/js/refreshrate.js");
 const Battery = require("../assets/js/battery.js");
 const Touch = require("../assets/js/touchscreen.js");
 const Colour = require("../assets/js/colortest.js");
+const Keyboard = require("../assets/js/keyboard.js");
 
 let count = 0;
 function test(name, fn) {
@@ -196,6 +197,84 @@ test("patterns paint without touching a real canvas", () => {
     assert.ok(calls.length > 0, p.id + " drew nothing");
     p.draw(ctx, 1, 1); // a 1px viewport must not throw or loop forever
   }
+});
+
+/* ------------------------------- keyboard -------------------------------- */
+
+const NAV_KEYS = ["Tab", "Space", "Enter", "Backspace", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+const none = { ctrlKey: false, metaKey: false, altKey: false };
+
+test("nothing is swallowed until the test surface has focus", () => {
+  // This is the bug the whole change exists for. A global keydown handler that
+  // ate Tab meant a keyboard-only visitor could not reach the nav, the theme
+  // toggle or any link on the page — the tester held the keyboard hostage from
+  // the moment the script ran.
+  for (const code of NAV_KEYS.concat(["KeyA", "Slash", "F1", "Escape"])) {
+    assert.strictEqual(
+      Keyboard.shouldPreventDefault(code, false, none), false,
+      code + " must reach the browser when the surface is not focused"
+    );
+  }
+});
+
+test("with focus, the keys the tool exists to test are swallowed", () => {
+  // A sticky spacebar is one of the commonest reasons anyone opens a key
+  // tester, so "just stop calling preventDefault" is not an available fix.
+  for (const code of NAV_KEYS) {
+    assert.strictEqual(Keyboard.shouldPreventDefault(code, true, none), true, code);
+  }
+  // And the printable keys too: "/" opens Firefox's quick-find otherwise, which
+  // steals the next keystrokes mid-test.
+  assert.strictEqual(Keyboard.shouldPreventDefault("Slash", true, none), true);
+  assert.strictEqual(Keyboard.shouldPreventDefault("KeyQ", true, none), true);
+});
+
+test("Escape is never swallowed, because it is the way out", () => {
+  assert.ok(Keyboard.isReleaseKey("Escape"));
+  assert.ok(!Keyboard.isReleaseKey("Enter"));
+  assert.strictEqual(Keyboard.shouldPreventDefault("Escape", true, none), false);
+  assert.strictEqual(Keyboard.shouldPreventDefault("Escape", false, none), false);
+});
+
+test("browser shortcuts survive capture", () => {
+  // Swallowing Cmd+C or Ctrl+R while the surface happens to hold focus would be
+  // a smaller version of exactly the same trap.
+  for (const mod of ["ctrlKey", "metaKey", "altKey"]) {
+    const held = Object.assign({}, none, { [mod]: true });
+    assert.strictEqual(Keyboard.shouldPreventDefault("KeyC", true, held), false, mod);
+    assert.strictEqual(Keyboard.shouldPreventDefault("KeyR", true, held), false, mod);
+    assert.strictEqual(Keyboard.shouldPreventDefault("Tab", true, held), false, mod + " + Tab");
+  }
+  // A missing modifiers object must not be read as "all modifiers held".
+  assert.strictEqual(Keyboard.shouldPreventDefault("KeyC", true, undefined), true);
+});
+
+test("the readout names the space bar rather than printing a blank", () => {
+  assert.strictEqual(Keyboard.keyLabel(" "), "Space");
+  assert.strictEqual(Keyboard.keyLabel("Spacebar"), "Space"); // older Firefox/Edge
+  assert.strictEqual(Keyboard.keyLabel(""), "—");
+  assert.strictEqual(Keyboard.keyLabel(undefined), "—");
+  assert.strictEqual(Keyboard.keyLabel("a"), "a");
+  assert.strictEqual(Keyboard.keyLabel("Tab"), "Tab");
+});
+
+test("releasing hands focus forward, never back into the surface", () => {
+  // Sending focus backwards — to the reset button just above, say — would mean
+  // the next Tab walks straight back into capture. The trap, wearing a hat.
+  const order = ["reset-btn", "surface", "article-link", "footer-home"];
+  assert.strictEqual(Keyboard.nextAfter(order, "surface"), "article-link");
+  assert.strictEqual(Keyboard.nextAfter(order, "footer-home"), null, "nothing after the last element");
+  assert.strictEqual(Keyboard.nextAfter(order, "missing"), null);
+  assert.strictEqual(Keyboard.nextAfter([], "surface"), null);
+  assert.strictEqual(Keyboard.nextAfter(["surface"], "surface"), null);
+});
+
+test("the status line always says how to get the keyboard back", () => {
+  const on = Keyboard.captureStatusText(true);
+  const off = Keyboard.captureStatusText(false);
+  assert.notStrictEqual(on, off);
+  assert.match(on, /Esc/, "a capturing page must name its escape hatch: " + on);
+  assert.match(off, /Tab|click/i, "and an idle page must say how to start: " + off);
 });
 
 console.log("\nAll " + count + " tests passed.");
