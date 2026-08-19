@@ -16,6 +16,7 @@ const Touch = require("../assets/js/touchscreen.js");
 const Colour = require("../assets/js/colortest.js");
 const Keyboard = require("../assets/js/keyboard.js");
 const Sys = require("../assets/js/sysinfo.js");
+const Poll = require("../assets/js/pollingrate.js");
 
 let count = 0;
 function test(name, fn) {
@@ -643,6 +644,111 @@ test("the copy-all text is clean enough to paste into a ticket", () => {
   assert.match(empty, /^System information/);
   assert.doesNotMatch(empty, /Collected:/);
   assert.ok(empty.split("\n").length > 20);
+});
+
+/* ------------------------------ polling rate ------------------------------
+   The whole page turns on one thing: never printing a rate the browser's clock
+   cannot actually resolve. Firefox rounds timestamps to a millisecond, which
+   makes 500Hz and 1000Hz the same measurement, and a confident "1000 Hz" there
+   would be a rounding artefact wearing a large font. */
+
+/** `n` intervals for a mouse polling steadily at `hz`. */
+const poll = (hz, n) => Array.from({ length: n }, () => 1000 / hz);
+
+test("a steady mouse measures at its real rate", () => {
+  const s = Poll.summarisePolling(poll(1000, 500), 0.1);
+  assert.ok(Math.abs(s.measuredHz - 1000) < 1, "got " + s.measuredHz);
+  assert.strictEqual(s.capped, false);
+  assert.strictEqual(Poll.snapToCommonRate(s.measuredHz), 1000);
+});
+
+test("a pause where the hand changed direction does not drag the rate down", () => {
+  const withPause = poll(1000, 400).concat([40, 60, 250]);
+  const s = Poll.summarisePolling(withPause, 0.1);
+  assert.ok(Math.abs(s.measuredHz - 1000) < 1, "got " + s.measuredHz);
+  assert.strictEqual(s.pauses, 1, "only the >100ms gap is discarded outright");
+});
+
+test("a coarse clock caps the claim instead of inventing precision", () => {
+  // A real 1000Hz mouse, measured on a browser whose clock ticks every 1ms.
+  const s = Poll.summarisePolling(poll(1000, 500), 1);
+  assert.strictEqual(s.capped, true);
+  assert.strictEqual(Math.round(s.ceilingHz), 500);
+  assert.strictEqual(Math.round(s.reportedHz), 500);
+  assert.ok(Math.abs(s.measuredHz - 1000) < 1, "the raw measurement is still kept");
+  assert.match(Poll.describeResult(s), /at least 500 Hz/);
+  assert.match(Poll.describeResult(s), /Chrome or Edge/);
+});
+
+test("the same mouse on a fine clock is reported in full", () => {
+  const s = Poll.summarisePolling(poll(1000, 500), 0.1);
+  assert.strictEqual(s.capped, false);
+  assert.strictEqual(Math.round(s.ceilingHz), 5000);
+  assert.match(Poll.describeResult(s), /1000 Hz mouse running at its rated speed/);
+});
+
+test("the resolvable ceiling is two clock ticks per interval", () => {
+  assert.strictEqual(Poll.resolvableCeilingHz(1), 500);
+  assert.strictEqual(Poll.resolvableCeilingHz(0.1), 5000);
+  assert.strictEqual(Poll.resolvableCeilingHz(0), null);
+  assert.strictEqual(Poll.resolvableCeilingHz(null), null);
+});
+
+test("the peak is a sustained rate, not one quantised sample", () => {
+  // One absurd 0.05ms gap in an otherwise 500Hz stream would read as 20,000Hz
+  // if the peak were the single smallest interval.
+  const s = Poll.summarisePolling([0.05].concat(poll(500, 500)), 0.1);
+  assert.ok(s.peakHz < 1000, "peak was " + s.peakHz);
+});
+
+test("simultaneous reports are counted, not quietly dropped", () => {
+  const s = Poll.summarisePolling(poll(500, 400).concat([0, 0, 0]), 1);
+  assert.strictEqual(s.zeroIntervals, 3);
+  assert.strictEqual(s.samples, 400);
+});
+
+test("too few samples yields nothing rather than a guess", () => {
+  assert.strictEqual(Poll.summarisePolling(poll(1000, 10), 0.1), null);
+  assert.strictEqual(Poll.summarisePolling([], 0.1), null);
+});
+
+test("snapToCommonRate refuses a rate that is not one", () => {
+  assert.strictEqual(Poll.snapToCommonRate(1000), 1000);
+  assert.strictEqual(Poll.snapToCommonRate(940), 1000, "queueing loss is normal");
+  assert.strictEqual(Poll.snapToCommonRate(700), null);
+  assert.strictEqual(Poll.snapToCommonRate(0), null);
+  // The gap between neighbouring rates is 100%, so 500 can never become 1000.
+  assert.strictEqual(Poll.snapToCommonRate(500), 500);
+});
+
+test("the 125Hz verdict says the thing people came for", () => {
+  const s = Poll.summarisePolling(poll(125, 400), 0.1);
+  assert.match(Poll.describeResult(s), /USB default/);
+});
+
+test("the clock note names the limit before anything is measured", () => {
+  assert.match(Poll.describeResolution(1), /500 Hz/);
+  assert.match(Poll.describeResolution(1), /cross-origin isolated/);
+  assert.match(Poll.describeResolution(0.1), /5000 Hz/);
+  assert.doesNotMatch(Poll.describeResolution(0.1), /cannot tell/);
+});
+
+test("the histogram spikes where the rate is", () => {
+  const h = Poll.intervalHistogram(poll(1000, 400), 0.25, 12);
+  const spike = h.bins.reduce((a, b) => (b.count > a.count ? b : a));
+  assert.ok(spike.from <= 1 && spike.to > 1, "spike at " + spike.from + "-" + spike.to + " ms");
+  assert.strictEqual(spike.count, 400);
+  // A 125Hz stream lands in its own bucket, eight milliseconds along.
+  const slow = Poll.intervalHistogram(poll(125, 400), 0.25, 12);
+  const slowSpike = slow.bins.reduce((a, b) => (b.count > a.count ? b : a));
+  assert.ok(slowSpike.from <= 8 && slowSpike.to > 8);
+});
+
+test("the timer probe reports the granularity of the clock it is given", () => {
+  // A stub clock that only ticks in 1ms steps, however often it is asked.
+  let t = 0, calls = 0;
+  const coarse = () => { calls++; if (calls % 7 === 0) t += 1; return t; };
+  assert.strictEqual(Poll.probeTimerResolution(coarse, 1000), 1);
 });
 
 console.log("\nAll " + count + " tests passed.");

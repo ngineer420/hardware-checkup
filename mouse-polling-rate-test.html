@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mouse Polling Rate Test — Check Your Hz in the Browser</title>
+<meta name="description" content="Free online mouse polling rate test. Swirl your mouse and measure its real report rate in Hz — 125, 500, 1000 or higher — with an interval histogram and an honest reading of your browser's own timer resolution.">
+<link rel="canonical" href="https://hardwarecheckup.com/mouse-polling-rate-test.html">
+<meta name="theme-color" content="#0c1114">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mouse Polling Rate Test — Check Your Hz in the Browser">
+<meta property="og:description" content="Measure how many times a second your mouse reports its position, and see exactly how far your browser's clock lets that measurement be trusted.">
+<meta property="og:url" content="https://hardwarecheckup.com/mouse-polling-rate-test.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mouse Polling Rate Test — Check Your Hz in the Browser">
+<meta name="twitter:description" content="Measure how many times a second your mouse reports its position, and see exactly how far your browser's clock lets that measurement be trusted.">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/styles.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Mouse Polling Rate Test",
+  "url": "https://hardwarecheckup.com/mouse-polling-rate-test.html",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Free browser-based mouse polling rate test that times pointer events, uses coalesced events to see past the frame rate, and reports the browser's own timer resolution alongside the result."
+}
+</script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7560786263587509" crossorigin="anonymous"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="hardwarecheckup.com home">
+      <span class="brand-mark"><span class="bracket">[</span>hw<span class="bracket">/</span>checkup<span class="bracket">]</span></span>
+      <span class="brand-tag">browser hardware tests</span>
+    </a>
+    <div class="header-actions">
+      <button id="theme-toggle" class="icon-btn" type="button" aria-label="Toggle dark/light theme" title="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<!-- nav:start -->
+<nav class="toolbar" aria-label="Tools">
+  <details class="tb-menu">
+    <summary class="tb-trigger" aria-label="All 15 tools">
+      <span class="tb-glyph" aria-hidden="true">&#9636;</span>
+      <span class="tb-label">All 15<span class="tb-label-long"> tools</span></span>
+    </summary>
+    <div class="tb-sheet">
+      <div class="tb-sheet-cols">
+        <p class="tb-grouplabel" id="tb-g1">Display</p>
+        <ul aria-labelledby="tb-g1">
+          <li><a href="/dead-pixel-test.html">Dead Pixel Test</a></li>
+          <li><a href="/refresh-rate-test.html">Refresh Rate Test</a></li>
+          <li><a href="/color-test.html">Colour Test</a></li>
+          <li><a href="/screen-resolution.html">Screen Resolution</a></li>
+        </ul>
+        <p class="tb-grouplabel" id="tb-g2">Camera &amp; sound</p>
+        <ul aria-labelledby="tb-g2">
+          <li><a href="/webcam-test.html">Webcam Test</a></li>
+          <li><a href="/mic-test.html">Microphone Test</a></li>
+          <li><a href="/speaker-test.html">Speaker Test</a></li>
+        </ul>
+        <p class="tb-grouplabel" id="tb-g3">Input</p>
+        <ul aria-labelledby="tb-g3">
+          <li><a href="/keyboard-test.html">Keyboard Test</a></li>
+          <li><a href="/mouse-test.html">Mouse Test</a></li>
+          <li><a href="/touchscreen-test.html">Touchscreen Test</a></li>
+          <li><a href="/mouse-polling-rate-test.html" aria-current="page">Mouse Polling Rate</a></li>
+        </ul>
+        <p class="tb-grouplabel" id="tb-g4">System</p>
+        <ul aria-labelledby="tb-g4">
+          <li><a href="/battery-test.html">Battery Test</a></li>
+          <li><a href="/system-info.html">System Info</a></li>
+          <li><a href="/what-is-my-browser.html">What Is My Browser</a></li>
+          <li><a href="/user-agent.html">User Agent String</a></li>
+        </ul>
+      </div>
+    </div>
+  </details>
+  <div class="tb-scrim"></div>
+  <ul class="tb-rail">
+    <li><a href="/webcam-test.html">Webcam</a></li>
+    <li><a href="/mic-test.html">Mic</a></li>
+    <li><a href="/speaker-test.html">Speakers</a></li>
+    <li><a href="/keyboard-test.html">Keyboard</a></li>
+    <li><a href="/mouse-test.html">Mouse</a></li>
+    <li><a href="/dead-pixel-test.html">Dead Pixel</a></li>
+    <li><a href="/refresh-rate-test.html">Refresh</a></li>
+    <li><a href="/touchscreen-test.html">Touch</a></li>
+  </ul>
+</nav>
+<!-- nav:end -->
+
+<main id="main">
+  <div class="tool-hero">
+    <h1>Mouse Polling Rate Test</h1>
+    <p>Find out how many times a second your mouse actually reports its position — and, just as importantly, how much of that number your browser is able to measure. Everything runs locally; nothing is uploaded.</p>
+  </div>
+
+  <div class="panel">
+    <div class="pr-pad" id="pr-pad">Swirl your mouse around inside this box, quickly and continuously, for a few seconds.</div>
+
+    <div class="big-answer">
+      <span class="ba-value" id="pr-hz">—</span>
+      <span class="ba-sub" id="pr-hz-sub">swirl the mouse to start</span>
+    </div>
+
+    <div class="pr-hist" id="pr-hist" role="img" aria-label="Histogram of the gaps between mouse reports, from 0 to 12 milliseconds"></div>
+    <p class="pr-axis" id="pr-axis" aria-hidden="true" hidden><span>0 ms</span><span>6 ms</span><span>12 ms</span></p>
+
+    <div class="field-grid">
+      <div class="field"><span class="k">Fastest 5%</span><span class="v" id="f-peak">—</span></div>
+      <div class="field"><span class="k">Matches</span><span class="v" id="f-match">—</span></div>
+      <div class="field"><span class="k">Median gap</span><span class="v" id="f-interval">—</span></div>
+      <div class="field"><span class="k">Jitter</span><span class="v" id="f-jitter">—</span></div>
+      <div class="field"><span class="k">Reports timed</span><span class="v" id="f-samples">—</span></div>
+      <div class="field"><span class="k">Event source</span><span class="v" id="f-source">—</span></div>
+      <div class="field"><span class="k">Timer resolution</span><span class="v" id="f-res">—</span></div>
+      <div class="field"><span class="k">Resolvable up to</span><span class="v" id="f-ceiling">—</span></div>
+    </div>
+
+    <p id="status" class="status-msg" role="status" aria-live="polite"></p>
+    <p id="pr-verdict" class="rr-verdict" role="status" hidden></p>
+
+    <div class="control-row">
+      <button id="reset-btn" type="button">Clear and measure again</button>
+    </div>
+  </div>
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
+    <h2>What this measures, and what it cannot</h2>
+    <p id="pr-clock-note" class="notice"></p>
+    <p>Polling rate is how often your mouse tells the computer where it is. A 1000&nbsp;Hz mouse reports every millisecond, a 125&nbsp;Hz one every eight. This page times the gaps between the reports that reach the browser and takes the <strong>median</strong> — not the average, because one gap where your hand changed direction would drag a genuine 1000&nbsp;Hz reading down to something plausible and wrong.</p>
+    <p>Two things stand between the mouse and the number above, and both are worth stating plainly rather than hiding behind a confident figure.</p>
+    <p><strong>Event coalescing.</strong> Browsers hand pointer events to a page in step with the screen, so a naive test on a 60&nbsp;Hz monitor measures every mouse in the world at about 60&nbsp;Hz. This page listens on <code>pointerrawupdate</code> where it exists and calls <code>getCoalescedEvents()</code> on every event, which returns the individual reports the browser bundled together, each carrying its own original timestamp. That is what lets a 1000&nbsp;Hz mouse read as 1000&nbsp;Hz behind a 60&nbsp;Hz frame loop. The <em>Event source</em> field tells you which path your browser took.</p>
+    <p><strong>Timer resolution.</strong> This is the real limit, and it is not the same in every browser. Browsers deliberately blunt their clocks so that pages cannot use precise timing to fingerprint or attack you. Chrome and Edge round timestamps to 100&nbsp;microseconds; Firefox rounds to a full millisecond unless the page is cross-origin isolated, which requires HTTP headers a static site like this one cannot send. A rate is only honestly claimable when its reporting interval spans at least two clock ticks, so a 1&nbsp;ms clock tops out around 500&nbsp;Hz — a 500&nbsp;Hz mouse and a 1000&nbsp;Hz mouse are then literally the same measurement. When that happens this page prints a capped result with a "≥" in front of it instead of inventing precision it does not have.</p>
+
+    <h2>How to get a reading you can trust</h2>
+    <p>Swirl continuously in wide circles inside the box — the test needs a couple of hundred timed reports, and a mouse that is standing still reports nothing at all. Keep the window focused and in front. Close anything heavy in the background: the measurement passes through the operating system's event queue and your browser's event loop, so a machine under load reports low, and a laptop throttling on battery reports lower still. Wireless mice are honest here but sensitive to their link, so a mouse on a shared dongle or a long, obstructed path to its receiver will show more jitter and the occasional dropped report.</p>
+    <p>Expect a real 1000&nbsp;Hz mouse to measure somewhere in the high hundreds rather than exactly 1000. That is normal — it is the queueing, not the hardware. What matters is which rate it lands nearest, which is what the <em>Matches</em> field reports, and the tolerance there is deliberately loose for exactly this reason.</p>
+
+    <h2>Reading the histogram</h2>
+    <p>The bars are the gaps between reports, bucketed in quarter-millisecond steps from 0 to 12&nbsp;ms. A mouse locked to one rate is a single spike: 1&nbsp;ms for 1000&nbsp;Hz, 2&nbsp;ms for 500&nbsp;Hz, 4&nbsp;ms for 250&nbsp;Hz, 8&nbsp;ms for 125&nbsp;Hz. Two spikes — one at your rate and one at double it — is the signature of a receiver dropping every so many reports, or of a browser handing over events in batches. A wide smear rather than a spike means the machine, not the mouse, is deciding when your input gets looked at.</p>
+
+    <h2>My mouse says 1000 Hz but this says 125</h2>
+    <p>125&nbsp;Hz is the USB default, and a mouse that advertises more will sit at 125 until something sets it higher. Check the mouse's own configuration software, and check that the setting survived a reboot or a change of USB port — plenty of them do not. A gaming mouse plugged into a hub, or a wireless one sharing a receiver with a keyboard, is also worth testing directly in a port on the machine before you blame the mouse.</p>
+
+    <p>Checking the rest of the mouse? The <a href="/mouse-test.html">mouse button and scroll test</a> covers left, middle and right clicks, double-click behaviour, the scroll wheel and dragging. For the other half of the input-lag question, the <a href="/refresh-rate-test.html">refresh rate test</a> measures what your display does with all those reports.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <!-- related:start -->
+  <nav class="footer-tools" aria-label="Related tools">
+    <span class="footer-tools-label">Related</span>
+    <a href="/keyboard-test.html">Keyboard Test</a>
+    <a href="/mouse-test.html">Mouse Test</a>
+    <a href="/touchscreen-test.html">Touchscreen Test</a>
+    <a href="/webcam-test.html">Webcam Test</a>
+  </nav>
+  <!-- related:end -->
+  <div class="footer-inner">
+    <div>© <span id="year"></span> hardwarecheckup.com</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/privacy.html">Privacy</a>
+      <a href="/terms.html">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/theme.js"></script>
+<script src="/assets/js/pollingrate.js"></script>
+<a href="https://erabb.it" class="erabbit-mark" aria-label="erabb.it"><img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐇</text></svg>" width="10" height="10" alt=""></a>
+</body>
+</html>
