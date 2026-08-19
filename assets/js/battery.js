@@ -45,6 +45,12 @@
   if (typeof module !== "undefined" && module.exports) {
     module.exports = { formatDuration: formatDuration, describeLevel: describeLevel };
   }
+  /* Also published to the page, so /full-checkup.html can print the same
+     sentence on its report card rather than growing a second, subtly different
+     copy of the wording this one is tested for. */
+  if (typeof window !== "undefined") {
+    window.HCBattery = { formatDuration: formatDuration, describeLevel: describeLevel };
+  }
 
   if (typeof document === "undefined") return;
 
