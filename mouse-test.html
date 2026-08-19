@@ -41,9 +41,9 @@
 <!-- nav:start -->
 <nav class="toolbar" aria-label="Tools">
   <details class="tb-menu">
-    <summary class="tb-trigger" aria-label="All 14 tools">
+    <summary class="tb-trigger" aria-label="All 15 tools">
       <span class="tb-glyph" aria-hidden="true">&#9636;</span>
-      <span class="tb-label">All 14<span class="tb-label-long"> tools</span></span>
+      <span class="tb-label">All 15<span class="tb-label-long"> tools</span></span>
     </summary>
     <div class="tb-sheet">
       <div class="tb-sheet-cols">
@@ -65,6 +65,7 @@
           <li><a href="/keyboard-test.html">Keyboard Test</a></li>
           <li><a href="/mouse-test.html" aria-current="page">Mouse Test</a></li>
           <li><a href="/touchscreen-test.html">Touchscreen Test</a></li>
+          <li><a href="/mouse-polling-rate-test.html">Mouse Polling Rate</a></li>
         </ul>
         <p class="tb-grouplabel" id="tb-g4">System</p>
         <ul aria-labelledby="tb-g4">
@@ -127,6 +128,7 @@
     <p>Move your cursor over the page and the <strong>cursor (x, y)</strong> readout tracks it in real time — jumpy or frozen numbers can indicate a failing sensor or a dirty surface. Click each button on your real mouse: the matching part of the on-screen mouse lights up, the <strong>last button</strong> field names it, and the <strong>clicks</strong> counter ticks up. Test the left, right, and middle (scroll-wheel) buttons this way; right-clicks are captured inside the tool so the context menu won't interrupt you.</p>
     <p>To check for a worn <strong>double-click</strong> switch, deliberately double-click and confirm the double-click field reads "detected". A common fault on older mice is the opposite problem — a single click that registers as a double — which you can catch by clicking once, slowly, and watching whether the counter jumps by two. Scroll the wheel up and down to confirm the <strong>scroll</strong> direction is detected both ways, and press-and-hold inside the <strong>drag test</strong> box, moving before you release, to confirm dragging holds without dropping mid-motion.</p>
     <p>Press <strong>Reset counters</strong> to start a fresh run. This tool only reads standard mouse and pointer events in your browser and records nothing.</p>
+    <p>None of this says anything about how <em>often</em> your mouse reports back — the figure gaming mice advertise as 500&nbsp;Hz or 1000&nbsp;Hz. That is a timing measurement rather than a button one, so it has its own page: the <a href="/mouse-polling-rate-test.html">mouse polling rate test</a> times the gaps between reports and tells you straight out how much of the answer your browser's clock is able to resolve.</p>
 
     <p>If a button feels unreliable, our guide to <a href="/articles/common-hardware-faults-and-how-to-diagnose-them.html">common hardware faults and how to diagnose them</a> covers double-click failure and drift. Using a game controller? Check for stick drift at <a href="https://stickdriftcheck.com" target="_blank" rel="noopener">stickdriftcheck.com</a>.</p>
   </section>
@@ -138,8 +140,8 @@
     <span class="footer-tools-label">Related</span>
     <a href="/keyboard-test.html">Keyboard Test</a>
     <a href="/touchscreen-test.html">Touchscreen Test</a>
+    <a href="/mouse-polling-rate-test.html">Mouse Polling Rate</a>
     <a href="/webcam-test.html">Webcam Test</a>
-    <a href="/mic-test.html">Microphone Test</a>
   </nav>
   <!-- related:end -->
   <div class="footer-inner">

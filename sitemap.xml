@@ -31,6 +31,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://hardwarecheckup.com/mouse-polling-rate-test.html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://hardwarecheckup.com/dead-pixel-test.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

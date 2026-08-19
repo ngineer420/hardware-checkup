@@ -1039,6 +1039,53 @@ kbd {
 }
 .rr-verdict[hidden] { display: none; }
 
+/* ---------- mouse polling rate ---------- */
+.pr-pad {
+  height: 190px;
+  margin-top: 6px;
+  background: var(--bg-inset);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 16px;
+  color: var(--text-faint);
+  font-size: 13px;
+  line-height: 1.5;
+  user-select: none;
+  touch-action: none;
+  cursor: crosshair;
+}
+.pr-pad.is-active { border-style: solid; border-color: var(--accent); color: var(--accent); }
+/* The histogram is the shape of the measurement: one spike is a mouse locked to
+   a rate, two spikes is a receiver dropping packets or a browser batching. Bars
+   are plain divs on a flex baseline — no canvas, so it survives with images off
+   and reads correctly in both themes. */
+.pr-hist {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 96px;
+  margin-top: 16px;
+  padding: 0 2px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.pr-hist:empty { display: none; }
+.pr-bar { flex: 1 1 0; min-width: 0; background: var(--accent); opacity: .85; border-radius: 2px 2px 0 0; }
+.pr-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-faint);
+  margin: 6px 2px 0;
+}
+.field .v.warn { color: var(--incorrect); }
+
 /* ---------- touchscreen ---------- */
 .touch-surface {
   position: relative;

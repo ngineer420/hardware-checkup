@@ -17,7 +17,8 @@ the clean form here would 404. `canon()` in sync_nav treats both as the same
 destination either way.
 """
 
-# Noun used in the menu trigger: "All 14 tools".
+# Noun used in the menu trigger: "All 15 tools". The count is derived from
+# len(TOOLS) by sync_nav, so it follows this list on its own.
 NOUN = "tools"
 
 # Tier-1 tools, in rail order — the first eight are the chips. This is the order
@@ -39,6 +40,12 @@ TOOLS = [
     {"href": "/refresh-rate-test.html",  "label": "Refresh",     "long": "Refresh Rate Test",    "group": "display", "tier": 1},
     {"href": "/touchscreen-test.html",   "label": "Touch",        "long": "Touchscreen Test",     "group": "input",   "tier": 1},
     # sheet only from here — the rail is capped at eight
+    # Tier 1, not a variant of the mouse test: "how many times a second does my
+    # mouse report" is a different question from "do my buttons work", it is
+    # searched separately, and the two pages share no code. Sheet-only because
+    # all eight rail slots are taken and none of them is worth evicting for a
+    # page this new — the mouse test links to it directly instead.
+    {"href": "/mouse-polling-rate-test.html", "label": None,      "long": "Mouse Polling Rate",   "group": "input",   "tier": 1},
     {"href": "/battery-test.html",       "label": None,           "long": "Battery Test",         "group": "system",  "tier": 1},
     {"href": "/color-test.html",         "label": None,           "long": "Colour Test",          "group": "display", "tier": 1},
     {"href": "/screen-resolution.html",  "label": None,           "long": "Screen Resolution",    "group": "display", "tier": 1},
@@ -47,7 +54,7 @@ TOOLS = [
     {"href": "/user-agent.html",         "label": None,           "long": "User Agent String",    "group": "system",  "tier": 1},
 ]
 
-# Sheet groups, in order. Fourteen destinations is past the eight where a flat
+# Sheet groups, in order. Fifteen destinations is past the eight where a flat
 # list stops being scannable, so the sheet renders grouped.
 GROUPS = [
     ("display", "Display"),
