@@ -180,7 +180,9 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 24px 20px 60px; }
   .hero { padding: 10px 0 14px; }
 }
 .hero::before {
-  content: "● SYSTEM READY — 14 DIAGNOSTICS AVAILABLE";
+  /* Counts the tool pages, which is 15 since the polling-rate test landed; the
+     guided run is not a sixteenth diagnostic, it is the fifteen in order. */
+  content: "● SYSTEM READY — 15 DIAGNOSTICS AVAILABLE";
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1353,6 +1355,159 @@ kbd {
    running prose sitting under a full-width panel, and at 860px it reads as one
    very long line. */
 .si-more { max-width: 640px; margin: 18px 0 0; font-size: 13.5px; color: var(--text-dim); }
+
+/* ---------- full checkup ---------- */
+.hero-cta { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; justify-content: center; margin: 18px 0 0; }
+.hero-cta-note { font-size: 13px; color: var(--text-dim); max-width: 460px; text-align: left; }
+.checkup-lead { display: grid; gap: 18px; }
+@media (min-width: 720px) { .checkup-lead { grid-template-columns: 1fr auto; align-items: start; } }
+.checkup-lead-text h2 { margin-top: 0; }
+.checkup-lead-cta { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+/* The start control is a link, not a button — it goes to another page, and a
+   right-click or a middle-click should behave the way they do on a link. The
+   site's button skin is written as `button.primary`, so a link has to carry its
+   own copy rather than borrowing a rule that cannot match it. */
+a.btn-link {
+  display: inline-block;
+  text-decoration: none;
+  padding: 12px 18px;
+  border-radius: var(--radius);
+  font-weight: 700;
+  white-space: nowrap;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 68%, var(--accent-2)));
+  border: 1px solid transparent;
+  color: var(--accent-contrast);
+  transition: filter .12s ease, box-shadow .12s ease;
+}
+a.btn-link:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent), 0 6px 20px -8px color-mix(in srgb, var(--accent) 60%, transparent);
+}
+.checkup-progress { font-size: 13px; color: var(--text-dim); margin: 0; }
+
+.checkup-steps { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 8px; }
+.checkup-step {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 12px;
+  align-items: baseline;
+  padding: 10px 12px;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-soft);
+  border-left: 3px solid var(--border);
+  border-radius: 8px;
+}
+.checkup-step.is-pass { border-left-color: var(--correct); }
+.checkup-step.is-fail { border-left-color: var(--incorrect); }
+.checkup-step.is-skip { border-left-color: var(--text-faint); }
+.checkup-step .cs-name { font-weight: 600; }
+.checkup-step .cs-state { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-faint); }
+.checkup-step.is-pass .cs-state { color: var(--correct); }
+.checkup-step.is-fail .cs-state { color: var(--incorrect); }
+.checkup-step .cs-note,
+.checkup-step .cs-measure { grid-column: 1 / -1; font-size: 12.5px; color: var(--text-dim); }
+
+/* The report card. The two halves are deliberately not styled alike: one is a
+   set of readings and the other is a set of opinions, and a card that renders
+   them identically is the card a seller would hand you. */
+.checkup-card { margin-top: 16px; }
+.cc-heading { margin: 22px 0 2px; font-size: 15px; }
+.cc-heading--human::before { content: "\270E  "; color: var(--text-faint); }
+.cc-heading--machine::before { content: "\2317  "; color: var(--text-faint); }
+.cc-heading-note { font-size: 12.5px; color: var(--text-faint); margin: 0 0 10px; }
+.cc-block { border: 1px solid var(--border-soft); border-radius: 10px; overflow: hidden; }
+.cc-block--human { background: var(--bg-inset); }
+.cc-block--machine { background: transparent; }
+.cc-block--machine .cc-value { font-family: var(--mono); }
+/* sysinfo.js renders its own bordered, filled rows. Inside the card they are
+   one column of one table, so the chrome comes off and only the divider stays —
+   otherwise the machine half reads as two different components stacked. */
+.cc-block--machine .si-rows { display: block; }
+.cc-block--machine .si-row {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--border-soft);
+  border-radius: 0;
+  padding: 9px 12px;
+}
+.cc-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 14px;
+  align-items: baseline;
+  padding: 9px 12px;
+  border-top: 1px solid var(--border-soft);
+}
+.cc-block > .cc-row:first-child,
+.cc-block > div:first-child .cc-row:first-child { border-top: 0; }
+.cc-label { color: var(--text-dim); font-size: 13.5px; }
+.cc-value { font-weight: 600; text-align: right; }
+.cc-row.is-pass .cc-value { color: var(--correct); }
+.cc-row.is-fail .cc-value { color: var(--incorrect); }
+.cc-row.is-skip .cc-value { color: var(--text-faint); }
+.cc-note { grid-column: 1 / -1; font-size: 12.5px; color: var(--text-dim); text-align: left; }
+.cc-empty { padding: 12px; margin: 0; font-size: 13px; color: var(--text-faint); }
+.checkup-stamp { font-size: 13px; color: var(--text-dim); margin: 0; }
+.cc-foot { font-size: 12px; color: var(--text-faint); margin: 16px 0 0; }
+
+/* The verdict bar, injected by checkup.js onto whichever tool page the run is
+   currently on. Fixed to the bottom so it is reachable without scrolling past a
+   full-height test, and body padding keeps it off the page's own last line. */
+.checkup-bar {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 9998;
+  background: var(--bg-raised);
+  border-top: 2px solid var(--accent);
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, .28);
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+}
+/* Enough room under the page for the bar in its tallest state — the note field
+   open, on a narrow screen, where the question wraps to two lines. */
+body.has-checkup-bar { padding-bottom: 230px; }
+@media (max-width: 640px) { body.has-checkup-bar { padding-bottom: 300px; } }
+.cb-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.cb-step { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); }
+.cb-name { font-weight: 700; }
+.cb-ask { margin: 6px 0 0; font-size: 14px; color: var(--text); }
+.cb-needs { margin: 4px 0 0; font-size: 12.5px; color: var(--text-dim); }
+.cb-buttons { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.cb-btn { padding: 10px 16px; font-size: 14px; font-weight: 600; }
+.cb-pass { background: var(--correct); border-color: var(--correct); color: #06120c; }
+.cb-fail { background: var(--incorrect); border-color: var(--incorrect); color: #150406; }
+.cb-note { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+/* A class rule beats the user agent's [hidden] { display: none }, so the note
+   field would sit open before anyone pressed Problem. */
+.cb-note[hidden] { display: none; }
+.cb-note-input {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 9px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+.cb-foot { display: flex; gap: 12px; flex-wrap: wrap; align-items: baseline; margin-top: 10px; font-size: 12.5px; }
+.cb-prev { color: var(--text-faint); }
+
+/* The card is meant to be printed and handed over, so the print sheet drops
+   everything that is navigation or decoration and keeps only the record. */
+@media print {
+  .site-header, .toolbar, .skip-link, .site-footer, .erabbit-mark,
+  .checkup-bar, .control-row, .checkup-lead-cta, .tool-hero p,
+  .about-section, .footer-tools { display: none !important; }
+  body { background: #fff; color: #000; padding-bottom: 0; }
+  .panel, .cc-block, .checkup-step, .si-row { border-color: #999; background: #fff; box-shadow: none; }
+  .si-label, .si-note { color: #333; }
+  .si-value { color: #000; }
+  .cc-label, .cc-note, .cc-heading-note, .checkup-stamp, .cs-state { color: #333; }
+  .cc-row.is-pass .cc-value, .cc-row.is-fail .cc-value, .cc-row.is-skip .cc-value { color: #000; }
+  .cc-heading { break-after: avoid; }
+  .cc-row, .checkup-step { break-inside: avoid; }
+}
 
 .erabbit-mark { display: block; width: 10px; margin: 0 0 0 auto; line-height: 0; cursor: default; }
 .erabbit-mark img { display: block; width: 10px; height: 10px; }

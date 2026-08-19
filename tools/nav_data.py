@@ -7,7 +7,13 @@ renders it into the static HTML of every page.
 Tier rule (portfolio spec, ngineer420.github.io#13): a page is tier 1 only if it
 answers a *different question*. Every test on this site does — a webcam test and
 a mic test are not one tool with a parameter changed — so there is no tier-2
-family here, no hub link and no in-tool chips. The whole fix is the rail and the
+family here and no in-tool chips.
+
+There IS a hub link now, and this docstring used to say there was not. Full
+Checkup is not a parent of the tests in the tier-2 sense — it does not vary them,
+it sequences them — so it is an ordinary tier-1 destination rather than a HUBS
+entry. It takes the FIRST rail chip, which pushes the eighth off; see the
+eviction note on its TOOLS entry below. The whole fix is the rail and the
 sheet replacing a fourteen-link block that wrapped to three rows at 1280px and
 opened a 506px drawer on a phone.
 
@@ -17,7 +23,7 @@ the clean form here would 404. `canon()` in sync_nav treats both as the same
 destination either way.
 """
 
-# Noun used in the menu trigger: "All 15 tools". The count is derived from
+# Noun used in the menu trigger: "All 16 tools". The count is derived from
 # len(TOOLS) by sync_nav, so it follows this list on its own.
 NOUN = "tools"
 
@@ -31,6 +37,14 @@ NOUN = "tools"
 #   long  -> anchor text in the sheet and the related block
 #   group -> sheet grouping, from the visitor's vocabulary, not the codebase's
 TOOLS = [
+    # First chip, and the one eviction on this list: the rail caps at eight, so
+    # pinning the hub drops Touchscreen to sheet-only. That is the deliberate
+    # trade. Touch was already the last of the eight — the site's own traffic
+    # order put it there — and it is the one rail test a large share of visitors
+    # cannot run at all, because their machine has no touchscreen. The hub is
+    # the only destination here that leads anywhere else, and it is what turns
+    # fifteen terminal pages into one session.
+    {"href": "/full-checkup.html",       "label": "Full Checkup", "long": "Full Checkup (guided run)", "group": "checkup", "tier": 1},
     {"href": "/webcam-test.html",        "label": "Webcam",       "long": "Webcam Test",          "group": "av",      "tier": 1},
     {"href": "/mic-test.html",           "label": "Mic",          "long": "Microphone Test",      "group": "av",      "tier": 1},
     {"href": "/speaker-test.html",       "label": "Speakers",     "long": "Speaker Test",         "group": "av",      "tier": 1},
@@ -38,8 +52,8 @@ TOOLS = [
     {"href": "/mouse-test.html",         "label": "Mouse",        "long": "Mouse Test",           "group": "input",   "tier": 1},
     {"href": "/dead-pixel-test.html",    "label": "Dead Pixel",   "long": "Dead Pixel Test",      "group": "display", "tier": 1},
     {"href": "/refresh-rate-test.html",  "label": "Refresh",     "long": "Refresh Rate Test",    "group": "display", "tier": 1},
-    {"href": "/touchscreen-test.html",   "label": "Touch",        "long": "Touchscreen Test",     "group": "input",   "tier": 1},
     # sheet only from here — the rail is capped at eight
+    {"href": "/touchscreen-test.html",   "label": None,           "long": "Touchscreen Test",     "group": "input",   "tier": 1},
     # Tier 1, not a variant of the mouse test: "how many times a second does my
     # mouse report" is a different question from "do my buttons work", it is
     # searched separately, and the two pages share no code. Sheet-only because
@@ -57,6 +71,7 @@ TOOLS = [
 # Sheet groups, in order. Fifteen destinations is past the eight where a flat
 # list stops being scannable, so the sheet renders grouped.
 GROUPS = [
+    ("checkup", "Start here"),
     ("display", "Display"),
     ("av", "Camera & sound"),
     ("input", "Input"),
