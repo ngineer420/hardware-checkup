@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mouse Polling Rate Test — Check Your Hz in the Browser</title>
-<meta name="description" content="Free online mouse polling rate test. Swirl your mouse and measure its real report rate in Hz — 125, 500, 1000 or higher — with an interval histogram and an honest reading of your browser's own timer resolution.">
+<meta name="description" content="Free online mouse polling rate test. Swirl your mouse and measure its real report rate in Hz — 125, 500, 1000 or higher — with an interval histogram and an honest reading of your browser's own timer resolution. Plus a Pointer Lock DPI test that measures counts per inch against a bank card.">
 <link rel="canonical" href="https://hardwarecheckup.com/mouse-polling-rate-test.html">
 <meta name="theme-color" content="#0c1114">
 
@@ -27,7 +27,7 @@
   "applicationCategory": "UtilitiesApplication",
   "operatingSystem": "Any",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-  "description": "Free browser-based mouse polling rate test that times pointer events, uses coalesced events to see past the frame rate, and reports the browser's own timer resolution alongside the result."
+  "description": "Free browser-based mouse polling rate test that times pointer events, uses coalesced events to see past the frame rate, and reports the browser's own timer resolution alongside the result. Includes a Pointer Lock DPI (CPI) test that sums movement deltas over a swipe measured against an 85.60 mm bank card and reports the uncertainty with the figure."
 }
 </script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7560786263587509" crossorigin="anonymous"></script>
@@ -158,6 +158,85 @@
     <h2>My mouse says 1000 Hz but this says 125</h2>
     <p>125&nbsp;Hz is the USB default, and a mouse that advertises more will sit at 125 until something sets it higher. Check the mouse's own configuration software, and check that the setting survived a reboot or a change of USB port — plenty of them do not. A gaming mouse plugged into a hub, or a wireless one sharing a receiver with a keyboard, is also worth testing directly in a port on the machine before you blame the mouse.</p>
 
+  </section>
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;" id="dpi">
+    <h2>Mouse DPI test &mdash; measure your CPI with a bank card</h2>
+    <p>The other number on the box. DPI &mdash; counts per inch, CPI, the two words mean the same thing &mdash; is how many steps the sensor reports for every inch the mouse travels across the desk. A browser cannot read it from the mouse. Nothing in any web API exposes a sensor setting, and no page has ever been able to ask one.</p>
+    <p>What a browser can do is count. Lock the pointer, sum the movement the operating system reports over a swipe, and divide by how far that swipe actually went &mdash; a distance you have to measure yourself, on the desk, with something of a known size. That is an <em>inference</em>, and it inherits every distortion sitting between the sensor and this page. The panel below reports the assumptions and the uncertainty alongside the figure, because without them the figure is not worth reading.</p>
+    <p id="dpi-accel-note" class="notice"></p>
+  </section>
+
+  <div class="panel">
+    <ol class="dpi-steps">
+      <li>Lay a bank card flat on the mousepad. Every payment card is <strong>85.60&nbsp;mm</strong> long, by ISO/IEC&nbsp;7810 &mdash; that is the ruler.</li>
+      <li>Tell the panel how far you are going to swipe. Two card lengths end to end is a good swipe; further is a better measurement.</li>
+      <li>Set the browser zoom to 100% &mdash; Ctrl+0, or Cmd+0 on a Mac. Chrome was measured not to care, but not every browser was.</li>
+      <li>Click the pad below to lock the pointer, swipe once from one end of that distance to the other, and click to finish.</li>
+    </ol>
+
+    <div class="control-row">
+      <label for="dpi-count">Swipe distance
+        <input id="dpi-count" class="dpi-num" type="number" min="0.5" max="99" step="0.5" value="2" inputmode="decimal">
+      </label>
+      <label for="dpi-unit" class="visually-hidden">Unit of distance</label>
+      <select id="dpi-unit">
+        <option value="card" selected>bank cards (85.60 mm each)</option>
+        <option value="mm">millimetres</option>
+        <option value="cm">centimetres</option>
+        <option value="in">inches</option>
+      </select>
+      <span class="dpi-dist" id="dpi-dist"></span>
+    </div>
+
+    <div class="dpi-pad" id="dpi-pad" role="button" tabindex="0" aria-describedby="dpi-status"></div>
+
+    <div class="big-answer is-unavailable" id="dpi-answer">
+      <span class="ba-value" id="dpi-value">&mdash;</span>
+      <span class="ba-sub" id="dpi-sub">measure a swipe to start</span>
+    </div>
+
+    <div class="field-grid">
+      <div class="field"><span class="k">Honest range</span><span class="v" id="d-range">&mdash;</span></div>
+      <div class="field"><span class="k">Standard step</span><span class="v" id="d-match">&mdash;</span></div>
+      <div class="field"><span class="k">Counts summed</span><span class="v" id="d-counts">&mdash;</span></div>
+      <div class="field"><span class="k">Distance</span><span class="v" id="d-dist">&mdash;</span></div>
+      <div class="field"><span class="k">Straightness</span><span class="v" id="d-straight">&mdash;</span></div>
+      <div class="field"><span class="k">Move events</span><span class="v" id="d-samples">&mdash;</span></div>
+      <div class="field"><span class="k">Pointer Lock</span><span class="v" id="d-lock">&mdash;</span></div>
+      <div class="field"><span class="k">Pixel ratio</span><span class="v" id="d-ratio">&mdash;</span></div>
+    </div>
+
+    <p id="dpi-status" class="status-msg" role="status" aria-live="polite"></p>
+    <p id="dpi-verdict" class="rr-verdict" role="status" hidden></p>
+    <p id="dpi-runs" class="rr-verdict" hidden></p>
+
+    <div class="control-row dpi-controls">
+      <button id="dpi-start" type="button" class="primary">Lock pointer and swipe</button>
+      <button id="dpi-reset" type="button">Clear runs</button>
+    </div>
+  </div>
+
+  <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
+    <h2>What this figure is, and what it is not</h2>
+    <p>It is <strong>effective CPI</strong>: counts per inch as your operating system hands them to the browser, at the speed you happened to swipe. It equals the sensor's hardware DPI only when nothing between them is scaling the number, and on a default Windows or macOS install something is.</p>
+    <p><strong>Pointer acceleration is the big one.</strong> Windows ships with &ldquo;Enhance pointer precision&rdquo; on, which moves the pointer further per count the faster you move &mdash; so a fast swipe measures high and a slow one measures low, and neither is the sensor's DPI. macOS accelerates by default too and offers no checkbox at all. The note above tells you how to turn it off on your system; until you do, the panel is measuring your pointer curve, not your mouse.</p>
+    <p><strong>Pointer speed is the quiet one.</strong> The speed slider in your mouse settings multiplies counts before the browser ever sees them. On Windows the middle notch, the sixth of eleven, is 1:1; anything else scales this reading by a fixed factor. Games and creative apps add their own in-app sensitivity on top, which is why an in-game figure and this one can both be right and still disagree.</p>
+    <p><strong>Browser zoom and display scaling do not move the units &mdash; which we checked rather than assumed.</strong> The obvious worry is that a swipe measured at 200% zoom would report half the counts, and that <code>devicePixelRatio</code> is therefore the divisor. It is not, and neither is anything else. We posted a fixed raw pointer delta straight into the operating system's event stream with the page pointer-locked, and repeated it at display scale factors of 1, 2 and 3 and at browser zoom levels of 100%, 125% and 200%. In all six cases the page saw exactly the same movement total, while <code>devicePixelRatio</code> ranged over 1, 2, 2.5, 3 and 4. Under Pointer Lock, Chrome hands the page the operating system's pointer delta untouched.</p>
+    <p>So this panel divides by nothing, and dividing by <code>devicePixelRatio</code> would actively break it &mdash; on a Retina Mac at 100% zoom the ratio is 2 and nothing is zoomed at all, so &ldquo;correcting&rdquo; would halve a correct answer. The <em>Pixel ratio</em> field is shown above for exactly that reason: watching a correct reading sit next to a ratio of 2 is the fastest way to see that it is not the divisor. One caveat survives the experiment, and it is why the steps still say 100%: the Pointer Lock specification says these values <em>are</em> in CSS pixels, and Chrome measurably does not do that. Only Chrome was tested, and a browser that follows the spec here would report fewer counts as you zoom in.</p>
+
+    <h2>Why a bank card and not a ruler on the screen</h2>
+    <p>Because the distance that matters is travelled on the mousepad, not on the screen. A page has no idea how many millimetres of desk a screen pixel stands for &mdash; it does not know your monitor's physical size, and an on-screen ruler would be measuring the wrong surface anyway. So the ruler has to be a real object, and it may as well be one already on the desk: every credit, debit and bank card in the world is 85.60&nbsp;&times;&nbsp;53.98&nbsp;mm to a tolerance of a tenth of a millimetre, because ISO/IEC&nbsp;7810 ID-1 says so and cash machines enforce it.</p>
+    <p>The swipe uses <a href="https://developer.mozilla.org/en-US/docs/Web/API/Pointer_Lock_API" rel="nofollow">Pointer Lock</a> for a reason worth stating. Without it the cursor stops dead at the edge of the screen while your hand carries on, the movement deltas stop arriving, and the total comes out short &mdash; which looks exactly like a low-DPI mouse rather than like a failed measurement. That is the single most misleading thing a test like this can do, so if the browser will not grant the lock this panel prints no number at all.</p>
+
+    <h2>How to get a reading you can trust</h2>
+    <p><strong>Swipe further.</strong> Everything else is second to this. The error is dominated by the few millimetres of slop at each end of the stroke, and that slop is a fixed distance, so it shrinks as a fraction of a longer swipe: one card carries about &plusmn;10%, two about &plusmn;5%, four about &plusmn;2.5%. The <em>Honest range</em> field is that arithmetic, and watching it narrow as you swipe further is the fastest way to see why long swipes matter.</p>
+    <p><strong>Swipe straight, once, in one direction.</strong> The card measures a straight line. A stroke that wanders up and down, or backs up half-way, travelled further than the card says and reads high &mdash; so the panel measures how straight the swipe was and refuses the run rather than quietly reporting the DPI of a squiggle.</p>
+    <p><strong>Then swipe again, faster.</strong> This is the test within the test. A sensor's DPI is a constant, so two swipes across the same card must produce the same figure. If a slow swipe and a fast one disagree, something speed-dependent sits between the sensor and this page, and on a desktop that is almost always pointer acceleration. The panel compares every run you take and says so outright when they do not agree, because two numbers that disagree tell you more than one number on its own ever could.</p>
+
+    <h2>It says 1450 and my mouse is set to 1600</h2>
+    <p>That is a 9% shortfall, and the usual causes are all in the list above rather than in the mouse: acceleration on a slow swipe, a pointer-speed slider off its centre notch, browser zoom, or a swipe that ended a few millimetres short of the card. Turn acceleration off, set zoom to 100%, swipe across four card lengths instead of two, and take three runs. If they agree with each other and still sit below the setting, check the mouse's own software &mdash; plenty of them expose several DPI stages on a button and boot into the wrong one.</p>
+
     <p>Checking the rest of the mouse? The <a href="/mouse-test.html">mouse button and scroll test</a> covers left, middle and right clicks, double-click behaviour, the scroll wheel and dragging. For the other half of the input-lag question, the <a href="/refresh-rate-test.html">refresh rate test</a> measures what your display does with all those reports.</p>
   </section>
 </main>
@@ -185,6 +264,7 @@
 <script src="/assets/js/theme.js"></script>
 <script src="/assets/js/checkup.js"></script>
 <script src="/assets/js/pollingrate.js"></script>
+<script src="/assets/js/mousedpi.js"></script>
 <a href="https://erabb.it" class="erabbit-mark" aria-label="erabb.it"><img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐇</text></svg>" width="10" height="10" alt=""></a>
 </body>
 </html>

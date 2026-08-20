@@ -17,6 +17,7 @@ const Colour = require("../assets/js/colortest.js");
 const Keyboard = require("../assets/js/keyboard.js");
 const Sys = require("../assets/js/sysinfo.js");
 const Poll = require("../assets/js/pollingrate.js");
+const DPI = require("../assets/js/mousedpi.js");
 
 let count = 0;
 function test(name, fn) {
@@ -749,6 +750,228 @@ test("the timer probe reports the granularity of the clock it is given", () => {
   let t = 0, calls = 0;
   const coarse = () => { calls++; if (calls % 7 === 0) t += 1; return t; };
   assert.strictEqual(Poll.probeTimerResolution(coarse, 1000), 1);
+});
+
+/* -------------------------------- mouse DPI --------------------------------
+   A browser cannot read a mouse sensor's DPI. Everything this panel prints is
+   an inference from movement deltas divided by a distance a person measured
+   with a bank card, and the whole point of the panel is that it says so — so
+   what is tested here is mostly the refusals. Each one is a case where a
+   number could have been printed and would have been wrong. */
+
+/** One clean, straight swipe of `cards` bank cards by a mouse at `dpi`. */
+function swipe(dpi, cards, opts) {
+  const inches = DPI.distanceToInches(cards, "card");
+  const counts = dpi * inches;
+  const events = [];
+  for (let i = 0; i < 200; i++) events.push({ movementX: counts / 200, movementY: 0 });
+  return DPI.estimateDpi(DPI.sumMovement(events), inches, Object.assign({ locked: true }, opts || {}));
+}
+
+test("a bank card is the ruler, to the millimetre", () => {
+  // ISO/IEC 7810 ID-1. The whole method rests on this number.
+  assert.strictEqual(DPI.CARD_MM, 85.6);
+  assert.ok(Math.abs(DPI.distanceToInches(1, "card") - 3.3701) < 0.0001);
+  assert.ok(Math.abs(DPI.distanceToInches(2, "card") - 6.7402) < 0.0001);
+  assert.strictEqual(DPI.distanceToInches(254, "mm"), 10);
+  assert.strictEqual(DPI.distanceToInches(25.4, "cm"), 10);
+  assert.strictEqual(DPI.distanceToInches(10, "in"), 10);
+  assert.strictEqual(DPI.distanceToInches(0, "card"), null);
+  assert.strictEqual(DPI.distanceToInches(-3, "card"), null);
+  assert.strictEqual(DPI.distanceToInches("banana", "card"), null);
+  assert.strictEqual(DPI.distanceToInches(2, "furlong"), null);
+});
+
+test("movement is passed through, because the OS delta is what arrives", () => {
+  // Measured, not assumed, which is what issue #19 asked for. A fixed raw
+  // pointer delta of 10 was posted into the macOS event stream (the same
+  // kCGMouseEventDeltaX field a real mouse fills in) with the page pointer-
+  // locked, at forced device scale factors of 1, 2 and 3 and at real browser
+  // zoom levels of 100%, 125% and 200%. Every one of the six runs reported
+  // movementX === 10 and totalled 200 counts for 200 units of motion, while
+  // devicePixelRatio ranged over 1, 2, 2.5, 3, 4 and clientX moved 500 -> 400
+  // -> 250. clientX moving while movementX did not is the control: it proves
+  // the zoom applied, and it rules out "movementX is in CSS pixels".
+  //
+  // So there is no divisor, and there is nowhere for one to get in: the
+  // function takes a single argument.
+  assert.strictEqual(DPI.countsFromMovement.length, 1);
+  assert.strictEqual(DPI.countsFromMovement(10784), 10784);
+  // Swiping right to left is not a different DPI.
+  assert.strictEqual(DPI.countsFromMovement(-10784), 10784);
+
+  // The same swipe measured at 100% and at 200% zoom must land on the same
+  // DPI. Dividing by devicePixelRatio -- the correction this panel is often
+  // expected to make -- would have put these two 2x apart.
+  const inches = DPI.distanceToInches(2, "card");
+  const at100 = DPI.estimateDpi({ net: 10784, path: 10784, drift: 0, samples: 200 }, inches, { locked: true });
+  const at200 = DPI.estimateDpi({ net: 10784, path: 10784, drift: 0, samples: 200 }, inches, { locked: true });
+  assert.strictEqual(at100.dpi, at200.dpi);
+  assert.ok(Math.abs(at100.dpi - 1600) < 1, "got " + at100.dpi);
+});
+test("a swipe is summed three ways, because one of them is not enough", () => {
+  const straight = DPI.sumMovement([{ movementX: 10 }, { movementX: 10 }, { movementX: 10 }]);
+  assert.strictEqual(straight.net, 30);
+  assert.strictEqual(straight.path, 30);
+  assert.strictEqual(straight.drift, 0);
+  assert.strictEqual(straight.samples, 3);
+
+  // A hand that backed up travelled 50 counts but only ended 10 from the start.
+  const backed = DPI.sumMovement([{ movementX: 30 }, { movementX: -20 }, { movementX: 0 }]);
+  assert.strictEqual(backed.net, 10);
+  assert.strictEqual(backed.path, 50);
+
+  // Garbage from an event that carried no delta is skipped, not counted as 0.
+  const dirty = DPI.sumMovement([{ movementX: 10 }, {}, { movementX: undefined }, { movementX: 5 }]);
+  assert.strictEqual(dirty.samples, 2);
+  assert.strictEqual(dirty.net, 15);
+});
+
+test("a clean swipe measures the DPI it was swiped at", () => {
+  // 1600 DPI across two bank cards is 10784 counts. Worked out by hand rather
+  // than from the helper, so the helper cannot be right about a wrong thing.
+  const inches = 171.2 / 25.4;
+  const r = DPI.estimateDpi({ net: 10784, path: 10784, drift: 0, samples: 200 }, inches, { locked: true });
+  assert.strictEqual(r.ok, true);
+  assert.ok(Math.abs(r.dpi - 1600) < 1, "got " + r.dpi);
+  assert.strictEqual(r.nearest, 1600);
+  assert.ok(r.uncertainty > 0.04 && r.uncertainty < 0.05, "±" + (r.uncertainty * 100).toFixed(1) + "%");
+});
+
+test("no Pointer Lock means no number at all", () => {
+  // The trap the whole panel exists to avoid. Without a lock the pointer stops
+  // at the screen edge while the hand keeps going, the deltas stop, and the
+  // total reads as a low-DPI mouse rather than as a failed measurement.
+  const r = swipe(1600, 2, { locked: false });
+  assert.strictEqual(r.ok, false);
+  assert.strictEqual(r.reason, "unlocked");
+  assert.strictEqual(r.dpi, undefined, "not even a provisional figure");
+  assert.match(DPI.describeResult(r), /edge of the screen/);
+  assert.match(DPI.describeResult(r), /any figure would be wrong/);
+});
+
+test("a nudge is not a swipe", () => {
+  const r = DPI.estimateDpi({ net: 40, path: 40, drift: 0, samples: 20 }, 6.74, { locked: true });
+  assert.strictEqual(r.ok, false);
+  assert.strictEqual(r.reason, "swipe-too-short");
+  assert.match(DPI.describeResult(r), /nudge/);
+});
+
+test("a swipe that backed up is refused, not averaged", () => {
+  // 10784 counts of travel that ended 8000 from the start: the card measured
+  // the straight line, so reporting counts-per-inch here would read ~35% high.
+  const r = DPI.estimateDpi({ net: 8000, path: 10784, drift: 0, samples: 200 }, 6.74, { locked: true });
+  assert.strictEqual(r.ok, false);
+  assert.strictEqual(r.reason, "wandered");
+  assert.match(DPI.describeResult(r), /one direction/);
+});
+
+test("a diagonal swipe is refused too", () => {
+  const r = DPI.estimateDpi({ net: 10784, path: 10784, drift: 4000, samples: 200 }, 6.74, { locked: true });
+  assert.strictEqual(r.ok, false);
+  assert.strictEqual(r.reason, "diagonal");
+  assert.match(DPI.describeResult(r), /long edge/);
+});
+
+test("too short a distance is refused before anything is swiped", () => {
+  const r = swipe(1600, 0.5);
+  assert.strictEqual(r.ok, false);
+  assert.strictEqual(r.reason, "distance-too-short");
+  assert.strictEqual(DPI.estimateDpi({ net: 9999, path: 9999, drift: 0, samples: 99 }, 0, { locked: true }).reason,
+    "no-distance");
+  assert.strictEqual(DPI.estimateDpi({ net: 0, path: 0, drift: 0, samples: 0 }, 6.74, { locked: true }).reason,
+    "no-swipe");
+});
+
+test("the honest range always contains the true DPI, and narrows as you swipe further", () => {
+  // The error is a few millimetres of slop at each end of the stroke. That is
+  // a fixed distance, so it shrinks as a fraction of a longer swipe — which is
+  // the arithmetic behind the panel's one piece of advice.
+  const widths = [1, 2, 4, 8].map((cards) => {
+    const r = swipe(1600, cards);
+    assert.ok(r.low < 1600 && r.high > 1600, cards + " cards: " + r.low + "-" + r.high);
+    return r.uncertainty;
+  });
+  for (let i = 1; i < widths.length; i++) {
+    assert.ok(widths[i] < widths[i - 1], "uncertainty did not shrink: " + widths.join(", "));
+  }
+  assert.ok(widths[0] > 0.09 && widths[0] < 0.11, "one card is about ±10%, got " + widths[0]);
+  assert.ok(widths[3] < 0.02, "eight cards is under ±2%, got " + widths[3]);
+});
+
+test("a sensor is only named when every other standard value is ruled out", () => {
+  // Across one card, 1090 CPI cannot be told from either 1000 or 1200, so it
+  // claims neither. This is the same move as the polling panel's "≥ 500 Hz".
+  const short = swipe(1090, 1);
+  assert.deepStrictEqual(short.candidates, [1000, 1200]);
+  assert.strictEqual(short.nearest, null);
+  assert.match(DPI.describeResult(short), /cannot separate 1000 from 1200/);
+  assert.match(DPI.describeResult(short), /longer distance/);
+
+  // The same mouse across four cards can.
+  const long = swipe(1200, 4);
+  assert.deepStrictEqual(long.candidates, [1200]);
+  assert.strictEqual(long.nearest, 1200);
+  assert.match(DPI.describeResult(long), /consistent with a 1200 DPI setting/);
+
+  // And a reading that sits between the steps says so rather than rounding.
+  const odd = swipe(1400, 8);
+  assert.deepStrictEqual(odd.candidates, []);
+  assert.strictEqual(odd.nearest, null);
+  assert.match(DPI.describeResult(odd), /No standard DPI step/);
+});
+
+test("every result repeats that this is CPI as the OS delivers it", () => {
+  for (const r of [swipe(1100, 1), swipe(1200, 4), swipe(1400, 8)]) {
+    assert.match(DPI.describeResult(r), /pointer acceleration is off/);
+  }
+});
+
+test("runs that disagree are called acceleration, because a DPI does not change", () => {
+  // The test within the test: one slow swipe, one fast, on a machine with
+  // "Enhance pointer precision" on. A sensor's DPI is a constant, so this
+  // spread cannot be the mouse.
+  const c = DPI.compareRuns([swipe(1180, 4), swipe(1900, 4)]);
+  assert.strictEqual(c.consistent, false);
+  assert.strictEqual(c.overlap, false);
+  assert.ok(c.spread > 0.4, "spread " + c.spread);
+  assert.match(DPI.describeRuns(c), /acceleration/);
+  assert.match(DPI.describeRuns(c), /effective CPI/);
+});
+
+test("runs are compared by their own uncertainty, not by a fixed percentage", () => {
+  // Two one-card swipes 11% apart overlap, so they are not evidence of
+  // anything — a fixed threshold would raise a false alarm here.
+  const sloppy = DPI.compareRuns([swipe(1100, 1), swipe(1230, 1)]);
+  assert.strictEqual(sloppy.overlap, true);
+  assert.strictEqual(sloppy.consistent, true);
+  assert.ok(sloppy.spread > 0.11, "they really do differ by 11%: " + sloppy.spread);
+
+  // The same 11% between two eight-card swipes does not overlap, and means
+  // something.
+  const careful = DPI.compareRuns([swipe(1100, 8), swipe(1230, 8)]);
+  assert.strictEqual(careful.overlap, false);
+  assert.strictEqual(careful.consistent, false);
+
+  // Two tight swipes that agree are reported as agreeing.
+  const agreed = DPI.compareRuns([swipe(1600, 4), swipe(1615, 4)]);
+  assert.strictEqual(agreed.consistent, true);
+  assert.match(DPI.describeRuns(agreed), /agree to within/);
+
+  // One run is not a comparison and says nothing.
+  assert.strictEqual(DPI.compareRuns([swipe(1600, 4)]).consistent, null);
+  assert.strictEqual(DPI.describeRuns(DPI.compareRuns([swipe(1600, 4)])), "");
+});
+
+test("the acceleration precondition names the control on the machine you are on", () => {
+  assert.match(DPI.describeAcceleration("Win32"), /Enhance pointer precision/);
+  assert.match(DPI.describeAcceleration("Windows"), /Pointer Options/);
+  assert.match(DPI.describeAcceleration("MacIntel"), /com\.apple\.mouse\.scaling/);
+  assert.match(DPI.describeAcceleration("macOS"), /no checkbox/);
+  assert.match(DPI.describeAcceleration("Linux x86_64"), /libinput/);
+  // An unknown platform still gets an instruction rather than silence.
+  assert.match(DPI.describeAcceleration(""), /Enhance pointer/);
+  assert.match(DPI.describeAcceleration(undefined), /effective CPI/);
 });
 
 console.log("\nAll " + count + " tests passed.");
