@@ -1088,6 +1088,80 @@ kbd {
 }
 .field .v.warn { color: var(--incorrect); }
 
+/* ---------- mouse DPI ---------- */
+/* Three lines of setup before anything can be measured, so they are a numbered
+   list rather than a paragraph: the bank card has to be on the desk before the
+   pad is clicked, and a prose sentence gets skipped. */
+.dpi-steps {
+  margin: 0 0 16px;
+  /* The panel is wider than the prose sections around it, and a monospace
+     line this long is tiring to read — hold the measure near the body copy's. */
+  max-width: 66ch;
+  padding-left: 22px;
+  color: var(--text-dim);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.dpi-steps li { margin-bottom: 4px; }
+.dpi-steps li:last-child { margin-bottom: 0; }
+
+.dpi-num {
+  width: 5.5em;
+  padding: 7px 10px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  color: var(--text);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+.dpi-num:hover { border-color: var(--accent-dim); }
+.dpi-dist { font-size: 12.5px; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+.dpi-controls { margin: 16px 0 0; }
+
+/* The swipe target. Taller than the polling pad because the cursor vanishes the
+   moment it is clicked, so this box is the only feedback there is — the live
+   count has to be readable from wherever the hand has wandered to. */
+.dpi-pad {
+  min-height: 150px;
+  margin-top: 6px;
+  background: var(--bg-inset);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 16px;
+  color: var(--text-faint);
+  font-size: 13px;
+  line-height: 1.5;
+  user-select: none;
+  touch-action: none;
+  cursor: crosshair;
+}
+.dpi-pad:hover { border-color: var(--accent-dim); color: var(--text-dim); }
+.dpi-pad.is-locked {
+  border-style: solid;
+  border-color: var(--accent);
+  color: var(--accent);
+  font-size: clamp(28px, 7vw, 46px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  cursor: none;
+}
+.dpi-pad-hint { display: block; font-size: 12.5px; font-weight: 400; letter-spacing: 0; color: var(--text-faint); }
+
+/* Two swipes that disagree is the panel's most important finding, so it does
+   not get the same calm teal as a normal verdict. */
+.rr-verdict.is-warning {
+  border-color: color-mix(in srgb, var(--incorrect) 45%, var(--border));
+  background: var(--incorrect-bg);
+}
+
 /* ---------- touchscreen ---------- */
 .touch-surface {
   position: relative;
