@@ -18,6 +18,7 @@ const Keyboard = require("../assets/js/keyboard.js");
 const Sys = require("../assets/js/sysinfo.js");
 const Poll = require("../assets/js/pollingrate.js");
 const DPI = require("../assets/js/mousedpi.js");
+const Mouse = require("../assets/js/mouse.js");
 
 let count = 0;
 function test(name, fn) {
@@ -972,6 +973,106 @@ test("the acceleration precondition names the control on the machine you are on"
   // An unknown platform still gets an instruction rather than silence.
   assert.match(DPI.describeAcceleration(""), /Enhance pointer/);
   assert.match(DPI.describeAcceleration(undefined), /effective CPI/);
+});
+
+/* ------------------------------ switch bounce ------------------------------
+   The dblclick event proves a mouse *can* double click. The fault people search
+   for is a switch that double clicks when they did not ask it to, and the only
+   thing that separates that from a fast intended double click is the gap. */
+
+/** Presses of `button` every `gapMs`, starting at t=0. */
+function pressRun(tracker, button, n, gapMs) {
+  const results = [];
+  for (let i = 0; i < n; i++) results.push(tracker.record(button, i * gapMs));
+  return results;
+}
+
+test("two presses 12 ms apart on one button are one suspected bounce", () => {
+  const t = Mouse.createBounceTracker();
+  const r = pressRun(t, 0, 2, 12);
+  assert.strictEqual(r[0].bounce, false, "a first press has nothing to bounce against");
+  assert.strictEqual(r[1].bounce, true);
+  assert.strictEqual(t.state.bounces, 1);
+  assert.strictEqual(t.state.presses, 2);
+  assert.strictEqual(t.state.shortestMs, 12);
+  assert.strictEqual(Mouse.describeBounces(t.state), "1 in 2 clicks");
+  assert.strictEqual(Mouse.describeShortest(t.state), "12 ms");
+});
+
+test("50 slow single clicks report 0 bounces", () => {
+  const t = Mouse.createBounceTracker();
+  pressRun(t, 0, 50, 1000);
+  assert.strictEqual(t.state.bounces, 0);
+  assert.strictEqual(t.state.presses, 50);
+  assert.strictEqual(Mouse.describeBounces(t.state), "0 in 50 clicks");
+  assert.strictEqual(Mouse.describeShortest(t.state), "1000 ms");
+});
+
+test("an intended double click at 150 ms is not a bounce", () => {
+  const t = Mouse.createBounceTracker();
+  pressRun(t, 0, 2, 150);
+  assert.strictEqual(t.state.bounces, 0);
+  // The threshold is a strict less-than, so a press exactly on it is not flagged.
+  const edge = Mouse.createBounceTracker();
+  pressRun(edge, 0, 2, Mouse.BOUNCE_THRESHOLD_MS);
+  assert.strictEqual(edge.state.bounces, 0);
+});
+
+test("a fast press on a different button is not a bounce", () => {
+  // Left then right 5 ms apart is two switches, not one switch firing twice.
+  const t = Mouse.createBounceTracker();
+  t.record(0, 0);
+  const r = t.record(2, 5);
+  assert.strictEqual(r.bounce, false);
+  assert.strictEqual(r.intervalMs, null);
+  assert.strictEqual(t.state.bounces, 0);
+  assert.strictEqual(t.state.shortestMs, null);
+});
+
+test("a worn G502 is described the way the issue says", () => {
+  // 50 slow presses, seven of which the switch reported twice, 12 ms later.
+  const t = Mouse.createBounceTracker();
+  let now = 0;
+  for (let i = 0; i < 50; i++) {
+    t.record(0, now);
+    if (i % 7 === 0) t.record(0, now + 12);
+    now += 800;
+  }
+  assert.strictEqual(t.state.bounces, 8);
+  assert.strictEqual(Mouse.describeShortest(t.state), "12 ms");
+  assert.match(Mouse.describeBounces(t.state), /^8 in 58 clicks$/);
+});
+
+test("reset clears the counters and the per-button memory", () => {
+  const t = Mouse.createBounceTracker();
+  pressRun(t, 0, 2, 12);
+  t.reset();
+  assert.deepStrictEqual(t.state, { presses: 0, bounces: 0, shortestMs: null });
+  // After a reset the next press must not be measured against the old one.
+  const r = t.record(0, 20);
+  assert.strictEqual(r.intervalMs, null);
+  assert.strictEqual(t.state.bounces, 0);
+});
+
+test("the drill counts a bounce as a doubled press, not a new click", () => {
+  const drill = { target: Mouse.DRILL_TARGET, done: 0, doubled: 0, finished: false };
+  const t = Mouse.createBounceTracker();
+  let now = 0;
+  for (let i = 0; i < Mouse.DRILL_TARGET; i++) {
+    Mouse.drillStep(drill, t.record(0, now));
+    if (i === 3) Mouse.drillStep(drill, t.record(0, now + 9));
+    now += 900;
+  }
+  assert.strictEqual(drill.done, 50);
+  assert.strictEqual(drill.doubled, 1);
+  assert.strictEqual(drill.finished, true);
+  assert.match(Mouse.describeDrill(drill), /50 single clicks, 1 registered as two/);
+
+  const clean = { target: Mouse.DRILL_TARGET, done: 0, doubled: 0, finished: false };
+  const c = Mouse.createBounceTracker();
+  for (let i = 0; i < Mouse.DRILL_TARGET; i++) Mouse.drillStep(clean, c.record(0, i * 900));
+  assert.match(Mouse.describeDrill(clean), /0 registered as two/);
+  assert.match(Mouse.describeDrill({ target: 50, done: 3, doubled: 0, finished: false }), /3 of 50 clicks done/);
 });
 
 console.log("\nAll " + count + " tests passed.");
