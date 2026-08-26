@@ -117,6 +117,16 @@
       <div class="field"><span class="k">Double-click</span><span class="v" id="f-dbl" style="font-size:14px;">—</span></div>
       <div class="field"><span class="k">Scroll</span><span class="v" id="f-scroll">—</span></div>
       <div class="field"><span class="k">Cursor (x, y)</span><span class="v" id="f-pos" style="font-size:14px;">—</span></div>
+      <div class="field"><span class="k">Suspected switch bounces</span><span class="v" id="f-bounce" style="font-size:14px;">0 in 0 clicks</span></div>
+      <div class="field"><span class="k">Shortest interval</span><span class="v" id="f-shortest" style="font-size:14px;">—</span></div>
+    </div>
+    <p class="bounce-note">A worn switch fires two presses for one click. Two presses of one button under 80 ms apart count as a bounce. See <a href="/articles/common-hardware-faults-and-how-to-diagnose-them.html">common hardware faults</a>.</p>
+
+    <h2 style="margin:20px 0 8px;font-size:13px;">Single-click drill</h2>
+    <div id="drill-pad" class="drill-pad" role="button" tabindex="0" aria-describedby="drill-status">Press Start, then click here 50 times. Leave a full second between clicks.</div>
+    <p id="drill-status" class="status-msg" role="status" aria-live="polite"></p>
+    <div class="control-row" style="margin-top:10px;">
+      <button id="drill-start" type="button">Start drill</button>
     </div>
 
     <h2 style="margin:20px 0 8px;font-size:13px;">Drag test</h2>
@@ -130,7 +140,7 @@
   <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
     <h2>How to use the mouse test</h2>
     <p>Move your cursor over the page and the <strong>cursor (x, y)</strong> readout tracks it in real time — jumpy or frozen numbers can indicate a failing sensor or a dirty surface. Click each button on your real mouse: the matching part of the on-screen mouse lights up, the <strong>last button</strong> field names it, and the <strong>clicks</strong> counter ticks up. Test the left, right, and middle (scroll-wheel) buttons this way; right-clicks are captured inside the tool so the context menu won't interrupt you.</p>
-    <p>To check for a worn <strong>double-click</strong> switch, deliberately double-click and confirm the double-click field reads "detected". A common fault on older mice is the opposite problem — a single click that registers as a double — which you can catch by clicking once, slowly, and watching whether the counter jumps by two. Scroll the wheel up and down to confirm the <strong>scroll</strong> direction is detected both ways, and press-and-hold inside the <strong>drag test</strong> box, moving before you release, to confirm dragging holds without dropping mid-motion.</p>
+    <p>To check for a worn <strong>double-click</strong> switch, deliberately double-click and confirm the double-click field reads "detected". A common fault on older mice is the opposite problem — a single click that registers as a double. The <strong>suspected switch bounces</strong> field catches it by timing. The tool records every press per button and flags two presses of the same button under 80&nbsp;ms apart. A human double-click almost always takes more than 100&nbsp;ms, so a flagged pair is the switch, not you. The <strong>shortest interval</strong> field shows the closest pair seen so far. For a clean answer, run the <strong>single-click drill</strong>: press Start, click the box 50 times with a full second between clicks, and read how many registered as two. A healthy mouse reports 0. Scroll the wheel up and down to confirm the <strong>scroll</strong> direction is detected both ways, and press-and-hold inside the <strong>drag test</strong> box, moving before you release, to confirm dragging holds without dropping mid-motion.</p>
     <p>Press <strong>Reset counters</strong> to start a fresh run. This tool only reads standard mouse and pointer events in your browser and records nothing.</p>
     <p>None of this says anything about how <em>often</em> your mouse reports back — the figure gaming mice advertise as 500&nbsp;Hz or 1000&nbsp;Hz. That is a timing measurement rather than a button one, so it has its own page: the <a href="/mouse-polling-rate-test.html">mouse polling rate test</a> times the gaps between reports and tells you straight out how much of the answer your browser's clock is able to resolve.</p>
 
