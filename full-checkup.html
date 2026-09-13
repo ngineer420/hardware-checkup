@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Full Checkup — Test a Used Laptop Before You Buy It</title>
-<meta name="description" content="A guided nine-test run for checking a second-hand laptop or PC before you pay: screen, keyboard, mouse, touchscreen, webcam, mic and speakers, one step at a time, ending in a printable report card. Runs in the browser, nothing uploaded.">
+<meta name="description" content="A guided nine-test run for checking a second-hand laptop or PC before you pay: screen, keyboard, mouse, touchscreen, webcam, mic and speakers, one step at a time, ending in a printable report card. Runs in the browser, and nothing is uploaded unless you save the checkup.">
 <link rel="canonical" href="https://hardwarecheckup.com/full-checkup.html">
 <meta name="theme-color" content="#0c1114">
 
@@ -110,7 +110,7 @@
 <main id="main">
   <div class="tool-hero">
     <h1>Full Checkup</h1>
-    <p>Nine tests, one at a time, ending in a report card you can print. Written for the person <em>buying</em> the machine — run it on the seller's laptop before the money moves, or on your own before an RMA. Everything happens in this browser and nothing is uploaded.</p>
+    <p>Nine tests, one at a time, ending in a report card you can print. Written for the person <em>buying</em> the machine — run it on the seller's laptop before the money moves, or on your own before an RMA. Everything happens in this browser, and nothing is uploaded unless you save the checkup to your history.</p>
   </div>
 
   <div class="panel">
@@ -131,7 +131,29 @@
       <button type="button" id="checkup-print" hidden>Print the report card</button>
       <button type="button" id="checkup-clear" hidden>Clear and start over</button>
     </div>
+
+    <!-- Filled by sch3ma.js. It stays hidden until the site has a sch3ma project. -->
+    <div class="history-save" id="history-save" hidden>
+      <h3 class="history-save-title">Checkup history</h3>
+      <form class="history-save-form" id="history-save-form">
+        <label class="history-save-label" for="history-label">Machine name</label>
+        <input class="history-input" type="text" id="history-label" maxlength="60" placeholder="ThinkPad from Marketplace" autocomplete="off">
+        <button type="submit" class="primary" id="history-save-btn">Save to history</button>
+      </form>
+      <p class="status-msg" id="history-status"></p>
+      <div class="history-account" id="history-account"></div>
+    </div>
   </div>
+
+  <section class="panel checkup-history" id="checkup-history" aria-labelledby="history-heading" hidden>
+    <h2 id="history-heading">Saved checkups</h2>
+    <p class="history-lead">Newest first. Open a checkup to see what changed since the checkup before it of the same machine.</p>
+    <p class="history-filter" id="history-filter" hidden></p>
+    <ol class="checkup-history-list" id="history-list"></ol>
+    <p class="checkup-history-empty" id="history-empty" hidden>No saved checkups yet.</p>
+    <button type="button" id="history-older" hidden>Show older</button>
+    <p class="status-msg" id="history-note"></p>
+  </section>
 
   <section class="panel checkup-card" id="checkup-card" hidden>
     <h2>Report card</h2>
@@ -149,7 +171,7 @@
       <div data-si-fields="resolution,physical,pixel-ratio,colour-depth,os,browser,browser-version,engine,cores,memory,gpu,touch"></div>
     </div>
 
-    <p class="cc-foot">Printed from hardwarecheckup.com. The verdicts above were recorded in this browser on this device and are stored nowhere else.</p>
+    <p class="cc-foot">Printed from hardwarecheckup.com. The verdicts above were recorded in this browser, on this device.</p>
   </section>
 
   <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
@@ -166,7 +188,14 @@
     <p>For those, do the physical checks: open and close the lid a few times, press on the palm rest and look for a bulge underneath, run something demanding for ten minutes and listen to the fans, and — on the machine's own operating system, not in a browser — look up the battery cycle count and the drive's SMART status.</p>
 
     <h2>How the record is kept</h2>
-    <p>Your answers live in this browser's local storage under a single key, on this device, and nowhere else. There is no account, no sync and no upload; clearing your browser data clears the run. Because of that, run the checkup on a browser you can come back to — if you check a laptop on the seller's machine, print the card before you close the lid.</p>
+    <p>Your answers live in this browser's local storage under a single key, on this device. Clearing your browser data clears the run. If you check a laptop on the seller's machine, print the card before you close the lid.</p>
+    <p>Nothing leaves this browser unless you press <strong>Save to history</strong>. That press sends the checkup to <a href="https://sch3ma.com">sch3ma.com</a>, the service that keeps the history. It stores:</p>
+    <ul>
+      <li>The machine name you type.</li>
+      <li>Each step's answer, note and measurement, with the time you recorded it.</li>
+      <li>The time the run started, and whether every step has an answer.</li>
+    </ul>
+    <p>It does not store the machine-read half of the report card. After the first save, each step you finish updates the saved checkup. An anonymous identity in this browser owns the history, and only that identity can read it. To see the history on another device, sign in with an email. To remove a saved checkup, press <strong>Delete</strong> beside it.</p>
   </section>
 </main>
 
@@ -194,6 +223,7 @@
 <script src="/assets/js/checkup.js"></script>
 <script src="/assets/js/battery.js"></script>
 <script src="/assets/js/sysinfo.js"></script>
+<script src="/assets/js/sch3ma.js"></script>
 <a href="https://erabb.it" class="erabbit-mark" aria-label="erabb.it"><img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐇</text></svg>" width="10" height="10" alt=""></a>
 </body>
 </html>
