@@ -19,12 +19,20 @@ const Sys = require("../assets/js/sysinfo.js");
 const Poll = require("../assets/js/pollingrate.js");
 const DPI = require("../assets/js/mousedpi.js");
 const Mouse = require("../assets/js/mouse.js");
+const Checkup = require("../assets/js/checkup.js");
+const History = require("../assets/js/sch3ma.js");
 
 let count = 0;
 function test(name, fn) {
   fn();
   count++;
   console.log("ok  " + name);
+}
+
+/* A test that returns a promise. These run in order after the others. */
+const later = [];
+function testAsync(name, fn) {
+  later.push([name, fn]);
 }
 
 /** `n` frame intervals for a perfectly steady display running at `hz`. */
@@ -1075,4 +1083,182 @@ test("the drill counts a bounce as a doubled press, not a new click", () => {
   assert.match(Mouse.describeDrill({ target: 50, done: 3, doubled: 0, finished: false }), /3 of 50 clicks done/);
 });
 
-console.log("\nAll " + count + " tests passed.");
+/* ----------------------------- checkup history -----------------------------
+   A saved checkup goes to sch3ma after each step. Two tabs, or a tab and a row
+   saved somewhere else, can each hold answers the other lacks. The merge
+   decides which answer survives, and a lost answer is a fault nobody sees until
+   the comparison lies. */
+
+/** One step result, the shape record() writes. */
+const result = (state, ts, extra) => Object.assign({ state, note: "", ts, measure: null }, extra);
+const hz = (value) => ({ label: "Measured refresh rate", value });
+
+test("merge keeps the most recently recorded result", () => {
+  const mine = {
+    "dead-pixel": result("pass", "2026-09-12T10:05:00.000Z"),
+    keyboard: result("fail", "2026-09-12T10:01:00.000Z", { note: "Q doubles" }),
+    mic: result("pass", undefined),
+  };
+  const theirs = {
+    "dead-pixel": result("fail", "2026-09-12T10:02:00.000Z", { note: "Stuck pixel" }),
+    keyboard: result("pass", "2026-09-12T10:03:00.000Z"),
+    webcam: result("skip", "2026-09-12T10:04:00.000Z"),
+    mic: result("fail", "2026-09-12T09:00:00.000Z"),
+  };
+  const merged = Checkup.mergeResults(mine, theirs);
+  assert.strictEqual(merged["dead-pixel"].state, "pass", "this tab answered later");
+  assert.strictEqual(merged.keyboard.state, "pass", "the other tab answered later");
+  assert.strictEqual(merged.webcam.state, "skip", "a step only one side has survives");
+  assert.strictEqual(merged.mic.state, "fail", "a result with a time beats one without");
+  assert.strictEqual(mine.keyboard.state, "fail", "the inputs are not changed");
+
+  // On a tie, this browser's copy wins.
+  const t = "2026-09-12T10:00:00.000Z";
+  assert.strictEqual(Checkup.mergeResults({ mouse: result("pass", t) }, { mouse: result("fail", t) }).mouse.state, "pass");
+  assert.deepStrictEqual(Checkup.mergeResults(null, undefined), {});
+});
+
+test("compare lists state, note and measurement changes", () => {
+  const before = {
+    "dead-pixel": result("pass", "2026-09-03T10:00:00.000Z"),
+    "refresh-rate": result("pass", "2026-09-03T10:01:00.000Z", { measure: hz("144 Hz") }),
+    keyboard: result("fail", "2026-09-03T10:02:00.000Z", { note: "Q doubles" }),
+    mouse: result("pass", "2026-09-03T10:03:00.000Z"),
+  };
+  // Keys in a different order, as a merged row can hold them.
+  const after = {
+    keyboard: result("fail", "2026-09-12T10:02:00.000Z", { note: "Q and W double" }),
+    "refresh-rate": result("fail", "2026-09-12T10:01:00.000Z", { measure: hz("60 Hz") }),
+    "dead-pixel": result("pass", "2026-09-12T10:00:00.000Z"),
+    mouse: result("pass", "2026-09-12T10:03:00.000Z", { note: "  " }),
+    webcam: result("skip", "2026-09-12T10:04:00.000Z"),
+  };
+  const changes = Checkup.compareResults(before, after);
+  assert.deepStrictEqual(changes.map((c) => c.id), ["refresh-rate", "keyboard", "webcam"],
+    "sequence order, and a step that only got a new time is not a change");
+  assert.strictEqual(changes[0].name, "Refresh rate");
+  assert.deepStrictEqual(changes[0].changed, ["state", "measure"]);
+  assert.strictEqual(changes[0].before.measure.value, "144 Hz");
+  assert.strictEqual(changes[0].after.measure.value, "60 Hz");
+  assert.deepStrictEqual(changes[1].changed, ["note"]);
+  assert.strictEqual(changes[2].before, null, "not run in the earlier checkup");
+  assert.deepStrictEqual(changes[2].changed, ["state"]);
+  assert.deepStrictEqual(Checkup.compareResults(after, after), []);
+  assert.deepStrictEqual(Checkup.compareResults(undefined, null), []);
+});
+
+test("a checkup is complete only when every step has an answer", () => {
+  const all = {};
+  for (const step of Checkup.SEQUENCE) all[step.id] = result("skip", "2026-09-12T10:00:00.000Z");
+  assert.strictEqual(Checkup.isComplete(all), true);
+  delete all.speaker;
+  assert.strictEqual(Checkup.isComplete(all), false);
+  assert.strictEqual(Checkup.isComplete(undefined), false);
+});
+
+test("the site ships with the history switched on", () => {
+  assert.strictEqual(History.configured(), true, "the project id and the key are set");
+});
+
+/** A stand-in for the sch3ma client that records each call. */
+function fakeDb(handlers) {
+  const calls = [];
+  return {
+    calls,
+    create(collection, body) {
+      calls.push(["create", collection, body]);
+      return Promise.resolve(Object.assign({ id: "chk_1", version: 1 }, body));
+    },
+    get(collection, id) {
+      calls.push(["get", collection, id]);
+      return handlers.get();
+    },
+    update(collection, id, body, options) {
+      calls.push(["update", collection, id, body, options]);
+      return handlers.update(body, options);
+    },
+  };
+}
+
+/** The error the SDK throws on a stale version. */
+function conflict(row) {
+  const body = { code: "version_conflict", message: "The record has version " + row.version + ".", version: row.version };
+  if (row.results) body.record = row;
+  return Object.assign(new Error(body.message), { code: body.code, body });
+}
+
+const STARTED = "2026-09-12T10:00:00.000Z";
+const LABEL = "ThinkPad from Marketplace";
+
+testAsync("the first save creates the row, and an unchanged run sends nothing", async () => {
+  const db = fakeDb({ update: () => Promise.reject(new Error("no update expected")) });
+  const local = { v: 1, started: STARTED, results: { "dead-pixel": result("pass", "2026-09-12T10:01:00.000Z") } };
+  const first = await History.pushRun(db, { started: STARTED, label: LABEL, id: null, version: null, pushed: null }, local);
+  assert.strictEqual(db.calls.length, 1);
+  assert.deepStrictEqual(db.calls[0], ["create", "checkups", { label: LABEL, results: local.results, started: STARTED, complete: false }]);
+  assert.deepStrictEqual(first.run, { started: STARTED, label: LABEL, id: "chk_1", version: 1, pushed: JSON.stringify(local.results) });
+
+  await History.pushRun(db, first.run, local);
+  assert.strictEqual(db.calls.length, 1, "no request for results the row already holds");
+});
+
+testAsync("a version conflict merges the row's results and retries once", async () => {
+  const run = { started: STARTED, label: LABEL, id: "chk_1", version: 2, pushed: "{}" };
+  const local = { v: 1, started: STARTED, results: { keyboard: result("fail", "2026-09-12T10:05:00.000Z", { note: "Q doubles" }) } };
+  const row = {
+    id: "chk_1", label: LABEL, version: 3,
+    results: { "dead-pixel": result("pass", "2026-09-12T10:01:00.000Z"), keyboard: result("pass", "2026-09-12T10:02:00.000Z") },
+  };
+  let attempts = 0;
+  const db = fakeDb({
+    update(body) {
+      attempts++;
+      if (attempts === 1) return Promise.reject(conflict(row));
+      return Promise.resolve(Object.assign({}, row, body, { version: 4 }));
+    },
+  });
+  const res = await History.pushRun(db, run, local);
+  const updates = db.calls.filter((c) => c[0] === "update");
+  assert.strictEqual(updates.length, 2);
+  assert.deepStrictEqual(updates[0][4], { version: 2 });
+  assert.deepStrictEqual(updates[1][4], { version: 3 }, "the retry carries the row's current version");
+  assert.strictEqual(res.results.keyboard.state, "fail", "this tab's later keyboard answer wins");
+  assert.strictEqual(res.results["dead-pixel"].state, "pass", "the other tab's step is kept");
+  assert.strictEqual(updates[1][3].complete, false);
+  assert.strictEqual(res.run.version, 4);
+  assert.strictEqual(res.run.pushed, JSON.stringify(res.results));
+  assert.ok(!db.calls.some((c) => c[0] === "get"), "the conflict body carried the row, so no read");
+});
+
+testAsync("a conflict without the row reads it, and a second conflict gives up", async () => {
+  const run = { started: STARTED, label: LABEL, id: "chk_1", version: 2, pushed: "{}" };
+  const local = { v: 1, started: STARTED, results: { mouse: result("pass", "2026-09-12T10:05:00.000Z") } };
+  const row = { id: "chk_1", label: LABEL, version: 5, results: {} };
+  const db = fakeDb({
+    get: () => Promise.resolve(row),
+    update: () => Promise.reject(conflict({ version: 6 })),
+  });
+  await assert.rejects(History.pushRun(db, run, local), (err) => err.code === "version_conflict");
+  assert.strictEqual(db.calls.filter((c) => c[0] === "get").length, 1);
+  assert.strictEqual(db.calls.filter((c) => c[0] === "update").length, 2, "one retry, never a loop");
+});
+
+testAsync("an error other than a conflict is not retried", async () => {
+  const err = Object.assign(new Error("Not found."), { code: "not_found", body: { code: "not_found" } });
+  const db = fakeDb({ update: () => Promise.reject(err) });
+  const local = { v: 1, started: STARTED, results: { mic: result("pass", "2026-09-12T10:05:00.000Z") } };
+  await assert.rejects(History.pushRun(db, { started: STARTED, label: LABEL, id: "chk_9", version: 1, pushed: "{}" }, local), /Not found/);
+  assert.strictEqual(db.calls.length, 1);
+});
+
+(async () => {
+  for (const [name, fn] of later) {
+    await fn();
+    count++;
+    console.log("ok  " + name);
+  }
+  console.log("\nAll " + count + " tests passed.");
+})().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

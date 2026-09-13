@@ -1586,12 +1586,76 @@ body.has-checkup-bar { padding-bottom: 230px; }
 .cb-foot { display: flex; gap: 12px; flex-wrap: wrap; align-items: baseline; margin-top: 10px; font-size: 12.5px; }
 .cb-prev { color: var(--text-faint); }
 
+/* The checkup history. sch3ma.js fills it, and it stays hidden until the site
+   has a sch3ma project. A class rule that sets display beats the user agent's
+   [hidden] rule, so each of those rules carries its own [hidden] line. */
+.history-save { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border-soft); }
+.history-save-title { margin: 0 0 10px; font-size: 14px; }
+.history-save-form { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.history-save-form[hidden] { display: none; }
+.history-save-label { flex-basis: 100%; font-size: 12.5px; color: var(--text-dim); }
+.history-input {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 9px 11px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-inset);
+  color: var(--text);
+  font-size: 14px;
+}
+.history-save .status-msg { margin-top: 8px; }
+.history-account { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 8px; font-size: 13px; color: var(--text-dim); }
+.ha-form { display: flex; flex-wrap: wrap; gap: 8px; flex-basis: 100%; }
+.ha-note { flex-basis: 100%; margin: 0; color: var(--incorrect); }
+button.hr-action { padding: 5px 10px; font-size: 12.5px; }
+
+.history-lead { margin: -6px 0 12px; font-size: 13px; color: var(--text-dim); }
+.history-filter { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 0 0 10px; font-size: 13px; }
+.history-filter[hidden] { display: none; }
+/* Not .history-list: the typing history at the top of this file owns that name. */
+.checkup-history-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.history-row { background: var(--bg-inset); border: 1px solid var(--border-soft); border-radius: 8px; }
+.hr-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; align-items: center; padding: 6px 10px 6px 4px; }
+.hr-open { display: grid; gap: 2px; justify-items: start; text-align: left; background: transparent; border: 0; padding: 4px 8px; min-width: 0; }
+.hr-open:hover { color: var(--text); }
+.hr-open:hover .hr-label { color: var(--accent); }
+.hr-label { font-weight: 700; overflow-wrap: anywhere; }
+.hr-label::before { content: "\25B8\00a0"; color: var(--text-faint); }
+.hr-open[aria-expanded="true"] .hr-label::before { content: "\25BE\00a0"; }
+.hr-meta { font-size: 12.5px; color: var(--text-dim); }
+.hr-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+button.hr-delete.is-armed { border-color: var(--incorrect); color: var(--incorrect); }
+@media (max-width: 520px) {
+  .hr-head { grid-template-columns: minmax(0, 1fr); }
+  .hr-actions { justify-content: flex-start; padding: 0 0 4px 8px; }
+}
+.hr-compare { padding: 0 12px 12px; border-top: 1px solid var(--border-soft); }
+.hx-note { margin: 10px 0; font-size: 13px; color: var(--text-dim); }
+.hx-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.hx-item { border-left: 3px solid var(--accent-dim); padding-left: 10px; }
+.hx-head { display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; margin: 0 0 6px; }
+.hx-step { font-weight: 600; }
+.hx-what { font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--text-faint); }
+.hx-sides { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 520px) { .hx-sides { grid-template-columns: minmax(0, 1fr); } }
+.hx-side { display: grid; gap: 2px; align-content: start; padding: 8px 10px; border: 1px solid var(--border-soft); border-radius: 6px; background: var(--bg-raised); }
+.hx-date { font-size: 11.5px; color: var(--text-faint); }
+.hx-state { font-weight: 600; }
+.hx-side.is-pass .hx-state { color: var(--correct); }
+.hx-side.is-fail .hx-state { color: var(--incorrect); }
+.hx-side.is-skip .hx-state,
+.hx-side.is-none .hx-state { color: var(--text-faint); }
+.hx-detail { font-size: 12.5px; color: var(--text-dim); overflow-wrap: anywhere; }
+.checkup-history-empty { margin: 0; font-size: 13px; color: var(--text-faint); }
+#history-older { margin-top: 12px; }
+
 /* The card is meant to be printed and handed over, so the print sheet drops
    everything that is navigation or decoration and keeps only the record. */
 @media print {
   .site-header, .toolbar, .skip-link, .site-footer, .erabbit-mark,
   .checkup-bar, .control-row, .checkup-lead-cta, .tool-hero p,
-  .about-section, .footer-tools { display: none !important; }
+  .about-section, .footer-tools, .history-save, .checkup-history { display: none !important; }
   body { background: #fff; color: #000; padding-bottom: 0; }
   .panel, .cc-block, .checkup-step, .si-row { border-color: #999; background: #fff; box-shadow: none; }
   .si-label, .si-note { color: #333; }

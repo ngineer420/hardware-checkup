@@ -1,5 +1,8 @@
 /* hardwarecheckup.com — Full Checkup
-   100% client-side. One localStorage key, `hc-checkup`; nothing is sent.
+   The run lives in one localStorage key, `hc-checkup`. Nothing leaves the
+   browser unless the visitor presses "Save to history" on the hub. After that
+   press, sch3ma.js copies the run to the visitor's checkup history on
+   sch3ma.com. That file says exactly what it stores.
 
    This file is loaded by EVERY page and does nothing at all unless one of two
    things is true:
@@ -22,6 +25,8 @@
 
   var KEY = "hc-checkup";
   var HUB = "/full-checkup.html";
+  // Written by sch3ma.js. This file reads it only to decide whether to load that file.
+  var HISTORY_KEY = "hc-history";
 
   /* The nine real pass/fail tests, in the order a buyer should run them.
      Screen first: it is the most expensive thing to be wrong and the hardest to
@@ -156,6 +161,66 @@
     var text = (node.textContent || "").trim();
     if (!text || text === "—") return null;
     return { label: step.measure.label, value: text };
+  }
+
+  /* ----------------------------- the history ----------------------------- */
+
+  function hasOwn(obj, key) { return Object.prototype.hasOwnProperty.call(obj, key); }
+
+  /** When a result was recorded, in epoch ms, or -Infinity when it has no time. */
+  function recordedAt(result) {
+    var t = result && result.ts ? Date.parse(result.ts) : NaN;
+    return isNaN(t) ? -Infinity : t;
+  }
+
+  /* Two copies of one run's results, merged step by step. Two tabs, or a tab
+     and a saved row, can each hold a step the other lacks, or a newer answer
+     for the same step. For each step, the result recorded last wins. On a tie
+     `mine` wins, because it is what this browser holds now. */
+  function mergeResults(mine, theirs) {
+    var out = {};
+    var id;
+    mine = mine || {};
+    theirs = theirs || {};
+    for (id in theirs) if (hasOwn(theirs, id)) out[id] = theirs[id];
+    for (id in mine) {
+      if (!hasOwn(mine, id)) continue;
+      if (!hasOwn(out, id) || recordedAt(mine[id]) >= recordedAt(out[id])) out[id] = mine[id];
+    }
+    return out;
+  }
+
+  function isComplete(results) {
+    results = results || {};
+    for (var i = 0; i < SEQUENCE.length; i++) if (!results[SEQUENCE[i].id]) return false;
+    return true;
+  }
+
+  function measureValue(result) {
+    return result && result.measure && result.measure.value != null ? String(result.measure.value) : "";
+  }
+
+  /* What changed between two checkups of one machine, in sequence order. A step
+     is listed when its state, its note or its measurement differs, and
+     `changed` names which of the three. A step with no answer on one side
+     counts as changed, and that side is null. A step with no answer on either
+     side is left out. */
+  function compareResults(before, after) {
+    var out = [];
+    before = before || {};
+    after = after || {};
+    for (var i = 0; i < SEQUENCE.length; i++) {
+      var step = SEQUENCE[i];
+      var a = before[step.id] || null;
+      var b = after[step.id] || null;
+      if (!a && !b) continue;
+      var changed = [];
+      if ((a ? a.state : null) !== (b ? b.state : null)) changed.push("state");
+      if (((a && a.note) || "").trim() !== ((b && b.note) || "").trim()) changed.push("note");
+      if (measureValue(a) !== measureValue(b)) changed.push("measure");
+      if (changed.length) out.push({ id: step.id, name: step.name, before: a, after: b, changed: changed });
+    }
+    return out;
   }
 
   /* --------------------------- the verdict bar --------------------------- */
@@ -394,6 +459,38 @@
     });
   }
 
+  /* Exported for Node, so the merge and the comparison are tested without a
+     browser. Also published to the page for sch3ma.js, which keeps the history
+     and leaves the run itself to this file. */
+  var api = {
+    KEY: KEY,
+    HISTORY_KEY: HISTORY_KEY,
+    SEQUENCE: SEQUENCE,
+    STATES: STATES,
+    load: load,
+    save: save,
+    renderHub: renderHub,
+    mergeResults: mergeResults,
+    compareResults: compareResults,
+    isComplete: isComplete,
+  };
+  if (typeof module !== "undefined" && module.exports) module.exports = api;
+  if (typeof window !== "undefined") window.HCCheckup = api;
+
+  if (typeof document === "undefined") return;
+
+  /* A saved run sends each finished step to its history row. The press that
+     saved it happened on the hub, so a step page loads sch3ma.js only when
+     `hc-history` holds a saved run. A run that nobody saved loads nothing. */
+  function loadHistorySync() {
+    var hist = null;
+    try { hist = JSON.parse(localStorage.getItem(HISTORY_KEY)); } catch (e) { return; }
+    if (!hist || !hist.run) return;
+    var script = document.createElement("script");
+    script.src = "/assets/js/sch3ma.js";
+    document.body.appendChild(script);
+  }
+
   /* --------------------------------- go --------------------------------- */
 
   if (location.pathname === HUB || /\/full-checkup(\.html)?$/.test(location.pathname)) {
@@ -404,5 +501,8 @@
 
   if (!/(^|[?&])checkup=1(&|$)/.test(location.search)) return;
   var current = findStep(location.pathname);
-  if (current) mountBar(current);
+  if (current) {
+    mountBar(current);
+    loadHistorySync();
+  }
 })();
