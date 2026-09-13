@@ -27,8 +27,8 @@
 (function () {
   "use strict";
 
-  var PROJECT = "prj_PENDING";
-  var KEY = "pk_live_PENDING"; // publishable: it ships in the page by design
+  var PROJECT = "prj_01M2C23BWGZ3JM4AHPFWV8NZ57";
+  var KEY = "pk_live_01M2C24NMS5CDE87QRG8JHYF8Y_jrhadrrPCPsawE1fOroYaUqT5i0d8YUO"; // publishable: it ships in the page by design
   var SDK = "https://sch3ma.com/sdk/1.js";
   var COLLECTION = "checkups";
   var PAGE_SIZE = 10;

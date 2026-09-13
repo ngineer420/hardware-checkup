@@ -1156,8 +1156,8 @@ test("a checkup is complete only when every step has an answer", () => {
   assert.strictEqual(Checkup.isComplete(undefined), false);
 });
 
-test("the site ships with the history switched off", () => {
-  assert.strictEqual(History.configured(), false, "the project id and the key are still placeholders");
+test("the site ships with the history switched on", () => {
+  assert.strictEqual(History.configured(), true, "the project id and the key are set");
 });
 
 /** A stand-in for the sch3ma client that records each call. */
