@@ -1083,6 +1083,39 @@ test("the drill counts a bounce as a doubled press, not a new click", () => {
   assert.match(Mouse.describeDrill({ target: 50, done: 3, doubled: 0, finished: false }), /3 of 50 clicks done/);
 });
 
+/* The mouse test is the one tool here whose whole input method a phone lacks.
+   Before this guard it rendered a full panel and then sat at its placeholders
+   for ever, which reads as a broken page rather than as the wrong device. The
+   rule has to keep the real test on a machine that has both a touch screen and
+   a mouse, so a single `(pointer: coarse)` check is not enough. */
+
+/** A fake `matchMedia` that answers only the queries it is given. */
+const media = (answers) => (query) => ({ matches: Boolean(answers[query]) });
+
+const COARSE = "(pointer: coarse)";
+const FINE = "(any-pointer: fine)";
+
+test("a phone gets the mouse-test explanation", () => {
+  assert.strictEqual(Mouse.touchOnlyPointer(media({ [COARSE]: true, [FINE]: false })), true);
+});
+
+test("a desktop with a mouse still runs the real mouse test", () => {
+  assert.strictEqual(Mouse.touchOnlyPointer(media({ [COARSE]: false, [FINE]: true })), false);
+});
+
+test("a touch laptop has both pointers, so it keeps the real test", () => {
+  // The fault a lone `(pointer: coarse)` check causes: a Surface or a touch
+  // XPS reports coarse for its screen and would lose a test its mouse can run.
+  assert.strictEqual(Mouse.touchOnlyPointer(media({ [COARSE]: true, [FINE]: true })), false);
+});
+
+test("a browser with no matchMedia keeps the real mouse test", () => {
+  // Failing open matters more than failing safe here. A browser too old to
+  // answer the query is far likelier to have a mouse than a touch screen.
+  assert.strictEqual(Mouse.touchOnlyPointer(undefined), false);
+  assert.strictEqual(Mouse.touchOnlyPointer(null), false);
+});
+
 /* ----------------------------- checkup history -----------------------------
    A saved checkup goes to sch3ma after each step. Two tabs, or a tab and a row
    saved somewhere else, can each hold answers the other lacks. The merge

@@ -639,6 +639,32 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 24px 20px 60px; }
   .footer-tools a { padding: 12px 2px; }
 }
 
+/* The other sites we run. They sit below the on-site related row and read
+   quieter than it, because a visitor who came here for a mouse fault wants the
+   keyboard test first and a tuner a long way second. */
+.footer-peers {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 10px 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 16px;
+  font-size: 12.5px;
+}
+.footer-peers-label {
+  color: var(--text-faint);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+.footer-peers a { color: var(--text-faint); }
+.footer-peers a:hover { color: var(--accent); }
+@media (max-width: 720px) {
+  .footer-peers { gap: 0 14px; }
+  .footer-peers a { padding: 12px 2px; }
+}
+
 /* ---------- privacy note ---------- */
 .privacy-note {
   max-width: 700px;
