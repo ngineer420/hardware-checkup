@@ -89,6 +89,23 @@
     return drill.target + " single clicks, " + drill.doubled + " registered as two. That points to a bouncing switch.";
   }
 
+  /**
+   * True when the only pointer the device has is a finger.
+   *
+   * `(pointer: coarse)` alone is not enough to hide the test. A laptop with a
+   * touch screen and a trackpad matches it, and that machine can run every
+   * field on this page. `(any-pointer: fine)` asks a different question — does
+   * *any* attached pointer aim precisely — so a device that answers coarse to
+   * the first and no to the second has a finger and nothing else.
+   *
+   * Takes `matchMedia` as an argument so the rule can be tested from Node.
+   */
+  function touchOnlyPointer(matchMedia) {
+    if (typeof matchMedia !== "function") return false;
+    return matchMedia("(pointer: coarse)").matches &&
+      !matchMedia("(any-pointer: fine)").matches;
+  }
+
   if (typeof module !== "undefined" && module.exports) {
     module.exports = {
       BOUNCE_THRESHOLD_MS: BOUNCE_THRESHOLD_MS,
@@ -97,7 +114,8 @@
       describeBounces: describeBounces,
       describeShortest: describeShortest,
       drillStep: drillStep,
-      describeDrill: describeDrill
+      describeDrill: describeDrill,
+      touchOnlyPointer: touchOnlyPointer
     };
     return;
   }
@@ -120,6 +138,27 @@
   var drillPad = document.getElementById("drill-pad");
   var drillStartBtn = document.getElementById("drill-start");
   var drillStatusEl = document.getElementById("drill-status");
+
+  /* The one path that has to be clean, the same way the battery readout hides
+     itself rather than showing four em-dashes. A finger gives no hover, no
+     separate buttons and no continuous cursor, so every field below would sit
+     at its placeholder for ever and the page would look broken. Hide the panel,
+     name the reason, and point the visitor at the test that does read their
+     hardware. */
+  if (touchOnlyPointer(window.matchMedia && window.matchMedia.bind(window))) {
+    var panel = document.getElementById("mouse-panel");
+    var notice = document.getElementById("mouse-touch-notice");
+    var why = document.getElementById("mouse-touch-why");
+    if (why) {
+      why.textContent = "This device reports a touch screen and no mouse. A finger gives the browser " +
+        "no hover, no separate left, middle and right buttons, and no continuous cursor position, so a " +
+        "mouse test has nothing to sample. Every field on this page would stay empty. Nothing is wrong " +
+        "with your device or with this page.";
+    }
+    if (panel) panel.hidden = true;
+    if (notice) notice.hidden = false;
+    return;
+  }
 
   var btnEls = { 0: btnLeft, 1: btnMiddle, 2: btnRight };
   var btnNames = { 0: "Left", 1: "Middle", 2: "Right" };

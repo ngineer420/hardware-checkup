@@ -6,6 +6,10 @@
 <title>Mouse Test — Check Buttons, Scroll, Double-Click &amp; Drag</title>
 <meta name="description" content="Free online mouse test. Check left, middle, and right buttons, double-click, the scroll wheel, cursor tracking, dragging, and a click counter. Runs 100% in your browser.">
 <link rel="canonical" href="https://hardwarecheckup.com/mouse-test.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mouse Test — Check Buttons, Scroll, Double-Click &amp; Drag">
+<meta property="og:description" content="Free online mouse test. Check left, middle, and right buttons, double-click, the scroll wheel, cursor tracking, dragging, and a click counter. Runs 100% in your browser.">
+<meta property="og:url" content="https://hardwarecheckup.com/mouse-test.html">
 <meta property="og:image" content="https://hardwarecheckup.com/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -20,11 +24,12 @@
   "name": "Mouse Test",
   "url": "https://hardwarecheckup.com/mouse-test.html",
   "applicationCategory": "UtilitiesApplication",
-  "operatingSystem": "Any",
+  "operatingSystem": "Windows, macOS, Linux, ChromeOS",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
   "description": "Free browser-based mouse test for buttons, double-click, scroll wheel, cursor position, and dragging."
 }
 </script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://hardwarecheckup.com/"},{"@type":"ListItem","position":2,"name":"Mouse Test"}]}</script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7560786263587509" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -105,7 +110,7 @@
     <p>Check every mouse button, the scroll wheel, double-clicking, cursor tracking, and dragging. The mouse graphic lights up as you click. Everything runs on your device — nothing is uploaded.</p>
   </div>
 
-  <div class="panel">
+  <div class="panel" id="mouse-panel">
     <div id="mouse-pad">
       <div class="mouse-body" aria-hidden="true">
         <div id="btn-left" class="mouse-btn left"></div>
@@ -141,6 +146,13 @@
     </div>
   </div>
 
+  <div id="mouse-touch-notice" class="notice" hidden>
+    <h2 style="margin-top:0;">This test needs a mouse</h2>
+    <p id="mouse-touch-why"></p>
+    <p>Test the hardware you do have instead. The <a href="/touchscreen-test.html">touchscreen test</a> reads the digitiser under your screen: it draws every finger you put down, counts how many the panel tracks at once, and shows the patches that report no touch. That is the part of a phone or a tablet that fails.</p>
+    <p>To run this page as it is meant to run, open it on a computer with a mouse or a trackpad. A tablet with a mouse or a trackpad attached also works, and this page shows the full test as soon as the browser reports that pointer.</p>
+  </div>
+
   <section class="container-narrow about-section" style="padding-left:0;padding-right:0;">
     <h2>How to use the mouse test</h2>
     <p>Move your cursor over the page and the <strong>cursor (x, y)</strong> readout tracks it in real time — jumpy or frozen numbers can indicate a failing sensor or a dirty surface. Click each button on your real mouse: the matching part of the on-screen mouse lights up, the <strong>last button</strong> field names it, and the <strong>clicks</strong> counter ticks up. Test the left, right, and middle (scroll-wheel) buttons this way; right-clicks are captured inside the tool so the context menu won't interrupt you.</p>
@@ -162,6 +174,14 @@
     <a href="/full-checkup.html">Full Checkup (guided run)</a>
   </nav>
   <!-- related:end -->
+  <nav class="footer-peers" aria-label="Other tools we run">
+    <span class="footer-peers-label">Elsewhere</span>
+    <a href="https://stickdriftcheck.com" rel="noopener">Controller drift test</a>
+    <a href="https://cpsboost.com" rel="noopener">Click speed test</a>
+    <a href="https://flicktrainer.com" rel="noopener">Aim trainer</a>
+    <a href="https://perfecttune.net" rel="noopener">Audio tuner</a>
+    <a href="https://devboxkit.com" rel="noopener">Developer tools</a>
+  </nav>
   <div class="footer-inner">
     <div>© <span id="year"></span> hardwarecheckup.com</div>
     <div class="footer-links">
