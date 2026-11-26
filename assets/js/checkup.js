@@ -135,6 +135,23 @@
     return null;
   }
 
+  /* A run with an answer is worth keeping. When the visitor leaves the run for
+     the hub, the hub opens at the save box, with the report card below it.
+     Before this, the hub opened at the top, and the box sat below all nine
+     steps, out of sight. */
+  var SAVE_ANCHOR = "#history-save";
+
+  function hubHref(data) {
+    for (var id in data.results) if (hasOwn(data.results, id)) return HUB + SAVE_ANCHOR;
+    return HUB;
+  }
+
+  /** Where an answer sends the visitor: the next open step, or the hub when every step has an answer. */
+  function afterAnswer(data, index) {
+    var next = nextUnanswered(data, index);
+    return next ? next.href + "?checkup=1" : hubHref(data);
+  }
+
   /** The first test with no verdict yet, or null when the run is complete. */
   function nextUnanswered(data, afterIndex) {
     var start = typeof afterIndex === "number" ? afterIndex + 1 : 0;
@@ -273,7 +290,7 @@
 
     var foot = el("div", "cb-foot");
     var hubLink = el("a", null, "Stop and see the report card");
-    hubLink.href = HUB;
+    hubLink.href = hubHref(data);
     foot.appendChild(hubLink);
     var existing = data.results[step.id];
     if (existing) {
@@ -289,8 +306,7 @@
 
     function finish(state) {
       record(step.id, state, note.value, measureFrom(step));
-      var next = nextUnanswered(load(), index);
-      location.href = next ? next.href + "?checkup=1" : HUB;
+      location.href = afterAnswer(load(), index);
     }
 
     passBtn.addEventListener("click", function () { finish("pass"); });
@@ -473,6 +489,8 @@
     mergeResults: mergeResults,
     compareResults: compareResults,
     isComplete: isComplete,
+    hubHref: hubHref,
+    afterAnswer: afterAnswer,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   if (typeof window !== "undefined") window.HCCheckup = api;
