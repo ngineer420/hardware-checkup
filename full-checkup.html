@@ -133,9 +133,11 @@
       <button type="button" id="checkup-clear" hidden>Clear and start over</button>
     </div>
 
-    <!-- Filled by sch3ma.js. It stays hidden until the site has a sch3ma project. -->
+    <!-- Filled by sch3ma.js. It stays hidden until the site has a sch3ma project.
+         A run that ends on a step page opens /full-checkup.html#history-save,
+         so the visitor lands on this box, with the report card below it. -->
     <div class="history-save" id="history-save" hidden>
-      <h3 class="history-save-title">Checkup history</h3>
+      <h3 class="history-save-title" id="history-save-title">Save this checkup</h3>
       <form class="history-save-form" id="history-save-form">
         <label class="history-save-label" for="history-label">Machine name</label>
         <input class="history-input" type="text" id="history-label" maxlength="60" placeholder="ThinkPad from Marketplace" autocomplete="off">

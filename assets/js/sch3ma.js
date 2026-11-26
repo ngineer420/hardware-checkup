@@ -226,6 +226,8 @@
   function renderSave() {
     var run = currentRun();
     $("history-save-form").hidden = !!run;
+    // An unsaved run gets a title that names the action. A saved run gets a title that names the record.
+    $("history-save-title").textContent = run ? "Checkup history" : "Save this checkup";
     if (!run) {
       status("Name the machine and save. Run the checkup again another day, and the history shows what changed. Nothing is sent until you press the button.", "");
     } else if (run.id) {

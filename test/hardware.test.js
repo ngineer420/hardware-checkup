@@ -1189,6 +1189,30 @@ test("a checkup is complete only when every step has an answer", () => {
   assert.strictEqual(Checkup.isComplete(undefined), false);
 });
 
+/* A run with an answer is worth keeping. Before this fix, the run ended at the
+   top of the hub, and the save box sat below all nine steps, out of sight on a
+   laptop and on a phone. */
+test("the last answer of a run opens the hub at the save box", () => {
+  const data = { v: 1, started: "2026-09-12T10:00:00.000Z", results: {} };
+  for (const step of Checkup.SEQUENCE) data.results[step.id] = result("pass", "2026-09-12T10:01:00.000Z");
+  const last = Checkup.SEQUENCE.length - 1;
+  assert.strictEqual(Checkup.afterAnswer(data, last), "/full-checkup.html#history-save");
+
+  delete data.results.keyboard;
+  assert.strictEqual(Checkup.afterAnswer(data, last), "/keyboard-test.html?checkup=1",
+    "an open step still comes first");
+});
+
+test("the stop link opens the save box only when the run has an answer", () => {
+  const data = { v: 1, started: null, results: {} };
+  assert.strictEqual(Checkup.hubHref(data), "/full-checkup.html");
+  data.results.mic = result("fail", "2026-09-12T10:01:00.000Z");
+  assert.strictEqual(Checkup.hubHref(data), "/full-checkup.html#history-save");
+
+  const html = require("fs").readFileSync(require("path").join(__dirname, "..", "full-checkup.html"), "utf8");
+  assert.ok(/<div class="history-save" id="history-save"/.test(html), "the hub has the anchor target");
+});
+
 test("the site ships with the history switched on", () => {
   assert.strictEqual(History.configured(), true, "the project id and the key are set");
 });
