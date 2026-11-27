@@ -1549,9 +1549,13 @@ a.btn-link:hover {
   border-radius: 0;
   padding: 9px 12px;
 }
+/* The label track never shrinks below its longest word, and it takes at most
+   45% when it needs more. The value takes the rest and wraps. With a bare
+   `minmax(0, 1fr) auto`, a long verdict took the whole row on a phone, and
+   "Refresh rate" ran into "Runs at its rated refresh rate". */
 .cc-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: fit-content(45%) minmax(0, 1fr);
   gap: 2px 14px;
   align-items: baseline;
   padding: 9px 12px;
